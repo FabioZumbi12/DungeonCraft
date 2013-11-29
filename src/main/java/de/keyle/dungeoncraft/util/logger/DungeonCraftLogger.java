@@ -32,7 +32,7 @@ public class DungeonCraftLogger {
 
     public static void write(String msg) {
         if (consoleCommandSender != null) {
-            consoleCommandSender.sendMessage("[" + ChatColor.RED + "Dungeon" + ChatColor.DARK_RED + "Craft" + ChatColor.RESET + "] " + msg);
+            consoleCommandSender.sendMessage("[" + ChatColor.RED + "D" + ChatColor.DARK_RED + "ungeon" + ChatColor.RED + "C" + ChatColor.DARK_RED + "raft" + ChatColor.RESET + "] " + msg);
             DebugLogger.info("(L) " + msg);
         }
     }

@@ -20,7 +20,7 @@
 
 package de.keyle.dungeoncraft;
 
-import de.keyle.dungeoncraft.commands.TestCommand;
+import de.keyle.dungeoncraft.commands.CreateWorldCommand;
 import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.DungeonCraftVersion;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
@@ -49,7 +49,7 @@ public class DungeonCraftPlugin extends JavaPlugin {
         Configuration.loadConfiguration();
         DebugLogger.setup();
 
-        getCommand("dctest").setExecutor(new TestCommand());
+        getCommand("dctest").setExecutor(new CreateWorldCommand());
     }
 
     public static DungeonCraftPlugin getPlugin() {

@@ -1,0 +1,8 @@
+name: ${project.name}
+main: de.keyle.dungeoncraft.DungeonCraftPlugin
+version: ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+authors: [Keyle,xXLupoXx]
+softdepend: [Vault, WorldEdit]
+commands:
+  dctest:
+    description: test

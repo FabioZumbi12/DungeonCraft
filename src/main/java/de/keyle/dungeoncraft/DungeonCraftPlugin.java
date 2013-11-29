@@ -26,7 +26,10 @@ import de.keyle.dungeoncraft.util.DungeonCraftVersion;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Arrays;
 
 public class DungeonCraftPlugin extends JavaPlugin {
     private static DungeonCraftPlugin plugin;
@@ -49,7 +52,15 @@ public class DungeonCraftPlugin extends JavaPlugin {
         Configuration.loadConfiguration();
         DebugLogger.setup();
 
+        DebugLogger.info("----------- loading DungeonCraft ... -----------");
+        DebugLogger.info("MyPet " + DungeonCraftVersion.getVersion() + " build: " + DungeonCraftVersion.getBuild());
+        DebugLogger.info("Bukkit " + getServer().getVersion());
+        DebugLogger.info("Java: " + System.getProperty("java.version") + " (VM: " + System.getProperty("java.vm.version") + ") by " + System.getProperty("java.vendor"));
+        DebugLogger.info("Plugins: " + Arrays.toString(getServer().getPluginManager().getPlugins()));
+
         getCommand("dctest").setExecutor(new CreateWorldCommand());
+
+        DungeonCraftLogger.write("version " + DungeonCraftVersion.getVersion() + "-b" + DungeonCraftVersion.getBuild() + ChatColor.GREEN + " ENABLED");
     }
 
     public static DungeonCraftPlugin getPlugin() {

@@ -79,6 +79,12 @@ public class SchematicLoader extends Thread {
 
         byte[] blocks = getChildTag(schematic, "Blocks", ByteArrayTag.class).getValue();
         byte[] blockData = getChildTag(schematic, "Data", ByteArrayTag.class).getValue();
+        byte[] biomeData;
+        if (schematic.containsKey("Biomes")) {
+            biomeData = getChildTag(schematic, "Biomes", ByteArrayTag.class).getValue();
+        } else {
+            biomeData = new byte[length * width];
+        }
 
         ListTag<CompoundTag> tileEntitiesTag = getChildTag(schematic, "TileEntities", ListTag.class);
         //ListTag<CompoundTag> entitiesTag = getChildTag(schematic, "Entities", ListTag.class);
@@ -102,7 +108,7 @@ public class SchematicLoader extends Thread {
             tileEntities.put(v, tileEntity);
         }
 
-        return new Schematic(blocks, blockData, width, length, height, tileEntities);
+        return new Schematic(blocks, blockData, biomeData, width, length, height, tileEntities);
     }
 
     private static <T extends Tag> T getChildTag(CompoundMap items, String key, Class<T> expected) throws IllegalArgumentException {

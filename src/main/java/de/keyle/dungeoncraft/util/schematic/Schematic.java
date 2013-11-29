@@ -29,15 +29,27 @@ import java.util.Map;
 public class Schematic {
     private final byte[] blocks;
     private final byte[] data;
+    private final byte[] biomes;
     private final short width;
     private final short lenght;
     private final short height;
     private final Map<BlockVector, CompoundMap> tileEntities = new HashMap<BlockVector, CompoundMap>();
     //private final Map<Vector, CompoundMap> entities = new HashMap<Vector, CompoundMap>();
 
+    public Schematic(byte[] blocks, byte[] data, byte[] biomes, short width, short lenght, short height, Map<BlockVector, CompoundMap> tileEntities) {
+        this.blocks = blocks;
+        this.data = data;
+        this.biomes = biomes;
+        this.width = width;
+        this.lenght = lenght;
+        this.height = height;
+        this.tileEntities.putAll(tileEntities);
+    }
+
     public Schematic(byte[] blocks, byte[] data, short width, short lenght, short height, Map<BlockVector, CompoundMap> tileEntities) {
         this.blocks = blocks;
         this.data = data;
+        this.biomes = new byte[width * lenght];
         this.width = width;
         this.lenght = lenght;
         this.height = height;
@@ -50,6 +62,10 @@ public class Schematic {
 
     public byte[] getData() {
         return data;
+    }
+
+    public byte[] getBiomes() {
+        return biomes;
     }
 
     public short getWidth() {

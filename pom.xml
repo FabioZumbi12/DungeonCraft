@@ -61,6 +61,10 @@
             <id>vault-repo</id>
             <url>http://ci.herocraftonline.com/plugin/repository/everything/</url>
         </repository>
+        <repository>
+            <id>metrics-repo</id>
+            <url>http://repo.mcstats.org/content/repositories/releases/</url>
+        </repository>
     </repositories>
 
     <distributionManagement>
@@ -166,8 +170,8 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Project-Author>Keyle</Project-Author>
-                            <Project-Name>MyPet</Project-Name>
+                            <Project-Authors>Keyle, xXLupoXx</Project-Authors>
+                            <Project-Name>DungeonCraft</Project-Name>
                             <Project-Version>${project.version}</Project-Version>
                             <Project-Build>${BUILD_NUMBER}</Project-Build>
                             <Project-Minecraft-Version>${minecraft.version}</Project-Minecraft-Version>
@@ -206,7 +210,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>org.mcstats</pattern>
-                                    <shadedPattern>de.keyle.dungeoncraft.util</shadedPattern>
+                                    <shadedPattern>de.keyle.dungeoncraft.util.metrics</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.spout.nbt</pattern>

@@ -25,9 +25,16 @@ import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_6_R3.util.LongHash;
 import org.bukkit.generator.ChunkGenerator;
 
-public class DungeonWorldServer extends WorldServer {
-    public DungeonWorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, String s, int i, WorldSettings worldsettings, MethodProfiler methodprofiler, IConsoleLogManager iconsolelogmanager, World.Environment env, ChunkGenerator gen) {
+public class DungeonCraftWorldServer extends WorldServer {
+    public DungeonCraftWorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, String s, int i, WorldSettings worldsettings, MethodProfiler methodprofiler, IConsoleLogManager iconsolelogmanager, World.Environment env, ChunkGenerator gen) {
         super(minecraftserver, idatamanager, s, i, worldsettings, methodprofiler, iconsolelogmanager, env, gen);
+    }
+
+    protected IChunkProvider j() {
+        IChunkLoader ichunkloader = this.dataManager.createChunkLoader(this.worldProvider);
+        this.chunkProviderServer = new DungeonCraftChunkGenerator(this, ichunkloader);
+
+        return this.chunkProviderServer;
     }
 
     protected void g() {
@@ -68,5 +75,9 @@ public class DungeonWorldServer extends WorldServer {
             }
             this.methodProfiler.b();
         }
+    }
+
+    private boolean canSpawn(int x, int z) {
+        return true;
     }
 }

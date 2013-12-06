@@ -61,7 +61,7 @@ public class DungeonCraftWorld {
 
         DungeonGenerator generator = new DungeonGenerator();
 
-        WorldServer internal = new DungeonWorldServer(console, new ServerNBTManager(worldsFolder, "world", true), worldName, dimension, new WorldSettings(seed, EnumGamemode.ADVENTURE, false, false, WorldType.NORMAL), console.methodProfiler, console.getLogger(), World.Environment.NORMAL, generator);
+        WorldServer internal = new DungeonCraftWorldServer(console, new ServerNBTManager(worldsFolder, "world", true), worldName, dimension, new WorldSettings(seed, EnumGamemode.ADVENTURE, false, false, WorldType.NORMAL), console.methodProfiler, console.getLogger(), World.Environment.NORMAL, generator);
 
         internal.scoreboard = ((CraftScoreboard) Bukkit.getScoreboardManager().getMainScoreboard()).getHandle();
         internal.tracker = new EntityTracker(internal);
@@ -70,6 +70,7 @@ public class DungeonCraftWorld {
         internal.setSpawnFlags(true, true);
         internal.getWorld().getPopulators().addAll(internal.generator.getDefaultPopulators(internal.getWorld()));
         internal.keepSpawnInMemory = false;
+        internal.savingDisabled = false;
 
         console.worlds.add(internal);
 

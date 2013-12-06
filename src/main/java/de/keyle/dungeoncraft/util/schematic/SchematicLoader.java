@@ -29,7 +29,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
 public class SchematicLoader extends Thread {
     private ISchematicReveiver schematicReceiver;
@@ -56,7 +55,7 @@ public class SchematicLoader extends Thread {
         }
 
         FileInputStream stream = new FileInputStream(file);
-        NBTInputStream nbtStream = new NBTInputStream(new GZIPInputStream(stream));
+        NBTInputStream nbtStream = new NBTInputStream(stream);
 
         CompoundTag schematicTag = (CompoundTag) nbtStream.readTag();
         if (!schematicTag.getName().equals("Schematic")) {

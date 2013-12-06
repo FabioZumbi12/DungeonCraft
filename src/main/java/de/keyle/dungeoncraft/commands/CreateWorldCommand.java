@@ -22,8 +22,6 @@ package de.keyle.dungeoncraft.commands;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
-import de.keyle.dungeoncraft.dungeon.generator.DungeonGenerator;
-import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,9 +37,11 @@ public class CreateWorldCommand implements CommandExecutor {
             world = DungeonCraftWorld.createWorld();
         }
 
+        /*
         if (!(world.getGenerator() instanceof DungeonGenerator)) {
             DungeonCraftLogger.write("Wrong Generator!");
         }
+        */
 
         return true;
     }

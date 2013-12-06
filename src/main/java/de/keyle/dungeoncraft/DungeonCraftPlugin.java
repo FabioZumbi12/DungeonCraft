@@ -29,6 +29,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.Arrays;
 
 public class DungeonCraftPlugin extends JavaPlugin {
@@ -44,6 +45,9 @@ public class DungeonCraftPlugin extends JavaPlugin {
 
     public void onEnable() {
         plugin = this;
+
+        new File(getPlugin().getDataFolder().getAbsolutePath(), "dungeons").mkdirs();
+        new File(getPlugin().getDataFolder().getAbsolutePath(), "logs").mkdirs();
 
         DungeonCraftVersion.reset();
         DungeonCraftLogger.setConsole(getServer().getConsoleSender());

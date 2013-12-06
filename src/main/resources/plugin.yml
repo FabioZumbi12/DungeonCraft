@@ -6,3 +6,7 @@ softdepend: [Vault, WorldEdit]
 commands:
   dctest:
     description: test
+  dctp:
+    description: tp
+  dcas:
+    description: as

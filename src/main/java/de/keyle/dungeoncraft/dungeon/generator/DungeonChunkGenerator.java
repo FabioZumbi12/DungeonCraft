@@ -55,7 +55,13 @@ public class DungeonChunkGenerator extends Thread {
             setBiomes(chunk, chunkX, chunkZ, schematic, field);
             chunk.initLighting();
 
-            generator.addChunk(chunk, chunkX, chunkZ);
+            // make the chunk ready (faked)
+            chunk.lit = true;
+            chunk.m = true;
+            chunk.done = true;
+            // ----------------------
+
+            generator.addChunk(chunk);
         }
     }
 

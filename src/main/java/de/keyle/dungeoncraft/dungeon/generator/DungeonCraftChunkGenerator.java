@@ -20,18 +20,25 @@
 
 package de.keyle.dungeoncraft.dungeon.generator;
 
+import de.keyle.dungeoncraft.util.IScheduler;
+import de.keyle.dungeoncraft.util.SchedulePlaner;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import net.minecraft.server.v1_7_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.chunkio.ChunkIOExecutor;
 import org.bukkit.craftbukkit.v1_7_R1.util.LongHash;
 
-public class DungeonCraftChunkGenerator extends ChunkProviderServer {
+import java.util.ArrayList;
+import java.util.List;
+
+public class DungeonCraftChunkGenerator extends ChunkProviderServer implements IScheduler {
     protected ChunkRegionLoader loader = null;
 
     public static DungeonCraftChunkGenerator chunkloader;
 
     private EmptyChunk emptyChunk;
 
+    private final List<DungeonChunkLoadedEvent> events = new ArrayList<DungeonChunkLoadedEvent>();
 
     public DungeonCraftChunkGenerator(WorldServer worldserver, IChunkLoader ichunkloader) {
         super(worldserver, ichunkloader, null);
@@ -42,6 +49,7 @@ public class DungeonCraftChunkGenerator extends ChunkProviderServer {
 
         chunkloader = this;
         emptyChunk = new EmptyChunk(worldserver, 0, 0);
+        SchedulePlaner.addTask(this, 1);
     }
 
     public void queueUnloadDungeonChunk(int chunkX, int chunkZ) {
@@ -76,13 +84,13 @@ public class DungeonCraftChunkGenerator extends ChunkProviderServer {
 
         if (chunk == null && runnable != null && loader != null && loader.chunkExists(this.world, i, j)) {
             ChunkIOExecutor.queueChunkLoad(this.world, loader, this, i, j, runnable);
-            return new EmptyChunk(world, i, j);
+            return null; //new EmptyChunk(world, i, j);
         }
 
         if (chunk == null) {
             chunk = loadChunk(i, j);
             if (chunk == null) {
-                return new EmptyChunk(world, i, j);
+                return null; //new EmptyChunk(world, i, j);
             }
 
             this.chunks.put(LongHash.toLong(i, j), chunk);
@@ -111,9 +119,13 @@ public class DungeonCraftChunkGenerator extends ChunkProviderServer {
     }
 
     @SuppressWarnings("SynchronizeOnNonFinalField") // "chunks" is never assigned again
-    public void addChunk(Chunk chunk, int chunkX, int chunkZ) {
+    public void addChunk(Chunk chunk) {
         synchronized (chunks) {
-            chunks.put(LongHash.toLong(chunkX, chunkZ), chunk);
+            chunks.put(LongHash.toLong(chunk.locX, chunk.locZ), chunk);
+        }
+        synchronized (events) {
+            DungeonChunkLoadedEvent event = new DungeonChunkLoadedEvent(chunk.locX, chunk.locZ);
+            events.add(event);
         }
     }
 
@@ -135,5 +147,17 @@ public class DungeonCraftChunkGenerator extends ChunkProviderServer {
             this.loader.a();
         }
         return true;
+    }
+
+    @Override
+    public void schedule() {
+        synchronized (events) {
+            if (!events.isEmpty()) {
+                for (DungeonChunkLoadedEvent event : events) {
+                    Bukkit.getPluginManager().callEvent(event);
+                }
+                events.clear();
+            }
+        }
     }
 }

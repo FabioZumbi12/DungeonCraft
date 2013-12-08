@@ -24,6 +24,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class DungeonChunkLoadedEvent extends Event {
+    private static final HandlerList handlers = new HandlerList();
+
     private final int x;
     private final int z;
 
@@ -42,6 +44,11 @@ public class DungeonChunkLoadedEvent extends Event {
 
     @Override
     public HandlerList getHandlers() {
-        return null;
+        return handlers;
+    }
+
+    @SuppressWarnings("unused")
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 }

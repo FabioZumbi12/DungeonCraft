@@ -25,19 +25,19 @@ import org.bukkit.event.HandlerList;
 
 public class DungeonChunkLoadedEvent extends Event {
     private final int x;
-    private final int y;
+    private final int z;
 
-    public DungeonChunkLoadedEvent(int x, int y) {
+    public DungeonChunkLoadedEvent(int x, int z) {
         this.x = x;
-        this.y = y;
+        this.z = z;
     }
 
     public int getX() {
         return x;
     }
 
-    public int getY() {
-        return y;
+    public int getZ() {
+        return z;
     }
 
     @Override

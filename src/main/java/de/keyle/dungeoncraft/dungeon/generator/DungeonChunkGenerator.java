@@ -21,9 +21,10 @@
 package de.keyle.dungeoncraft.dungeon.generator;
 
 import de.keyle.dungeoncraft.util.schematic.Schematic;
-import net.minecraft.server.v1_6_R3.Chunk;
-import net.minecraft.server.v1_6_R3.ChunkSection;
-import net.minecraft.server.v1_6_R3.World;
+import net.minecraft.server.v1_7_R1.Block;
+import net.minecraft.server.v1_7_R1.Chunk;
+import net.minecraft.server.v1_7_R1.ChunkSection;
+import net.minecraft.server.v1_7_R1.World;
 
 public class DungeonChunkGenerator extends Thread {
     private final World world;
@@ -74,7 +75,7 @@ public class DungeonChunkGenerator extends Thread {
                 for (int z = 0; z < 16; ++z) {
                     int index = getSchematicIndex(startChunkX, startChunkZ, chunkX, chunkZ, x, y + yOffset, z, schematicLength, schematicWidth);
                     if (index != -1) {
-                        newChunkSection.setTypeId(x, y, z, blocks[index]);
+                        newChunkSection.setTypeId(x, y, z, Block.e(blocks[index]));
                         newChunkSection.setData(x, y, z, data[index]);
                     }
                 }

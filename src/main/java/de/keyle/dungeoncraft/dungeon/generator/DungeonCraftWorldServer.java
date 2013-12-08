@@ -20,14 +20,14 @@
 
 package de.keyle.dungeoncraft.dungeon.generator;
 
-import net.minecraft.server.v1_6_R3.*;
+import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_6_R3.util.LongHash;
+import org.bukkit.craftbukkit.v1_7_R1.util.LongHash;
 import org.bukkit.generator.ChunkGenerator;
 
 public class DungeonCraftWorldServer extends WorldServer {
-    public DungeonCraftWorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, String s, int i, WorldSettings worldsettings, MethodProfiler methodprofiler, IConsoleLogManager iconsolelogmanager, World.Environment env, ChunkGenerator gen) {
-        super(minecraftserver, idatamanager, s, i, worldsettings, methodprofiler, iconsolelogmanager, env, gen);
+    public DungeonCraftWorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, String s, int i, WorldSettings worldsettings, MethodProfiler methodprofiler, World.Environment env, ChunkGenerator gen) {
+        super(minecraftserver, idatamanager, s, i, worldsettings, methodprofiler, env, gen);
     }
 
     protected IChunkProvider j() {
@@ -38,7 +38,7 @@ public class DungeonCraftWorldServer extends WorldServer {
     }
 
     protected void g() {
-        C(); // -> super.g();
+        B(); // -> super.g();
 
         for (long chunkCoord : this.chunkTickList.popAll()) {
             int chunkX = LongHash.msw(chunkCoord);
@@ -56,18 +56,16 @@ public class DungeonCraftWorldServer extends WorldServer {
 
             this.methodProfiler.c("tickTiles");
             for (ChunkSection chunksection : chunk.i()) {
-                if ((chunksection != null) && (chunksection.shouldTick())) {
+                if (chunksection != null && chunksection.shouldTick()) {
                     for (int j2 = 0; j2 < 3; j2++) {
                         this.k = (this.k * 3 + 1013904223);
                         int i2 = this.k >> 2;
                         int k2 = i2 & 0xF;
                         int l2 = i2 >> 8 & 0xF;
                         int i3 = i2 >> 16 & 0xF;
-                        int j3 = chunksection.getTypeId(k2, i3, l2);
+                        Block block = chunksection.getTypeId(k2, i3, l2);
 
-                        Block block = Block.byId[j3];
-
-                        if ((block != null) && (block.isTicking())) {
+                        if (block != null && block.isTicking()) {
                             block.a(this, k2 + blockX, i3 + chunksection.getYPosition(), l2 + blockZ, this.random);
                         }
                     }

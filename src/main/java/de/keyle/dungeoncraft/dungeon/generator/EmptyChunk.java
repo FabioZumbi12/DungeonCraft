@@ -1,6 +1,6 @@
 package de.keyle.dungeoncraft.dungeon.generator;
 
-import net.minecraft.server.v1_6_R3.*;
+import net.minecraft.server.v1_7_R1.*;
 
 import java.util.List;
 import java.util.Random;
@@ -11,7 +11,7 @@ public class EmptyChunk extends Chunk {
     }
 
     public boolean a(int paramInt1, int paramInt2) {
-        return (paramInt1 == this.x) && (paramInt2 == this.z);
+        return (paramInt1 == this.locX) && (paramInt2 == this.locZ);
     }
 
     public int b(int paramInt1, int paramInt2) {
@@ -21,15 +21,15 @@ public class EmptyChunk extends Chunk {
     public void initLighting() {
     }
 
-    public int getTypeId(int paramInt1, int paramInt2, int paramInt3) {
-        return 0;
+    public Block getType(int paramInt1, int paramInt2, int paramInt3) {
+        return Blocks.AIR;
     }
 
     public int b(int paramInt1, int paramInt2, int paramInt3) {
         return 255;
     }
 
-    public boolean a(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+    public boolean a(int paramInt1, int paramInt2, int paramInt3, Block paramBlock, int paramInt4) {
         return true;
     }
 
@@ -37,7 +37,7 @@ public class EmptyChunk extends Chunk {
         return 0;
     }
 
-    public boolean b(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    public boolean a(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
         return false;
     }
 
@@ -48,7 +48,7 @@ public class EmptyChunk extends Chunk {
     public void a(EnumSkyBlock paramEnumSkyBlock, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
     }
 
-    public int c(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    public int b(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
         return 0;
     }
 
@@ -98,7 +98,7 @@ public class EmptyChunk extends Chunk {
     }
 
     public Random a(long paramLong) {
-        return new Random(this.world.getSeed() + this.x * this.x * 4987142 + this.x * 5947611 + this.z * this.z * 4392871L + this.z * 389711 ^ paramLong);
+        return new Random(this.world.getSeed() + this.locX * this.locX * 4987142 + this.locX * 5947611 + this.locZ * this.locZ * 4392871L + this.locZ * 389711 ^ paramLong);
     }
 
     public boolean isEmpty() {

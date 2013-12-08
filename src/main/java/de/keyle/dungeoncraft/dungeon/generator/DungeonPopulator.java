@@ -22,31 +22,17 @@ package de.keyle.dungeoncraft.dungeon.generator;
 
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import de.keyle.dungeoncraft.util.vector.Vector;
-import net.minecraft.server.v1_6_R3.Block;
-import net.minecraft.server.v1_6_R3.NBTTagCompound;
-import net.minecraft.server.v1_6_R3.TileEntity;
+import net.minecraft.server.v1_7_R1.Block;
+import net.minecraft.server.v1_7_R1.NBTTagCompound;
+import net.minecraft.server.v1_7_R1.TileEntity;
 import org.bukkit.Chunk;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 import org.bukkit.generator.BlockPopulator;
 
-import java.lang.reflect.Field;
 import java.util.Random;
 
 public class DungeonPopulator extends BlockPopulator {
-    private static Field nmsBlock_isTileEntityField;
-
-    private NBTTagCompound nbtData = null;
-
-    static {
-        try {
-            nmsBlock_isTileEntityField = Block.class.getDeclaredField("isTileEntity");
-            nmsBlock_isTileEntityField.setAccessible(true);
-        } catch (Throwable e) {
-            nmsBlock_isTileEntityField = null;
-        }
-    }
-
     @Override
     public void populate(World world, Random random, Chunk chunk) {
 
@@ -72,14 +58,7 @@ public class DungeonPopulator extends BlockPopulator {
     }
 
     public static boolean hasTileEntity(int type) {
-        Block nmsBlock = Block.byId[type];
-        if (nmsBlock == null) {
-            return false;
-        }
-        try {
-            return nmsBlock_isTileEntityField.getBoolean(nmsBlock);
-        } catch (IllegalAccessException e) {
-            return false;
-        }
+        Block nmsBlock = Block.e(type);
+        return nmsBlock != null && nmsBlock.isTileEntity();
     }
 }

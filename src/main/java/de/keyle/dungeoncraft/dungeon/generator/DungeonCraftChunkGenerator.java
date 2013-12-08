@@ -21,14 +21,16 @@
 package de.keyle.dungeoncraft.dungeon.generator;
 
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
-import net.minecraft.server.v1_6_R3.*;
-import org.bukkit.craftbukkit.v1_6_R3.chunkio.ChunkIOExecutor;
-import org.bukkit.craftbukkit.v1_6_R3.util.LongHash;
+import net.minecraft.server.v1_7_R1.*;
+import org.bukkit.craftbukkit.v1_7_R1.chunkio.ChunkIOExecutor;
+import org.bukkit.craftbukkit.v1_7_R1.util.LongHash;
 
 public class DungeonCraftChunkGenerator extends ChunkProviderServer {
     protected ChunkRegionLoader loader = null;
 
     public static DungeonCraftChunkGenerator chunkloader;
+
+    private EmptyChunk emptyChunk;
 
 
     public DungeonCraftChunkGenerator(WorldServer worldserver, IChunkLoader ichunkloader) {
@@ -39,6 +41,7 @@ public class DungeonCraftChunkGenerator extends ChunkProviderServer {
         chunkProvider = this;
 
         chunkloader = this;
+        emptyChunk = new EmptyChunk(worldserver, 0, 0);
     }
 
     public void queueUnloadDungeonChunk(int chunkX, int chunkZ) {
@@ -47,6 +50,12 @@ public class DungeonCraftChunkGenerator extends ChunkProviderServer {
         Chunk c = this.chunks.get(LongHash.toLong(chunkX, chunkZ));
         if (c != null) {
             c.mustSave = true;
+        }
+    }
+
+    public void printLoadedChunkCoords() {
+        for (Chunk chunk : chunks.values()) {
+            DungeonCraftLogger.write("X: " + chunk.locX + " Z:" + chunk.locZ);
         }
     }
 

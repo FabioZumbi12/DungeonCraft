@@ -21,10 +21,10 @@
 package de.keyle.dungeoncraft.dungeon.generator;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
-import net.minecraft.server.v1_6_R3.*;
+import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_6_R3.scoreboard.CraftScoreboard;
+import org.bukkit.craftbukkit.v1_7_R1.scoreboard.CraftScoreboard;
 import org.bukkit.event.world.WorldLoadEvent;
 
 import java.io.File;
@@ -60,13 +60,15 @@ public class DungeonCraftWorld {
         while (used);
 
         DungeonGenerator generator = new DungeonGenerator();
+        ServerNBTManager nbtManager = new ServerNBTManager(worldsFolder, "world", true);
+        WorldSettings worldSettings = new WorldSettings(seed, EnumGamemode.ADVENTURE, false, false, WorldType.NORMAL);
 
-        WorldServer internal = new DungeonCraftWorldServer(console, new ServerNBTManager(worldsFolder, "world", true), worldName, dimension, new WorldSettings(seed, EnumGamemode.ADVENTURE, false, false, WorldType.NORMAL), console.methodProfiler, console.getLogger(), World.Environment.NORMAL, generator);
+        WorldServer internal = new DungeonCraftWorldServer(console, nbtManager, worldName, dimension, worldSettings, console.methodProfiler, World.Environment.NORMAL, generator);
 
         internal.scoreboard = ((CraftScoreboard) Bukkit.getScoreboardManager().getMainScoreboard()).getHandle();
         internal.tracker = new EntityTracker(internal);
         internal.addIWorldAccess(new WorldManager(console, internal));
-        internal.difficulty = 1;
+        internal.difficulty = EnumDifficulty.NORMAL;
         internal.setSpawnFlags(true, true);
         internal.getWorld().getPopulators().addAll(internal.generator.getDefaultPopulators(internal.getWorld()));
         internal.keepSpawnInMemory = false;

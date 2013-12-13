@@ -6,34 +6,34 @@ import java.util.List;
 import java.util.Random;
 
 public class EmptyChunk extends Chunk {
-    public EmptyChunk(World paramWorld, int paramInt1, int paramInt2) {
-        super(paramWorld, paramInt1, paramInt2);
+    public EmptyChunk(World world, int posX, int posZ) {
+        super(world, posX, posZ);
     }
 
-    public boolean a(int paramInt1, int paramInt2) {
-        return (paramInt1 == this.locX) && (paramInt2 == this.locZ);
+    public boolean a(int posX, int posZ) {
+        return (posX == this.locX) && (posZ == this.locZ);
     }
 
-    public int b(int paramInt1, int paramInt2) {
+    public int b(int posX, int posZ) {
         return 0;
     }
 
     public void initLighting() {
     }
 
-    public Block getType(int paramInt1, int paramInt2, int paramInt3) {
+    public Block getType(int blockX, int blockY, int blockZ) {
         return Blocks.AIR;
     }
 
-    public int b(int paramInt1, int paramInt2, int paramInt3) {
+    public int b(int blockX, int blockY, int blockZ) {
         return 255;
     }
 
-    public boolean a(int paramInt1, int paramInt2, int paramInt3, Block paramBlock, int paramInt4) {
+    public boolean a(int blockX, int blockY, int blockZ, Block block, int paramInt4) {
         return true;
     }
 
-    public int getData(int paramInt1, int paramInt2, int paramInt3) {
+    public int getData(int blockX, int blockY, int blockZ) {
         return 0;
     }
 
@@ -41,38 +41,38 @@ public class EmptyChunk extends Chunk {
         return false;
     }
 
-    public int getBrightness(EnumSkyBlock paramEnumSkyBlock, int paramInt1, int paramInt2, int paramInt3) {
+    public int getBrightness(EnumSkyBlock skyBlock, int blockX, int blockY, int blockZ) {
         return 0;
     }
 
-    public void a(EnumSkyBlock paramEnumSkyBlock, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    public void a(EnumSkyBlock skyBlock, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
     }
 
-    public int b(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    public int b(int blockX, int blockY, int blockZ, int paramInt4) {
         return 0;
     }
 
-    public void a(Entity paramEntity) {
+    public void a(Entity entity) {
     }
 
-    public void b(Entity paramEntity) {
+    public void b(Entity entity) {
     }
 
-    public void a(Entity paramEntity, int paramInt) {
+    public void a(Entity entity, int slice) {
     }
 
-    public boolean d(int paramInt1, int paramInt2, int paramInt3) {
+    public boolean d(int blockX, int blockY, int blockZ) {
         return false;
     }
 
-    public TileEntity e(int paramInt1, int paramInt2, int paramInt3) {
+    public TileEntity e(int blockX, int blockY, int blockZ) {
         return null;
     }
 
-    public void a(TileEntity paramTileEntity) {
+    public void a(TileEntity tileEntity) {
     }
 
-    public void a(int paramInt1, int paramInt2, int paramInt3, TileEntity paramTileEntity) {
+    public void a(int paramInt1, int paramInt2, int paramInt3, TileEntity tileEntity) {
     }
 
     public void f(int paramInt1, int paramInt2, int paramInt3) {
@@ -87,25 +87,25 @@ public class EmptyChunk extends Chunk {
     public void e() {
     }
 
-    public void a(Entity paramEntity, AxisAlignedBB paramAxisAlignedBB, List paramList, IEntitySelector paramIEntitySelector) {
+    public void a(Entity entity, AxisAlignedBB alignedBB, List list, IEntitySelector entitySelector) {
     }
 
-    public void a(Class paramClass, AxisAlignedBB paramAxisAlignedBB, List paramList, IEntitySelector paramIEntitySelector) {
+    public void a(Class clazz, AxisAlignedBB alignedBB, List list, IEntitySelector entitySelector) {
     }
 
     public boolean a(boolean paramBoolean) {
         return false;
     }
 
-    public Random a(long paramLong) {
-        return new Random(this.world.getSeed() + this.locX * this.locX * 4987142 + this.locX * 5947611 + this.locZ * this.locZ * 4392871L + this.locZ * 389711 ^ paramLong);
+    public Random a(long seed) {
+        return new Random(this.world.getSeed() + this.locX * this.locX * 4987142 + this.locX * 5947611 + this.locZ * this.locZ * 4392871L + this.locZ * 389711 ^ seed);
     }
 
     public boolean isEmpty() {
         return true;
     }
 
-    public boolean c(int paramInt1, int paramInt2) {
+    public boolean c(int posX, int posZ) {
         return true;
     }
 }

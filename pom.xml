@@ -38,6 +38,10 @@
         <vault.version>1.2.27</vault.version>
         <worldedit.version>5.5.6</worldedit.version>
         <simplenbt.version>1.0.5</simplenbt.version>
+        <mcmmo.version>1.4.06</mcmmo.version>
+        <heroes.version>1.5.2</heroes.version>
+        <heroes.build>b1713</heroes.build>
+        <ancientrpg.version>1.0</ancientrpg.version>
         <metrics.version>R7</metrics.version>
     </properties>
 
@@ -128,6 +132,31 @@
             <artifactId>simplenbt</artifactId>
             <version>${simplenbt.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.gmail.nossr50.mcMMO</groupId>
+            <artifactId>mcMMO</artifactId>
+            <version>${mcmmo.version}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.getspout</groupId>
+                    <artifactId>spoutplugin</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.ancientshores</groupId>
+            <artifactId>AncientRPG</artifactId>
+            <version>${ancientrpg.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.herocraftonline.heroes</groupId>
+            <artifactId>Heroes</artifactId>
+            <version>${heroes.version}</version>
+            <classifier>${heroes.build}</classifier>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

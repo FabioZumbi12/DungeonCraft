@@ -28,11 +28,41 @@ import java.util.UUID;
 
 public class Group {
 
+    private static List<Group> groups = new ArrayList<Group>();
     private UUID uuid;
     private List<DungeonCraftPlayer> players = new ArrayList<DungeonCraftPlayer>();
 
+    public static Group newGroup(DungeonCraftPlayer player) {
+        Group newGroup = new Group(player);
+        groups.add(newGroup);
+        return newGroup;
+    }
+
+    public static Group getGroupByPlayer(DungeonCraftPlayer player) {
+        for(Group g : groups) {
+            if(g.containsPlayer(player)) {
+                return g;
+            }
+        }
+        return null;
+    }
+
+    public static Group getGroupByPlayer(Player player) {
+        for(Group g : groups) {
+            if(g.containsPlayer(player)) {
+                return g;
+            }
+        }
+        return null;
+    }
+
     public Group() {
         this.uuid = UUID.randomUUID();
+    }
+
+    public Group(DungeonCraftPlayer player) {
+        this.uuid = UUID.randomUUID();
+        addPlayer(player);
     }
 
     public void addPlayer(Player player) {
@@ -63,6 +93,10 @@ public class Group {
 
     public boolean containsPlayer(DungeonCraftPlayer player) {
         return players.contains(player);
+    }
+
+    public int getPartyCount() {
+        return players.size();
     }
 
     public List<DungeonCraftPlayer> getPlayers() {

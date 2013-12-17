@@ -31,69 +31,45 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupManager
-{
+public class GroupManager {
 
-    private enum GroupTypes
-    {
+    private enum GroupTypes {
         HEROES, ANCIENT, MCMMO, DUNGEONCRAFT, NONE
     }
 
-    public static boolean isInGroup(Player player)
-    {
+    public static boolean isInGroup(Player player) {
         return isInGroupEnum(player) != GroupTypes.NONE;
     }
 
-    public static GroupTypes isInGroupEnum(Player player)
-    {
-        if (PluginSupportManager.isPluginUsable("Heroes"))
-        {
-            try
-            {
+    public static GroupTypes isInGroupEnum(Player player) {
+        if (PluginSupportManager.isPluginUsable("Heroes")) {
+            try {
                 Heroes heroes = PluginSupportManager.getPluginInstance(Heroes.class);
                 Hero heroPlayer = heroes.getCharacterManager().getHero(player);
-                if (heroPlayer.getParty() != null && heroPlayer.getParty().getMembers().size() > 1)
-                {
+                if (heroPlayer.getParty() != null && heroPlayer.getParty().getMembers().size() > 1) {
                     return GroupTypes.HEROES;
                 }
+            } catch (Exception ignored) {
             }
-            catch (Exception ignored)
-            {
-            }
-        }
-        else if (PluginSupportManager.isPluginUsable("mcMMO"))
-        {
-            try
-            {
-                if (PartyAPI.getMembers(player) != null && PartyAPI.getMembers(player).size() > 1)
-                {
+        } else if (PluginSupportManager.isPluginUsable("mcMMO")) {
+            try {
+                if (PartyAPI.getMembers(player) != null && PartyAPI.getMembers(player).size() > 1) {
                     return GroupTypes.MCMMO;
                 }
+            } catch (Exception ignored) {
             }
-            catch (Exception ignored)
-            {
-            }
-        }
-        else if (PluginSupportManager.isPluginUsable("AncientRPG"))
-        {
-            try
-            {
+        } else if (PluginSupportManager.isPluginUsable("AncientRPG")) {
+            try {
                 ApiManager api = ApiManager.getApiManager();
                 AncientRPGParty party = api.getPlayerParty(player);
-                if (party != null && party.getMemberNumber() > 1)
-                {
+                if (party != null && party.getMemberNumber() > 1) {
                     return GroupTypes.ANCIENT;
                 }
 
+            } catch (Exception ignored) {
             }
-            catch (Exception ignored)
-            {
-            }
-        }
-        else
-        {
-            if (Group.getGroupByPlayer(player) != null && Group.getGroupByPlayer(player).getPartyCount() > 1)
-            {
+        } else {
+            if (Group.getGroupByPlayer(player) != null && Group.getGroupByPlayer(player).getPartyCount() > 1) {
                 return GroupTypes.DUNGEONCRAFT;
             }
         }
@@ -101,16 +77,13 @@ public class GroupManager
     }
 
     //Returns complete group or null if player is not in group
-    public static List<DungeonCraftPlayer> getGroup(Player player)
-    {
+    public static List<DungeonCraftPlayer> getGroup(Player player) {
         List<DungeonCraftPlayer> ret = new ArrayList<DungeonCraftPlayer>();
-        switch (isInGroupEnum(player))
-        {
+        switch (isInGroupEnum(player)) {
             case HEROES:
                 Heroes heroes = PluginSupportManager.getPluginInstance(Heroes.class);
                 Hero heroPlayer = heroes.getCharacterManager().getHero(player);
-                for (Hero h : heroPlayer.getParty().getMembers())
-                {
+                for (Hero h : heroPlayer.getParty().getMembers()) {
                     ret.add(DungeonCraftPlayer.getPlayer(h.getPlayer()));
                 }
                 return ret;
@@ -118,15 +91,13 @@ public class GroupManager
             case ANCIENT:
                 ApiManager api = ApiManager.getApiManager();
                 AncientRPGParty party = api.getPlayerParty(player);
-                for (Player p : party.Member)
-                {
+                for (Player p : party.Member) {
                     ret.add(DungeonCraftPlayer.getPlayer(p));
                 }
                 return ret;
 
             case MCMMO:
-                for (String s : PartyAPI.getMembers(player))
-                {
+                for (String s : PartyAPI.getMembers(player)) {
                     ret.add(DungeonCraftPlayer.getPlayer(s));
                 }
                 return ret;
@@ -141,8 +112,7 @@ public class GroupManager
         return null;
     }
 
-    public static int getGroupStrength(Player player)
-    {
+    public static int getGroupStrength(Player player) {
         List<DungeonCraftPlayer> tmp = getGroup(player);
         return tmp == null ? -1 : tmp.size();
     }

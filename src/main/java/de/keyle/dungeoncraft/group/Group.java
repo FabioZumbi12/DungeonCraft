@@ -39,8 +39,8 @@ public class Group {
     }
 
     public static Group getGroupByPlayer(DungeonCraftPlayer player) {
-        for(Group g : groups) {
-            if(g.containsPlayer(player)) {
+        for (Group g : groups) {
+            if (g.containsPlayer(player)) {
                 return g;
             }
         }
@@ -48,8 +48,8 @@ public class Group {
     }
 
     public static Group getGroupByPlayer(Player player) {
-        for(Group g : groups) {
-            if(g.containsPlayer(player)) {
+        for (Group g : groups) {
+            if (g.containsPlayer(player)) {
                 return g;
             }
         }

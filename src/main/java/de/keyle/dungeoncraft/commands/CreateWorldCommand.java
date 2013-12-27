@@ -20,16 +20,15 @@
 
 package de.keyle.dungeoncraft.commands;
 
+import de.keyle.command.framework.Command;
+import de.keyle.command.framework.CommandArgs;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 
-public class CreateWorldCommand implements CommandExecutor {
-    @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+public class CreateWorldCommand {
+    @Command(name = "dccw")
+    public void onCommand(CommandArgs args) {
 
         World world = DungeonCraftPlugin.getPlugin().getServer().getWorld("dctestworld");
 
@@ -42,7 +41,5 @@ public class CreateWorldCommand implements CommandExecutor {
             DungeonCraftLogger.write("Wrong Generator!");
         }
         */
-
-        return true;
     }
 }

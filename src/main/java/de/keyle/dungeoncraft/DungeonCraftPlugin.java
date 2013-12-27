@@ -20,6 +20,7 @@
 
 package de.keyle.dungeoncraft;
 
+import de.keyle.command.framework.CommandFramework;
 import de.keyle.dungeoncraft.commands.CreateWorldCommand;
 import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.DungeonCraftVersion;
@@ -27,6 +28,7 @@ import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -34,6 +36,7 @@ import java.util.Arrays;
 
 public class DungeonCraftPlugin extends JavaPlugin {
     private static DungeonCraftPlugin plugin;
+    CommandFramework framework;
 
     public void onDisable() {
         DungeonCraftLogger.setConsole(null);
@@ -62,12 +65,23 @@ public class DungeonCraftPlugin extends JavaPlugin {
         DebugLogger.info("Java: " + System.getProperty("java.version") + " (VM: " + System.getProperty("java.vm.version") + ") by " + System.getProperty("java.vendor"));
         DebugLogger.info("Plugins: " + Arrays.toString(getServer().getPluginManager().getPlugins()));
 
-        getCommand("dctest").setExecutor(new CreateWorldCommand());
+        framework = new CommandFramework(this) {
+            @Override
+            public void printMessage(String message) {
+                DungeonCraftLogger.write(message);
+            }
+        };
+        framework.registerCommands(new CreateWorldCommand());
 
         DungeonCraftLogger.write("version " + DungeonCraftVersion.getVersion() + "-b" + DungeonCraftVersion.getBuild() + ChatColor.GREEN + " ENABLED");
     }
 
     public static DungeonCraftPlugin getPlugin() {
         return plugin;
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
+        return framework.handleCommand(sender, label, command, args);
     }
 }

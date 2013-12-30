@@ -1,7 +1,7 @@
 /*
  * This file is part of DungeonCraft
  *
- * Copyright (C) 2011-2013 Keyle
+ * Copyright (C) 2011-2013 Keyle & xXLupoXx
  * DungeonCraft is licensed under the GNU Lesser General Public License.
  *
  * DungeonCraft is free software: you can redistribute it and/or modify

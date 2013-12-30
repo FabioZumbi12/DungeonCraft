@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.dungeon.generator;
 
 import com.google.common.collect.ArrayListMultimap;
+import de.keyle.dungeoncraft.api.events.DungeonChunkLoadedEvent;
 import de.keyle.dungeoncraft.dungeon.DungeonFieldManager;
 import de.keyle.dungeoncraft.util.IScheduler;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;

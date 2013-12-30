@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.dungeon.generator;
+package de.keyle.dungeoncraft.api.events;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

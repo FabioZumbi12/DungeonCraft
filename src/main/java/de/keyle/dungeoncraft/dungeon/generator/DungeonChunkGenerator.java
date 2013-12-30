@@ -20,6 +20,9 @@
 
 package de.keyle.dungeoncraft.dungeon.generator;
 
+import de.keyle.dungeoncraft.dungeon.DungeonField;
+import de.keyle.dungeoncraft.dungeon.DungeonFieldManager;
+import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import net.minecraft.server.v1_7_R1.Block;
 import net.minecraft.server.v1_7_R1.Chunk;
@@ -30,18 +33,18 @@ public class DungeonChunkGenerator extends Thread {
     private final World world;
     private final int chunkX;
     private final int chunkZ;
-    private final DungeonCraftChunkGenerator generator;
+    private final DungeonCraftChunkProvider provider;
 
-    public DungeonChunkGenerator(World world, int chunkX, int chunkZ, DungeonCraftChunkGenerator generator) {
+    public DungeonChunkGenerator(World world, int chunkX, int chunkZ, DungeonCraftChunkProvider provider) {
         this.world = world;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
-        this.generator = generator;
+        this.provider = provider;
     }
 
     public void run() {
-        DungeonManager.DungeonField field = DungeonManager.getDungeonFieldForChunk(chunkX, chunkZ);
-        Schematic schematic = DungeonManager.getSchematicForDungeonField(field);
+        DungeonField field = DungeonFieldManager.getDungeonFieldForChunk(chunkX, chunkZ);
+        Schematic schematic = DungeonFieldManager.getSchematicForDungeonField(field);
 
         if (schematic != null) {
 
@@ -50,10 +53,11 @@ public class DungeonChunkGenerator extends Thread {
 
             int sectionCount = (int) Math.ceil(schematicHeight / 16.D);
             for (int i = 0; i < sectionCount; i++) {
-                chunk.i()[i] = generateSectionBlocks(i, chunkX, chunkZ, schematic, field);
+                chunk.i()[i] = generateSectionBlocks(i, chunkX - field.getChunkX(), chunkZ - field.getChunkZ(), schematic);
             }
-            setBiomes(chunk, chunkX, chunkZ, schematic, field);
-            chunk.initLighting();
+            setBiomes(chunk, chunkX - field.getChunkX(), chunkZ - field.getChunkZ(), schematic);
+            //chunk.initLighting(); //causes ModificationException in:
+            // Collections.sort(entityplayer.chunkCoordIntPairQueue, new ChunkCoordComparator(entityplayer));
 
             // make the chunk ready (faked)
             chunk.lit = true;
@@ -61,13 +65,12 @@ public class DungeonChunkGenerator extends Thread {
             chunk.done = true;
             // ----------------------
 
-            generator.addChunk(chunk);
+            provider.addChunk(chunk);
+            DungeonCraftLogger.write("Generated Chunk from schematic at X(" + chunkX + ") Z(" + chunkZ + ")");
         }
     }
 
-    public ChunkSection generateSectionBlocks(int section, int chunkX, int chunkZ, Schematic schematic, DungeonManager.DungeonField field) {
-        int startChunkX = field.getChunkX();
-        int startChunkZ = field.getChunkZ();
+    public ChunkSection generateSectionBlocks(int section, int chunkX, int chunkZ, Schematic schematic) {
         int schematicWidth = schematic.getWidth();
         int schematicLength = schematic.getLenght();
         byte[] blocks = schematic.getBlocks();
@@ -75,12 +78,18 @@ public class DungeonChunkGenerator extends Thread {
 
         ChunkSection newChunkSection = new ChunkSection(section, true); //ToDo Check 2nd parameter
         int yOffset = section * 16;
+        int maxY = schematic.getHeight() > yOffset ? 16 : yOffset - schematic.getHeight();
+
+        int maxIndex = schematicWidth * schematicLength * schematic.getHeight();
 
         for (int x = 0; x < 16; x++) {
-            for (int y = 0; y < 16; ++y) {
+            for (int y = 0; y < maxY; ++y) {
                 for (int z = 0; z < 16; ++z) {
-                    int index = getSchematicIndex(startChunkX, startChunkZ, chunkX, chunkZ, x, y + yOffset, z, schematicLength, schematicWidth);
+                    int index = getSchematicIndex(chunkX, chunkZ, x, y + yOffset, z, schematicLength, schematicWidth);
                     if (index != -1) {
+                        if (index >= maxIndex) {
+                            continue;
+                        }
                         newChunkSection.setTypeId(x, y, z, Block.e(blocks[index]));
                         newChunkSection.setData(x, y, z, data[index]);
                     }
@@ -90,18 +99,21 @@ public class DungeonChunkGenerator extends Thread {
         return newChunkSection;
     }
 
-    public byte[] setBiomes(Chunk chunk, int chunkX, int chunkZ, Schematic schematic, DungeonManager.DungeonField field) {
-        int startChunkX = field.getChunkX();
-        int startChunkZ = field.getChunkZ();
+    public byte[] setBiomes(Chunk chunk, int chunkX, int chunkZ, Schematic schematic) {
         int schematicWidth = schematic.getWidth();
         int schematicLength = schematic.getLenght();
         byte[] schematicBiomes = schematic.getBiomes();
         byte[] biomes = chunk.m();
 
+        int maxIndex = schematicWidth * schematicLength;
+
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; ++z) {
-                int index = getSchematicIndex(startChunkX, startChunkZ, chunkX, chunkZ, x, z, schematicLength, schematicWidth);
+                int index = getSchematicIndex(chunkX, chunkZ, x, z, schematicLength, schematicWidth);
                 if (index != -1) {
+                    if (index >= maxIndex) {
+                        continue;
+                    }
                     biomes[x + z * 16] = schematicBiomes[index];
                 }
             }
@@ -110,23 +122,23 @@ public class DungeonChunkGenerator extends Thread {
         return biomes;
     }
 
-    public static int getSchematicIndex(int startChunkX, int startChunkZ, int chunkX, int chunkZ, int x, int y, int z, int schematicLength, int schematicWidth) {
-        if (x >= schematicWidth - (chunkX - startChunkX) * 16) {
+    public static int getSchematicIndex(int chunkX, int chunkZ, int x, int y, int z, int schematicLength, int schematicWidth) {
+        if (x >= schematicWidth - chunkX * 16) {
             return -1;
         }
-        if (z >= schematicLength - (chunkZ - startChunkZ) * 16) {
+        if (z >= schematicLength - chunkZ * 16) {
             return -1;
         }
-        return (y * 16 * 16) + ((z + (chunkZ - startChunkZ) * 16) * 16) + (x + (chunkX - startChunkX) * 16);
+        return (y * schematicWidth * schematicLength) + ((z + chunkZ * 16) * schematicWidth) + (x + chunkX * 16);
     }
 
-    public static int getSchematicIndex(int startChunkX, int startChunkZ, int chunkX, int chunkZ, int x, int z, int schematicLength, int schematicWidth) {
-        if (x >= schematicWidth - (chunkX - startChunkX) * 16) {
+    public static int getSchematicIndex(int chunkX, int chunkZ, int x, int z, int schematicLength, int schematicWidth) {
+        if (x >= schematicWidth - chunkX * 16) {
             return -1;
         }
-        if (z >= schematicLength - (chunkZ - startChunkZ) * 16) {
+        if (z >= schematicLength - chunkZ * 16) {
             return -1;
         }
-        return ((z + (chunkZ - startChunkZ) * 16) * 16) + (x + (chunkX - startChunkX) * 16);
+        return ((z + chunkZ * 16) * schematicWidth) + (x + chunkX * 16);
     }
 }

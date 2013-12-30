@@ -20,10 +20,8 @@
 
 package de.keyle.dungeoncraft.dungeon;
 
-import de.keyle.dungeoncraft.dungeon.generator.DungeonManager;
 import de.keyle.dungeoncraft.util.IScheduler;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
-import de.keyle.dungeoncraft.util.schematic.Schematic;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ public class Dungeon implements IScheduler {
     protected final String dungeonName;
     protected final DungeonBase dungeonBase;
     protected final UUID uuid;
-    protected final DungeonManager.DungeonField position;
+    protected final DungeonField position;
 
     protected List<Player> playerList = new ArrayList<Player>();
 
@@ -44,7 +42,7 @@ public class Dungeon implements IScheduler {
         this.dungeonName = dungeonName;
         this.dungeonBase = dungeonTheme;
         uuid = UUID.randomUUID();
-        position = DungeonManager.getNewDungeonField();
+        position = DungeonFieldManager.getNewDungeonField();
     }
 
     public void setReady() {
@@ -58,24 +56,26 @@ public class Dungeon implements IScheduler {
     public void schedule() {
         if (isReady) {
             if (first) {
+                unlockSchematic();
                 DungeonCraftLogger.write("Ok Lets do something");
                 first = false;
             }
+            //ToDo Weather & Time
         }
         if (!isLoaded) {
             if (!dungeonBase.isSchematicLoaded()) {
                 dungeonBase.loadSchematic();
             } else {
-                lockSchematic(dungeonBase.getSchematic());
+                lockSchematic();
             }
         }
     }
 
-    public void lockSchematic(Schematic schematic) {
-        DungeonManager.assignSchematicToDungeonField(position, schematic);
+    public void lockSchematic() {
+        DungeonFieldManager.assignSchematicToDungeonField(position, dungeonBase.getSchematic());
     }
 
     public void unlockSchematic() {
-        DungeonManager.dissociateSchematicFromDungeonField(position);
+        DungeonFieldManager.dissociateSchematicFromDungeonField(position);
     }
 }

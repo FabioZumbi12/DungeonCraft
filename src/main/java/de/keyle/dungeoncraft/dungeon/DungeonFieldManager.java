@@ -18,15 +18,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.dungeon.generator;
+package de.keyle.dungeoncraft.dungeon;
 
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class DungeonManager {
-
+public class DungeonFieldManager {
     private static Map<DungeonField, Schematic> fieldSchematicMap = new HashMap<DungeonField, Schematic>();
 
     public static DungeonField getNewDungeonField() {
@@ -42,7 +41,7 @@ public class DungeonManager {
     }
 
     public static Schematic getSchematicForChunk(int chunkX, int chunkZ) {
-        DungeonField field = new DungeonField(chunkX / 100, chunkZ / 100);
+        DungeonField field = getDungeonFieldForChunk(chunkX, chunkZ);
 
         return fieldSchematicMap.get(field);
     }
@@ -52,73 +51,6 @@ public class DungeonManager {
     }
 
     public static DungeonField getDungeonFieldForChunk(int chunkX, int chunkZ) {
-        return new DungeonField(chunkX / 100, chunkZ / 100);
-    }
-
-    public static class DungeonField implements Comparable<DungeonField> {
-        private int x, z;
-
-        public DungeonField(int x, int z) {
-            this.x = x;
-            this.z = z;
-        }
-
-        public int getX() {
-            return x;
-        }
-
-        public int getZ() {
-            return z;
-        }
-
-        public int getBlockX() {
-            return 1600 * x;
-        }
-
-        public int getBlockZ() {
-            return 1600 * z;
-        }
-
-        public int getChunkX() {
-            return 100 * x;
-        }
-
-        public int getChunkZ() {
-            return 100 * z;
-        }
-
-        @Override
-        public int compareTo(DungeonField other) {
-            if (this.x != other.x) {
-                return this.x > other.x ? 1 : -1;
-            }
-            if (this.z != other.z) {
-                return this.z > other.z ? 1 : -1;
-            }
-            return 0;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o == null || !(o instanceof DungeonField)) {
-                return false;
-            }
-            DungeonField that = (DungeonField) o;
-
-            if (x != that.x) {
-                return false;
-            }
-            if (z != that.z) {
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = x;
-            result = 31 * result + z;
-            return result;
-        }
+        return new DungeonField((int) Math.floor(chunkX / 100.), (int) Math.floor(chunkZ / 100.));
     }
 }

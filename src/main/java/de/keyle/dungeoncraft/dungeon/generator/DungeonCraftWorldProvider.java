@@ -20,12 +20,33 @@
 
 package de.keyle.dungeoncraft.dungeon.generator;
 
-import net.minecraft.server.v1_7_R1.ChunkProviderGenerate;
+import net.minecraft.server.v1_7_R1.IChunkProvider;
 import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R1.WorldProvider;
+import net.minecraft.server.v1_7_R1.WorldType;
 
-public class DungeonCraftChunkGenerator extends ChunkProviderGenerate {
+public class DungeonCraftWorldProvider extends WorldProvider {
 
-    public DungeonCraftChunkGenerator(World world, long seed) {
-        super(world, seed, false);
+    DungeonCraftChunkGenerator worldProvider;
+
+    public DungeonCraftWorldProvider(World world) {
+        super();
+        this.b = world;
+        b();
+        worldProvider = new DungeonCraftChunkGenerator(world, world.getSeed());
+        this.type = WorldType.NORMAL;
+    }
+
+    public IChunkProvider getChunkProvider() {
+        return worldProvider;
+    }
+
+    public String getName() {
+        return "Dungeon";
+    }
+
+    @Override
+    public boolean canSpawn(int i, int j) {
+        return true;
     }
 }

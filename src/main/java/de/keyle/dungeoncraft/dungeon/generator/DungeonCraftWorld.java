@@ -26,6 +26,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_7_R1.scoreboard.CraftScoreboard;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.generator.ChunkGenerator;
 
 import java.io.File;
 import java.util.Random;
@@ -59,18 +60,17 @@ public class DungeonCraftWorld {
         }
         while (used);
 
-        DungeonGenerator generator = new DungeonGenerator();
+        ChunkGenerator generator = console.server.getGenerator(worldName);
         ServerNBTManager nbtManager = new ServerNBTManager(worldsFolder, "world", true);
         WorldSettings worldSettings = new WorldSettings(seed, EnumGamemode.ADVENTURE, false, false, WorldType.NORMAL);
 
         WorldServer internal = new DungeonCraftWorldServer(console, nbtManager, worldName, dimension, worldSettings, console.methodProfiler, World.Environment.NORMAL, generator);
 
         internal.scoreboard = ((CraftScoreboard) Bukkit.getScoreboardManager().getMainScoreboard()).getHandle();
-        internal.tracker = new EntityTracker(internal);
+        //internal.tracker = new EntityTracker(internal); //doppelte zuweisung?!?! (WorldServer.java)
         internal.addIWorldAccess(new WorldManager(console, internal));
         internal.difficulty = EnumDifficulty.NORMAL;
         internal.setSpawnFlags(true, true);
-        internal.getWorld().getPopulators().addAll(internal.generator.getDefaultPopulators(internal.getWorld()));
         internal.keepSpawnInMemory = false;
         internal.savingDisabled = false;
 

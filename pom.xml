@@ -37,7 +37,7 @@
 
         <vault.version>1.2.27</vault.version>
         <worldedit.version>5.5.6</worldedit.version>
-        <simplenbt.version>1.0.5</simplenbt.version>
+        <knbt.version>0.0.1-SNAPSHOT</knbt.version>
         <mcmmo.version>1.4.06</mcmmo.version>
         <heroes.version>1.5.2</heroes.version>
         <heroes.build>b1713</heroes.build>
@@ -52,8 +52,12 @@
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
         <repository>
-            <id>mypet-repo</id>
+            <id>keyle-repo</id>
             <url>http://repo.keyle.de/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
         </repository>
         <repository>
             <id>bukkit-repo</id>
@@ -135,13 +139,19 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.spout</groupId>
-            <artifactId>simplenbt</artifactId>
-            <version>${simplenbt.version}</version>
+            <groupId>de.keyle</groupId>
+            <artifactId>fanciful-chat</artifactId>
+            <version>0.0.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.gmail.nossr50.mcMMO</groupId>
+            <groupId>de.keyle</groupId>
+            <artifactId>knbt</artifactId>
+            <version>${knbt.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+        <groupId>com.gmail.nossr50.mcMMO</groupId>
             <artifactId>mcMMO</artifactId>
             <version>${mcmmo.version}</version>
             <scope>provided</scope>
@@ -209,7 +219,7 @@
                     <archive>
                         <manifestEntries>
                             <Project-Authors>Keyle, xXLupoXx</Project-Authors>
-                            <Project-Name>DungeonCraft</Project-Name>
+                            <Project-Name>${project.name}</Project-Name>
                             <Project-Version>${project.version}</Project-Version>
                             <Project-Build>${BUILD_NUMBER}</Project-Build>
                             <Project-Minecraft-Version>${minecraft.version}</Project-Minecraft-Version>
@@ -241,9 +251,9 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <artifactSet>
                                 <includes>
-                                    <include>org.spout:simplenbt:jar:*</include>
                                     <include>org.mcstats.bukkit:metrics:*</include>
                                     <include>de.keyle:command-framework:*</include>
+                                    <include>de.keyle:knbt:*</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
@@ -252,7 +262,7 @@
                                     <shadedPattern>de.keyle.dungeoncraft.util.metrics</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>org.spout.nbt</pattern>
+                                    <pattern>de.keyle.knbt</pattern>
                                     <shadedPattern>de.keyle.dungeoncraft.util.nbt</shadedPattern>
                                 </relocation>
                                 <relocation>
@@ -260,16 +270,6 @@
                                     <shadedPattern>de.keyle.dungeoncraft.commands.framework</shadedPattern>
                                 </relocation>
                             </relocations>
-                            <filters>
-                                <filter>
-                                    <artifact>org.spout:simplenbt</artifact>
-                                    <excludes>
-                                        <exclude>org/spout/nbt/gui/*.class</exclude>
-                                        <exclude>org/spout/nbt/util/*.class</exclude>
-                                        <exclude>LICENSE.txt</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
                         </configuration>
                     </execution>
                 </executions>

@@ -21,7 +21,7 @@
 package de.keyle.dungeoncraft.util.schematic;
 
 import de.keyle.dungeoncraft.util.vector.BlockVector;
-import org.spout.nbt.CompoundMap;
+import de.keyle.knbt.TagCompound;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,10 +33,10 @@ public class Schematic {
     private final short width;
     private final short lenght;
     private final short height;
-    private final Map<BlockVector, CompoundMap> tileEntities = new HashMap<BlockVector, CompoundMap>();
+    private final Map<BlockVector, TagCompound> tileEntities = new HashMap<BlockVector, TagCompound>();
     //private final Map<Vector, CompoundMap> entities = new HashMap<Vector, CompoundMap>();
 
-    public Schematic(byte[] blocks, byte[] data, byte[] biomes, short width, short lenght, short height, Map<BlockVector, CompoundMap> tileEntities) {
+    public Schematic(byte[] blocks, byte[] data, byte[] biomes, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities) {
         this.blocks = blocks;
         this.data = data;
         this.biomes = biomes;
@@ -46,7 +46,7 @@ public class Schematic {
         this.tileEntities.putAll(tileEntities);
     }
 
-    public Schematic(byte[] blocks, byte[] data, short width, short lenght, short height, Map<BlockVector, CompoundMap> tileEntities) {
+    public Schematic(byte[] blocks, byte[] data, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities) {
         this.blocks = blocks;
         this.data = data;
         this.biomes = new byte[width * lenght];
@@ -80,7 +80,7 @@ public class Schematic {
         return height;
     }
 
-    public Map<BlockVector, CompoundMap> getTileEntities() {
+    public Map<BlockVector, TagCompound> getTileEntities() {
         return tileEntities;
     }
 }

@@ -21,13 +21,13 @@
 package de.keyle.dungeoncraft.util.schematic;
 
 import de.keyle.dungeoncraft.util.vector.BlockVector;
-import org.spout.nbt.*;
-import org.spout.nbt.stream.NBTInputStream;
+import de.keyle.knbt.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SchematicLoader extends Thread {
@@ -55,53 +55,57 @@ public class SchematicLoader extends Thread {
         }
 
         FileInputStream stream = new FileInputStream(file);
-        NBTInputStream nbtStream = new NBTInputStream(stream);
 
-        CompoundTag schematicTag = (CompoundTag) nbtStream.readTag();
-        if (!schematicTag.getName().equals("Schematic")) {
-            throw new IllegalArgumentException("Tag \"Schematic\" does not exist or is not first");
+        TagCompound schematicTag = TagStream.readTag(stream, true);
+        if (schematicTag == null) {
+            schematicTag = TagStream.readTag(stream, false);
+            if (schematicTag == null) {
+                throw new IllegalArgumentException("Can not read tags");
+            }
         }
 
-        CompoundMap schematic = schematicTag.getValue();
-        if (!schematic.containsKey("Blocks")) {
+        if (!schematicTag.containsKeyAs("Blocks", TagByteArray.class)) {
             throw new IllegalArgumentException("Schematic file is missing a \"Blocks\" tag");
         }
 
-        short width = getChildTag(schematic, "Width", ShortTag.class).getValue();
-        short length = getChildTag(schematic, "Length", ShortTag.class).getValue();
-        short height = getChildTag(schematic, "Height", ShortTag.class).getValue();
+        short width = getChildTag(schematicTag, "Width", TagShort.class).getShortData();
+        short length = getChildTag(schematicTag, "Length", TagShort.class).getShortData();
+        short height = getChildTag(schematicTag, "Height", TagShort.class).getShortData();
 
-        String materials = getChildTag(schematic, "Materials", StringTag.class).getValue();
+        String materials = getChildTag(schematicTag, "Materials", TagString.class).getStringData();
         if (!materials.equals("Alpha")) {
             throw new IllegalArgumentException("Schematic file is not an Alpha schematic");
         }
 
-        byte[] blocks = getChildTag(schematic, "Blocks", ByteArrayTag.class).getValue();
-        byte[] blockData = getChildTag(schematic, "Data", ByteArrayTag.class).getValue();
+        byte[] blocks = getChildTag(schematicTag, "Blocks", TagByteArray.class).getByteArrayData();
+        byte[] blockData = getChildTag(schematicTag, "Data", TagByteArray.class).getByteArrayData();
         byte[] biomeData;
-        if (schematic.containsKey("Biomes")) {
-            biomeData = getChildTag(schematic, "Biomes", ByteArrayTag.class).getValue();
+        if (schematicTag.containsKeyAs("Biomes", TagByteArray.class)) {
+            biomeData = getChildTag(schematicTag, "Biomes", TagByteArray.class).getByteArrayData();
         } else {
             biomeData = new byte[length * width];
         }
 
-        ListTag<CompoundTag> tileEntitiesTag = getChildTag(schematic, "TileEntities", ListTag.class);
-        //ListTag<CompoundTag> entitiesTag = getChildTag(schematic, "Entities", ListTag.class);
+        TagList tileEntitiesTag = getChildTag(schematicTag, "TileEntities", TagList.class);
+        //ListTag<TagCompound> entitiesTag = getChildTag(schematic, "Entities", ListTag.class);
 
-        Map<BlockVector, CompoundMap> tileEntities = new HashMap<BlockVector, CompoundMap>();
-        for (CompoundTag compound : tileEntitiesTag.getValue()) {
-            CompoundMap tileEntity = compound.getValue();
+        List<TagBase> readOnlyList = tileEntitiesTag.getReadOnlyList();
+        Map<BlockVector, TagCompound> tileEntities = new HashMap<BlockVector, TagCompound>();
 
-            if (!tileEntity.containsKey("x")) {
+        for (int i = 0; i < readOnlyList.size(); i++) {
+            TagBase compound = readOnlyList.get(i);
+            TagCompound tileEntity = tileEntitiesTag.getTagAs(i, TagCompound.class);
+
+            if (!tileEntity.containsKeyAs("x", TagInt.class)) {
                 continue;
-            } else if (!tileEntity.containsKey("y")) {
+            } else if (!tileEntity.containsKeyAs("y", TagInt.class)) {
                 continue;
-            } else if (!tileEntity.containsKey("z")) {
+            } else if (!tileEntity.containsKeyAs("z", TagInt.class)) {
                 continue;
             }
-            int x = ((IntTag) tileEntity.get("x")).getValue();
-            int y = ((IntTag) tileEntity.get("y")).getValue();
-            int z = ((IntTag) tileEntity.get("z")).getValue();
+            int x = ((TagInt) tileEntity.get("x")).getIntData();
+            int y = ((TagInt) tileEntity.get("y")).getIntData();
+            int z = ((TagInt) tileEntity.get("z")).getIntData();
 
             BlockVector v = new BlockVector(x, y, z);
             tileEntities.put(v, tileEntity);
@@ -110,11 +114,11 @@ public class SchematicLoader extends Thread {
         return new Schematic(blocks, blockData, biomeData, width, length, height, tileEntities);
     }
 
-    private static <T extends Tag> T getChildTag(CompoundMap items, String key, Class<T> expected) throws IllegalArgumentException {
-        if (!items.containsKey(key)) {
+    private static <T extends TagBase> T getChildTag(TagCompound items, String key, Class<T> expected) throws IllegalArgumentException {
+        if (!items.getCompoundData().containsKey(key)) {
             throw new IllegalArgumentException("Schematic file is missing a \"" + key + "\" tag");
         }
-        Tag tag = items.get(key);
+        TagBase tag = items.get(key);
         if (!expected.isInstance(tag)) {
             throw new IllegalArgumentException(key + " tag is not of tag type " + expected.getName());
         }

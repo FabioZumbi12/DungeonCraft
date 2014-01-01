@@ -26,6 +26,7 @@ import de.keyle.dungeoncraft.commands.InviteToGroupCommand;
 import de.keyle.dungeoncraft.commands.JoinGroupCommand;
 import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.DungeonCraftVersion;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import org.bukkit.Bukkit;
@@ -67,6 +68,8 @@ public class DungeonCraftPlugin extends JavaPlugin {
         DebugLogger.info("Java: " + System.getProperty("java.version") + " (VM: " + System.getProperty("java.vm.version") + ") by " + System.getProperty("java.vendor"));
         DebugLogger.info("Plugins: " + Arrays.toString(getServer().getPluginManager().getPlugins()));
 
+        new Locales();
+
         framework = new CommandFramework(this) {
             @Override
             public void printMessage(String message) {
@@ -86,7 +89,6 @@ public class DungeonCraftPlugin extends JavaPlugin {
 
     public File getFile() {
         return super.getFile();
-
     }
 
     @Override

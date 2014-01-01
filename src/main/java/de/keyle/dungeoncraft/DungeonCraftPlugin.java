@@ -24,6 +24,7 @@ import de.keyle.command.framework.CommandFramework;
 import de.keyle.dungeoncraft.commands.CreateGroupCommand;
 import de.keyle.dungeoncraft.commands.InviteToGroupCommand;
 import de.keyle.dungeoncraft.commands.JoinGroupCommand;
+import de.keyle.dungeoncraft.listeners.WorldListener;
 import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.DungeonCraftVersion;
 import de.keyle.dungeoncraft.util.locale.Locales;
@@ -69,6 +70,9 @@ public class DungeonCraftPlugin extends JavaPlugin {
         DebugLogger.info("Plugins: " + Arrays.toString(getServer().getPluginManager().getPlugins()));
 
         new Locales();
+
+        WorldListener worldListener = new WorldListener();
+        getServer().getPluginManager().registerEvents(worldListener, this);
 
         framework = new CommandFramework(this) {
             @Override

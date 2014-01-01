@@ -20,6 +20,8 @@
 
 package de.keyle.dungeoncraft.group;
 
+import de.keyle.dungeoncraft.util.BukkitUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class DungeonCraftPlayer {
     private Map<String, Integer> dungeonLockout = new HashMap<String, Integer>();
 
     private final String playerName;
+    private String lastLanguage = "en";
 
     public DungeonCraftPlayer(String playerName) {
         this.playerName = playerName;
@@ -92,6 +95,21 @@ public class DungeonCraftPlayer {
 
     public static List<DungeonCraftPlayer> getAllPlayers() {
         return playerList;
+    }
+
+    public String getLanguage() {
+        if (isOnline()) {
+            lastLanguage = BukkitUtil.getPlayerLanguage(getPlayer());
+        }
+        return lastLanguage;
+    }
+
+    public Player getPlayer() {
+        return Bukkit.getServer().getPlayerExact(playerName);
+    }
+
+    public boolean isOnline() {
+        return getPlayer().isOnline(); // This could cause lag on bigger servers.
     }
 
     public boolean equals(Object o) {

@@ -20,70 +20,42 @@
 
 package de.keyle.dungeoncraft.group;
 
+import de.keyle.dungeoncraft.api.group.DungeonCraftGroup;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Group {
-
-    private static List<Group> groups = new ArrayList<Group>();
+public abstract class Group implements DungeonCraftGroup {
     private UUID uuid;
-    private List<DungeonCraftPlayer> players = new ArrayList<DungeonCraftPlayer>();
+    private List<DungeonCraftPlayer> members = new ArrayList<DungeonCraftPlayer>();
+    private DungeonCraftPlayer leader;
 
-    public static Group newGroup(DungeonCraftPlayer player) {
-        Group newGroup = new Group(player);
-        groups.add(newGroup);
-        return newGroup;
-    }
-
-    public static Group getGroupByPlayer(DungeonCraftPlayer player) {
-        for (Group g : groups) {
-            if (g.containsPlayer(player)) {
-                return g;
-            }
-        }
-        return null;
-    }
-
-    public static Group getGroupByPlayer(Player player) {
-        for (Group g : groups) {
-            if (g.containsPlayer(player)) {
-                return g;
-            }
-        }
-        return null;
-    }
-
-    public Group() {
+    public Group(DungeonCraftPlayer leader) {
         this.uuid = UUID.randomUUID();
-    }
-
-    public Group(DungeonCraftPlayer player) {
-        this.uuid = UUID.randomUUID();
-        addPlayer(player);
+        this.leader = leader;
+        addPlayer(leader);
     }
 
     public void addPlayer(Player player) {
         addPlayer(DungeonCraftPlayer.getPlayer(player));
-
     }
 
     public void addPlayer(DungeonCraftPlayer player) {
         if (!this.containsPlayer(player)) {
-            players.add(player);
+            members.add(player);
         }
     }
 
-    public void deletePlayer(Player player) {
-        deletePlayer(DungeonCraftPlayer.getPlayer(player));
+    public void removePlayer(Player player) {
+        removePlayer(DungeonCraftPlayer.getPlayer(player));
 
     }
 
-    public void deletePlayer(DungeonCraftPlayer player) {
+    public void removePlayer(DungeonCraftPlayer player) {
         if (this.containsPlayer(player)) {
-            this.players.remove(player);
+            this.members.remove(player);
         }
     }
 
@@ -92,15 +64,27 @@ public class Group {
     }
 
     public boolean containsPlayer(DungeonCraftPlayer player) {
-        return players.contains(player);
+        return members.contains(player);
     }
 
-    public int getPartyCount() {
-        return players.size();
+    @Override
+    public int getGroupStrength() {
+        return members.size();
     }
 
-    public List<DungeonCraftPlayer> getPlayers() {
-        return this.players;
+    @Override
+    public List<DungeonCraftPlayer> getGroupMembers() {
+        return this.members;
+    }
+
+    @Override
+    public DungeonCraftPlayer getGroupLeader() {
+        return leader;
+    }
+
+    @Override
+    public void disbandGroup() {
+        members.clear();
     }
 
     public UUID getUuid() {
@@ -110,7 +94,7 @@ public class Group {
     public String toString() {
         String tmp = "Group ID: " + uuid.toString() + "\n";
         int i = 0;
-        for (DungeonCraftPlayer player : players) {
+        for (DungeonCraftPlayer player : members) {
             tmp += "Member " + ++i + ": " + player.toString() + "\n";
         }
         return tmp;
@@ -119,9 +103,9 @@ public class Group {
     public boolean equals(Object o) {
         if (o instanceof Group) {
             Group group = (Group) o;
-            if (group.getPlayers().size() != this.players.size()) {
-                for (int i = 0; i < this.players.size(); i++) {
-                    if (!this.players.get(i).equals(group.getPlayers().get(i))) {
+            if (group.getGroupMembers().size() != this.members.size()) {
+                for (int i = 0; i < this.members.size(); i++) {
+                    if (!this.members.get(i).equals(group.getGroupMembers().get(i))) {
                         return false;
                     }
                 }

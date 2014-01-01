@@ -18,28 +18,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.commands;
+package de.keyle.dungeoncraft.api.group;
 
-import de.keyle.command.framework.Command;
-import de.keyle.command.framework.CommandArgs;
-import de.keyle.dungeoncraft.DungeonCraftPlugin;
-import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
-import org.bukkit.World;
+import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 
-public class CreateWorldCommand {
-    @Command(name = "dccw")
-    public void onCommand(CommandArgs args) {
+import java.util.List;
 
-        World world = DungeonCraftPlugin.getPlugin().getServer().getWorld("dctestworld");
+public interface DungeonCraftGroup {
 
-        if (world == null) {
-            world = DungeonCraftWorld.createWorld();
-        }
+    public int getGroupStrength();
 
-        /*
-        if (!(world.getGenerator() instanceof DungeonGenerator)) {
-            DungeonCraftLogger.write("Wrong Generator!");
-        }
-        */
+    public List<DungeonCraftPlayer> getGroupMembers();
+
+    public DungeonCraftPlayer getGroupLeader();
+
+    public GroupType getGroupType();
+
+    public void disbandGroup();
+
+    public enum GroupType {
+        HEROES, ANCIENT, MCMMO, DUNGEONCRAFT, NONE
     }
 }

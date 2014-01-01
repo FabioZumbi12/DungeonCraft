@@ -25,36 +25,86 @@ import com.ancientshores.AncientRPG.Party.AncientRPGParty;
 import com.gmail.nossr50.api.PartyAPI;
 import com.herocraftonline.heroes.Heroes;
 import com.herocraftonline.heroes.characters.Hero;
+import de.keyle.dungeoncraft.group.systems.AncientRpgGroup;
+import de.keyle.dungeoncraft.group.systems.DungeonCraftGroup;
+import de.keyle.dungeoncraft.group.systems.HeroesGroup;
+import de.keyle.dungeoncraft.group.systems.McMmoGroup;
 import de.keyle.dungeoncraft.util.PluginSupportManager;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import static de.keyle.dungeoncraft.api.group.DungeonCraftGroup.GroupType;
 
 public class GroupManager {
 
-    private enum GroupTypes {
-        HEROES, ANCIENT, MCMMO, DUNGEONCRAFT, NONE
+    private static List<Group> groups = new ArrayList<Group>();
+
+    public static Group newGroup(DungeonCraftPlayer player) {
+        Group newGroup;
+        switch (isInGroupEnum(player.getPlayer())) {
+            case ANCIENT:
+                newGroup = new AncientRpgGroup(player);
+                groups.add(newGroup);
+                break;
+            case HEROES:
+                newGroup = new HeroesGroup(player);
+                groups.add(newGroup);
+                break;
+            case MCMMO:
+                newGroup = new McMmoGroup(player);
+                groups.add(newGroup);
+                break;
+            default:
+                newGroup = new DungeonCraftGroup(player);
+                groups.add(newGroup);
+                break;
+        }
+        return newGroup;
+    }
+
+    public static List<Group> getGroups() {
+        return Collections.unmodifiableList(groups);
+    }
+
+    public static Group getGroupByPlayer(DungeonCraftPlayer player) {
+        for (Group g : groups) {
+            if (g.containsPlayer(player)) {
+                return g;
+            }
+        }
+        return null;
+    }
+
+    public static Group getGroupByPlayer(Player player) {
+        for (Group g : groups) {
+            if (g.containsPlayer(player)) {
+                return g;
+            }
+        }
+        return null;
     }
 
     public static boolean isInGroup(Player player) {
-        return isInGroupEnum(player) != GroupTypes.NONE;
+        return isInGroupEnum(player) != GroupType.NONE;
     }
 
-    public static GroupTypes isInGroupEnum(Player player) {
+    public static GroupType isInGroupEnum(Player player) {
         if (PluginSupportManager.isPluginUsable("Heroes")) {
             try {
                 Heroes heroes = PluginSupportManager.getPluginInstance(Heroes.class);
                 Hero heroPlayer = heroes.getCharacterManager().getHero(player);
                 if (heroPlayer.getParty() != null && heroPlayer.getParty().getMembers().size() > 1) {
-                    return GroupTypes.HEROES;
+                    return GroupType.HEROES;
                 }
             } catch (Exception ignored) {
             }
         } else if (PluginSupportManager.isPluginUsable("mcMMO")) {
             try {
                 if (PartyAPI.getMembers(player) != null && PartyAPI.getMembers(player).size() > 1) {
-                    return GroupTypes.MCMMO;
+                    return GroupType.MCMMO;
                 }
             } catch (Exception ignored) {
             }
@@ -63,17 +113,17 @@ public class GroupManager {
                 ApiManager api = ApiManager.getApiManager();
                 AncientRPGParty party = api.getPlayerParty(player);
                 if (party != null && party.getMemberNumber() > 1) {
-                    return GroupTypes.ANCIENT;
+                    return GroupType.ANCIENT;
                 }
 
             } catch (Exception ignored) {
             }
         } else {
-            if (Group.getGroupByPlayer(player) != null && Group.getGroupByPlayer(player).getPartyCount() > 1) {
-                return GroupTypes.DUNGEONCRAFT;
+            if (getGroupByPlayer(player) != null && getGroupByPlayer(player).getGroupStrength() > 1) {
+                return GroupType.DUNGEONCRAFT;
             }
         }
-        return GroupTypes.NONE;
+        return GroupType.NONE;
     }
 
     //Returns complete group or null if player is not in group
@@ -103,7 +153,7 @@ public class GroupManager {
                 return ret;
 
             case DUNGEONCRAFT:
-                return Group.getGroupByPlayer(player).getPlayers();
+                return getGroupByPlayer(player).getGroupMembers();
 
             case NONE:
                 return null;

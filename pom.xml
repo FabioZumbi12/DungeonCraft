@@ -42,6 +42,7 @@
         <heroes.version>1.5.2</heroes.version>
         <heroes.build>b1713</heroes.build>
         <commandframework.version>0.0.1-SNAPSHOT</commandframework.version>
+        <fanciful-chat.version>0.0.2</fanciful-chat.version>
         <ancientrpg.version>1.0</ancientrpg.version>
         <metrics.version>R7</metrics.version>
     </properties>
@@ -141,7 +142,7 @@
         <dependency>
             <groupId>de.keyle</groupId>
             <artifactId>fanciful-chat</artifactId>
-            <version>0.0.1</version>
+            <version>${fanciful-chat.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -151,7 +152,7 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-        <groupId>com.gmail.nossr50.mcMMO</groupId>
+            <groupId>com.gmail.nossr50.mcMMO</groupId>
             <artifactId>mcMMO</artifactId>
             <version>${mcmmo.version}</version>
             <scope>provided</scope>
@@ -253,6 +254,7 @@
                                 <includes>
                                     <include>org.mcstats.bukkit:metrics:*</include>
                                     <include>de.keyle:command-framework:*</include>
+                                    <include>de.keyle:fanciful-chat:*</include>
                                     <include>de.keyle:knbt:*</include>
                                 </includes>
                             </artifactSet>
@@ -268,6 +270,10 @@
                                 <relocation>
                                     <pattern>de.keyle.command.framework</pattern>
                                     <shadedPattern>de.keyle.dungeoncraft.commands.framework</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>de.keyle.fanciful</pattern>
+                                    <shadedPattern>de.keyle.dungeoncraft.util.fanciful</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

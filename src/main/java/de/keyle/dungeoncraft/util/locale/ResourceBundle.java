@@ -23,7 +23,7 @@ package de.keyle.dungeoncraft.util.locale;
 import java.util.*;
 
 public class ResourceBundle extends java.util.ResourceBundle {
-    private List<java.util.ResourceBundle> extensionBundles = new ArrayList<java.util.ResourceBundle>();
+    private final List<java.util.ResourceBundle> extensionBundles = new ArrayList<java.util.ResourceBundle>();
     private boolean noParent = false;
 
     public ResourceBundle(java.util.ResourceBundle parent) {
@@ -38,8 +38,9 @@ public class ResourceBundle extends java.util.ResourceBundle {
         if (bundle == null) {
             return;
         }
-
-        this.extensionBundles.add(bundle);
+        synchronized (extensionBundles) {
+            this.extensionBundles.add(bundle);
+        }
     }
 
     @SuppressWarnings("unchecked")

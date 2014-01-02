@@ -34,6 +34,9 @@ public class DungeonManager {
         if (dungeon2Field.containsKey(dungeon)) {
             return;
         }
+        if (field2dungeon.containsKey(dungeon.position)) {
+            return;
+        }
         dungeon2Field.put(dungeon, dungeon.position);
     }
 

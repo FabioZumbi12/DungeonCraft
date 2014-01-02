@@ -111,7 +111,5 @@ public class DungeonCraftWorldServer extends WorldServer {
         this.methodProfiler.c("portalForcer");
         this.t().a(getTime());
         this.methodProfiler.b();
-
-        getWorld().processChunkGC();
     }
 }

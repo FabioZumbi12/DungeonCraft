@@ -29,9 +29,7 @@ import de.keyle.dungeoncraft.util.schematic.Schematic;
 import net.minecraft.server.v1_7_R1.*;
 import net.minecraft.server.v1_7_R1.EmptyChunk;
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
 import org.bukkit.craftbukkit.v1_7_R1.util.LongHash;
-import org.bukkit.event.world.ChunkUnloadEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,13 +38,11 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer implements IS
     public static ChunkProviderServer chunkloader;
 
     private final List<DungeonChunkLoadedEvent> events = new ArrayList<DungeonChunkLoadedEvent>();
-    private IChunkLoader f;
     private final ArrayListMultimap<Long, Runnable> callbacks = ArrayListMultimap.create();
 
     public DungeonCraftChunkProvider(WorldServer worldserver, IChunkLoader ichunkloader, DungeonCraftChunkGenerator chunkProvider) {
         super(worldserver, ichunkloader, chunkProvider);
         chunkloader = this;
-        f = ichunkloader;
     }
 
     public Chunk getChunkAt(final int chunkX, final int chunkZ, final Runnable callback) {
@@ -131,26 +127,16 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer implements IS
         new PacketPlayOutMapChunkBulk(chunkList);
     }
 
-    public boolean unloadChunks() {
-        if (!this.world.savingDisabled) {
-            Server server = this.world.getServer();
-            for (int i = 0; (i < 100) && (!this.unloadQueue.isEmpty()); i++) {
-                long chunkcoordinates = this.unloadQueue.popFirst();
-                Chunk chunk = this.chunks.get(chunkcoordinates);
-                if (chunk != null) {
-                    ChunkUnloadEvent event = new ChunkUnloadEvent(chunk.bukkitChunk);
-                    server.getPluginManager().callEvent(event);
-                    if (!event.isCancelled()) {
-                        chunk.removeEntities();
-                        saveChunk(chunk);
-                        saveChunkNOP(chunk);
+    public void queueUnload(int i, int j) {
+        this.unloadQueue.add(i, j);
+    }
 
-                        this.chunks.remove(chunkcoordinates);
-                    }
-                }
-            }
-            if (this.f != null) {
-                this.f.a();
+    public boolean unloadChunks() {
+        for (int i = 0; i < 100 && !this.unloadQueue.isEmpty(); i++) {
+            long chunkcoordinates = this.unloadQueue.popFirst();
+            Chunk chunk = this.chunks.get(chunkcoordinates);
+            if (chunk != null) {
+                this.chunks.remove(chunkcoordinates);
             }
         }
         return false;

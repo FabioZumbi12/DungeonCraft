@@ -102,7 +102,7 @@ public class EmptyChunk extends Chunk {
     }
 
     public boolean isEmpty() {
-        return true;
+        return false;
     }
 
     public boolean c(int posX, int posZ) {

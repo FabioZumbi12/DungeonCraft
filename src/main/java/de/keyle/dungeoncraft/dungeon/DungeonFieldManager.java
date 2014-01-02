@@ -26,14 +26,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DungeonFieldManager {
-    private static Map<DungeonField, Schematic> fieldSchematicMap = new HashMap<DungeonField, Schematic>();
+    private final static Map<DungeonField, Schematic> fieldSchematicMap = new HashMap<DungeonField, Schematic>();
 
     public static DungeonField getNewDungeonField() {
         return new DungeonField(0, 0);
     }
 
     public static void assignSchematicToDungeonField(DungeonField field, Schematic schematic) {
-        fieldSchematicMap.put(field, schematic);
+        synchronized (fieldSchematicMap) {
+            fieldSchematicMap.put(field, schematic);
+        }
     }
 
     public static void dissociateSchematicFromDungeonField(DungeonField field) {

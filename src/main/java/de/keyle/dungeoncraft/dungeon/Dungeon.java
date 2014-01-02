@@ -20,9 +20,13 @@
 
 package de.keyle.dungeoncraft.dungeon;
 
+import de.keyle.dungeoncraft.DungeonCraftPlugin;
+import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.group.Group;
 import de.keyle.dungeoncraft.util.IScheduler;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
-import org.bukkit.entity.Player;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +34,14 @@ import java.util.UUID;
 
 public class Dungeon implements IScheduler {
     protected boolean isReady = false;
-    protected boolean isLoaded = false;
+    protected boolean isLoading = false;
+    protected boolean first = true;
     protected final String dungeonName;
     protected final DungeonBase dungeonBase;
     protected final UUID uuid;
     protected final DungeonField position;
 
-    protected List<Player> playerList = new ArrayList<Player>();
+    protected List<DungeonCraftPlayer> playerList = new ArrayList<DungeonCraftPlayer>();
 
     public Dungeon(String dungeonName, DungeonBase dungeonTheme) {
         this.dungeonName = dungeonName;
@@ -45,29 +50,52 @@ public class Dungeon implements IScheduler {
         position = DungeonFieldManager.getNewDungeonField();
     }
 
-    public void setReady() {
+    public Dungeon(String dungeonName, DungeonBase dungeonTheme, Group group) {
+        this(dungeonName, dungeonTheme);
+        for (DungeonCraftPlayer player : group.getGroupMembers()) {
+            playerList.add(player);
+        }
+    }
+
+    public synchronized void setReady() {
         isReady = true;
         DungeonCraftLogger.write("Dungeon is now ready to use!");
     }
 
-    boolean first = true;
+    public synchronized boolean isRready() {
+        return isReady;
+    }
+
+    public void addPlayer(DungeonCraftPlayer player) {
+        if (!playerList.contains(player)) {
+            playerList.add(player);
+        }
+    }
 
     @Override
     public void schedule() {
-        if (isReady) {
+        if (isRready()) {
             if (first) {
                 unlockSchematic();
                 DungeonCraftLogger.write("Ok Lets do something");
                 first = false;
+
+                World world = DungeonCraftPlugin.getPlugin().getServer().getWorld("dctestworld");
+                Location spawn = new Location(world, 98, 160, 130);
+
+                for (DungeonCraftPlayer p : playerList) {
+                    if (p.isOnline()) {
+                        p.getPlayer().teleport(spawn);
+                    }
+                }
             }
             //ToDo Weather & Time
+            return;
         }
-        if (!isLoaded) {
-            if (!dungeonBase.isSchematicLoaded()) {
-                dungeonBase.loadSchematic();
-            } else {
-                lockSchematic();
-            }
+        if (!isLoading) {
+            isLoading = true;
+            DungeonLoader loader = new DungeonLoader(this);
+            loader.start();
         }
     }
 

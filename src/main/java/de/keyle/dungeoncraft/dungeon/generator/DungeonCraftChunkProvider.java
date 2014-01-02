@@ -27,7 +27,6 @@ import de.keyle.dungeoncraft.util.IScheduler;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import net.minecraft.server.v1_7_R1.*;
-import net.minecraft.server.v1_7_R1.EmptyChunk;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.util.LongHash;
 
@@ -35,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DungeonCraftChunkProvider extends ChunkProviderServer implements IScheduler {
-    public static ChunkProviderServer chunkloader;
+    public static DungeonCraftChunkProvider chunkloader;
 
     private final List<DungeonChunkLoadedEvent> events = new ArrayList<DungeonChunkLoadedEvent>();
     private final ArrayListMultimap<Long, Runnable> callbacks = ArrayListMultimap.create();
@@ -43,6 +42,20 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer implements IS
     public DungeonCraftChunkProvider(WorldServer worldserver, IChunkLoader ichunkloader, DungeonCraftChunkGenerator chunkProvider) {
         super(worldserver, ichunkloader, chunkProvider);
         chunkloader = this;
+    }
+
+    public void generateChunkAt(final int chunkX, final int chunkZ, final Runnable callback) {
+        Schematic schematic = DungeonFieldManager.getSchematicForChunk(chunkX, chunkZ);
+        DungeonCraftLogger.write("Schematic found for X(" + chunkX + ") Z(" + chunkZ + ") -> " + (schematic != null));
+        if (schematic != null) {
+            if (callback != null) {
+                synchronized (callbacks) {
+                    callbacks.put(LongHash.toLong(chunkX, chunkZ), callback);
+                }
+            }
+            DungeonChunkGenerator generator = new DungeonChunkGenerator(this.world, chunkX, chunkZ, this);
+            generator.start();
+        }
     }
 
     public Chunk getChunkAt(final int chunkX, final int chunkZ, final Runnable callback) {
@@ -61,9 +74,9 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer implements IS
                 generator.start();
                 return null;
             }
-            Chunk c = getOrCreateChunkGrass(chunkX, chunkZ);
-            addChunk(c);
-            return null;
+
+            chunk = getOrCreateChunkGrass(chunkX, chunkZ);
+            addChunk(chunk);
         }
 
         if (callback != null) {
@@ -81,8 +94,8 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer implements IS
         DungeonCraftLogger.write("Generate Grass Chunk at X(" + chunkX + ") Z(" + chunkZ + ")");
 
         Chunk localChunk = new EmptyChunk(this.world, chunkX, chunkZ);
-        /*
-        Chunk localChunk = new Chunk(this.world, chunkX, chunkZ);
+
+        //Chunk localChunk = new Chunk(this.world, chunkX, chunkZ);
         ChunkSection localObject2;
 
         localObject2 = localChunk.i()[0];
@@ -94,19 +107,17 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer implements IS
 
         for (int n = 0; n < 16; n++) {
             for (int i1 = 0; i1 < 16; i1++) {
-                localObject2.setTypeId(n, 0, i1, Blocks.GRASS);
+                localObject2.setTypeId(n, 0, i1, Blocks.STATIONARY_WATER);
                 localObject2.setData(n, 0, i1, 0);
             }
         }
 
         localChunk.initLighting();
-
-
         localChunk.lit = true;
         localChunk.m = true;
         localChunk.done = true;
         localChunk.e();
-        */
+
         return localChunk;
     }
 

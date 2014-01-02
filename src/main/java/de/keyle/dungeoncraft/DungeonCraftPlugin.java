@@ -24,6 +24,8 @@ import de.keyle.command.framework.CommandFramework;
 import de.keyle.dungeoncraft.commands.CreateGroupCommand;
 import de.keyle.dungeoncraft.commands.InviteToGroupCommand;
 import de.keyle.dungeoncraft.commands.JoinGroupCommand;
+import de.keyle.dungeoncraft.commands.TestCommand;
+import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import de.keyle.dungeoncraft.listeners.WorldListener;
 import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.DungeonCraftVersion;
@@ -83,6 +85,10 @@ public class DungeonCraftPlugin extends JavaPlugin {
         framework.registerCommands(new CreateGroupCommand());
         framework.registerCommands(new InviteToGroupCommand());
         framework.registerCommands(new JoinGroupCommand());
+
+        framework.registerCommands(new TestCommand());
+
+        DungeonCraftWorld.createWorld();
 
         DungeonCraftLogger.write("version " + DungeonCraftVersion.getVersion() + "-b" + DungeonCraftVersion.getBuild() + ChatColor.GREEN + " ENABLED");
     }

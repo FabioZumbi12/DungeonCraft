@@ -27,9 +27,10 @@ import java.util.Map;
 
 public class DungeonFieldManager {
     private final static Map<DungeonField, Schematic> fieldSchematicMap = new HashMap<DungeonField, Schematic>();
+    private static int fieldIndex = 0;
 
     public static DungeonField getNewDungeonField() {
-        return new DungeonField(0, 0);
+        return new DungeonField(fieldIndex++, 0);
     }
 
     public static void assignSchematicToDungeonField(DungeonField field, Schematic schematic) {

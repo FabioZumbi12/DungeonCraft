@@ -21,11 +21,16 @@
 package de.keyle.dungeoncraft.dungeon;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
+import de.keyle.dungeoncraft.util.configuration.ConfigurationYaml;
+import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.schematic.ISchematicReveiver;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import de.keyle.dungeoncraft.util.schematic.SchematicLoader;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
+import org.apache.commons.lang.Validate;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -38,11 +43,13 @@ public class DungeonBase implements ISchematicReveiver {
     int timeLimit = 0;
     World.Environment environment = World.Environment.NORMAL;
     boolean isLoading = false;
+    ConfigurationSection customConfigOptions;
 
     WeakReference<Schematic> schematic = null;
 
     public DungeonBase(String name) {
         this.name = name;
+        load();
     }
 
     public boolean hasTimeLimit() {
@@ -63,6 +70,10 @@ public class DungeonBase implements ISchematicReveiver {
 
     public String getName() {
         return name;
+    }
+
+    public boolean hasCustomConfigOptions() {
+        return customConfigOptions != null;
     }
 
     public OrientationVector getSpawn() {
@@ -91,11 +102,39 @@ public class DungeonBase implements ISchematicReveiver {
 
     @Override
     public File getSchematicFile() {
-        return new File(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "dungeons" + File.separator + name + File.separator + name + ".schematic");
+        return new File(getFolder(), name + ".schematic");
+    }
+
+    public File getConfigFile() {
+        return new File(getFolder(), "config.yml");
+    }
+
+    public File getFolder() {
+        return new File(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "dungeons" + File.separator + name);
     }
 
     public synchronized void setSchematic(Schematic schematic) {
         this.schematic = new WeakReference<Schematic>(schematic);
         isLoading = false;
+    }
+
+    public void load() {
+        ConfigurationYaml configurationYaml = new ConfigurationYaml(getConfigFile());
+        FileConfiguration config = configurationYaml.getConfig();
+
+        double x = config.getDouble("spawn.location.x", -1D);
+        double y = config.getDouble("spawn.location.y", -1D);
+        double z = config.getDouble("spawn.location.z", -1D);
+        double yaw = config.getDouble("spawn.location.yaw");
+        double pitch = config.getDouble("spawn.location.pitch");
+        Validate.isTrue(x >= 0 && x < 1600, "The X part of the spawn location has to be between 0 and 1600");
+        Validate.isTrue(y >= 0 && y < 256, "The Y part of the spawn location has to be between 0 and 256");
+        Validate.isTrue(z >= 0 && z < 1600, "The Z part of the spawn location has to be between 0 and 1600");
+        spawn = new OrientationVector(x, y, z, yaw, pitch);
+
+        customConfigOptions = config.getConfigurationSection("custom");
+        if (hasCustomConfigOptions()) {
+            DungeonCraftLogger.write("keys: " + customConfigOptions.getKeys(false));
+        }
     }
 }

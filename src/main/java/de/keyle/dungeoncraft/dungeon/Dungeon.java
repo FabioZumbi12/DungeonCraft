@@ -25,6 +25,7 @@ import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.group.Group;
 import de.keyle.dungeoncraft.util.IScheduler;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
+import de.keyle.dungeoncraft.util.vector.OrientationVector;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -81,7 +82,8 @@ public class Dungeon implements IScheduler {
                 first = false;
 
                 World world = DungeonCraftPlugin.getPlugin().getServer().getWorld("dctestworld");
-                Location spawn = new Location(world, 98, 160, 130);
+                OrientationVector ov = dungeonBase.getSpawn();
+                Location spawn = new Location(world, ov.getX() + (position.getX() * 1600), ov.getY(), ov.getZ() + (position.getZ() * 1600), (float) ov.getYaw(), (float) ov.getPitch());
 
                 for (DungeonCraftPlayer p : playerList) {
                     if (p.isOnline()) {

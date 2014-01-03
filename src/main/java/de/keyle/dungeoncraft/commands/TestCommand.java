@@ -29,10 +29,12 @@ import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import org.bukkit.entity.Player;
 
 public class TestCommand {
+
+    DungeonBase base = new DungeonBase("test1");
+
     @Command(name = "dctest")
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof Player) {
-            DungeonBase base = new DungeonBase("test1");
             Dungeon d = new Dungeon("testDungeon", base);
             d.addPlayer(DungeonCraftPlayer.getPlayer((Player) args.getSender()));
             DungeonManager.addDungeon(d);

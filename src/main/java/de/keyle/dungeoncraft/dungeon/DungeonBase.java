@@ -21,7 +21,7 @@
 package de.keyle.dungeoncraft.dungeon;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
-import de.keyle.dungeoncraft.util.configuration.ConfigurationYaml;
+import de.keyle.dungeoncraft.util.config.ConfigurationYaml;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.schematic.ISchematicReveiver;
 import de.keyle.dungeoncraft.util.schematic.Schematic;

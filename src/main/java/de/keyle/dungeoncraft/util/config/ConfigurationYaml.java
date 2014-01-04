@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.util.configuration;
+package de.keyle.dungeoncraft.util.config;
 
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import org.bukkit.configuration.file.FileConfiguration;

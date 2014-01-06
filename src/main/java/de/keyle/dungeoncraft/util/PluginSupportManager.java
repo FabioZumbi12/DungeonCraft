@@ -1,9 +1,7 @@
-package de.keyle.dungeoncraft.util;
-
 /*
  * This file is part of DungeonCraft
  *
- * Copyright (C) 2011-2013 Keyle & xXLupoXx
+ * Copyright (C) 2013-2014 Keyle & xXLupoXx
  * DungeonCraft is licensed under the GNU Lesser General Public License.
  *
  * DungeonCraft is free software: you can redistribute it and/or modify
@@ -20,6 +18,8 @@ package de.keyle.dungeoncraft.util;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+package de.keyle.dungeoncraft.util;
+
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -31,8 +31,7 @@ import org.bukkit.plugin.PluginManager;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PluginSupportManager implements Listener
-{
+public class PluginSupportManager implements Listener {
 
     private static PluginManager pluginManager = null;
     private static Map<String, Plugin> pluginInstances = new HashMap<String, Plugin>();
@@ -40,20 +39,15 @@ public class PluginSupportManager implements Listener
     private static Map<String, Boolean> pluginFound = new HashMap<String, Boolean>();
 
 
-    public static <T extends Plugin> T getPluginInstance(Class<T> clazz)
-    {
-        if (pluginManager == null)
-        {
+    public static <T extends Plugin> T getPluginInstance(Class<T> clazz) {
+        if (pluginManager == null) {
             pluginManager = Bukkit.getServer().getPluginManager();
         }
-        if (pluginInstances.containsKey(clazz.getName()))
-        {
+        if (pluginInstances.containsKey(clazz.getName())) {
             return clazz.cast(pluginInstances.get(clazz.getName()));
         }
-        for (Plugin p : pluginManager.getPlugins())
-        {
-            if (clazz.isInstance(p))
-            {
+        for (Plugin p : pluginManager.getPlugins()) {
+            if (clazz.isInstance(p)) {
                 T plugin = clazz.cast(p);
                 pluginInstances.put(clazz.getName(), plugin);
                 pluginFound.put(clazz.getName(), true);
@@ -66,37 +60,27 @@ public class PluginSupportManager implements Listener
         return null;
     }
 
-    public static boolean isPluginUsable(String pluginName)
-    {
-        if (pluginManager == null)
-        {
+    public static boolean isPluginUsable(String pluginName) {
+        if (pluginManager == null) {
             pluginManager = Bukkit.getServer().getPluginManager();
         }
-        if (pluginFound.containsKey(pluginName))
-        {
+        if (pluginFound.containsKey(pluginName)) {
             return pluginFound.get(pluginName);
         }
-        if (!pluginNames.containsKey(pluginName))
-        {
+        if (!pluginNames.containsKey(pluginName)) {
             Plugin plugin = pluginManager.getPlugin(pluginName);
-            if (plugin != null)
-            {
+            if (plugin != null) {
                 return getPluginInstance(plugin.getClass()) != null;
-            }
-            else
-            {
+            } else {
                 pluginFound.put(pluginName, false);
             }
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
 
-    public static void reset()
-    {
+    public static void reset() {
         pluginFound.clear();
         pluginInstances.clear();
         pluginNames.clear();
@@ -104,8 +88,7 @@ public class PluginSupportManager implements Listener
     }
 
     @EventHandler
-    public void onPluginDisable(final PluginDisableEvent event)
-    {
+    public void onPluginDisable(final PluginDisableEvent event) {
         String pluginName = event.getPlugin().getName();
         String className = event.getPlugin().getClass().getName();
 

@@ -132,6 +132,8 @@ public class DungeonBase implements ISchematicReveiver {
         Validate.isTrue(z >= 0 && z < 1600, "The Z part of the spawn location has to be between 0 and 1600");
         spawn = new OrientationVector(x, y, z, yaw, pitch);
 
+        timeLimit = config.getInt("time.limit", 0);
+
         customConfigOptions = config.getConfigurationSection("custom");
         if (hasCustomConfigOptions()) {
             DungeonCraftLogger.write("keys: " + customConfigOptions.getKeys(false));

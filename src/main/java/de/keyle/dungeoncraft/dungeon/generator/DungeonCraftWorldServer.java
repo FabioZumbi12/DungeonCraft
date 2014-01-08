@@ -92,6 +92,9 @@ public class DungeonCraftWorldServer extends WorldServer {
     public void doTick() {
         for (Dungeon dungeon : DungeonManager.getDungeons()) {
             dungeon.schedule();
+            if (dungeon.isCompleted()) {
+                DungeonManager.removeDungeon(dungeon);
+            }
         }
         dungeonCrafthunkProviderServer.schedule();
 

@@ -36,6 +36,7 @@ public class TestCommand {
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof Player) {
             Dungeon d = new Dungeon("testDungeon", base);
+            d.setExitLocation(((Player) args.getSender()).getLocation());
             d.addPlayer(DungeonCraftPlayer.getPlayer((Player) args.getSender()));
             DungeonManager.addDungeon(d);
         }

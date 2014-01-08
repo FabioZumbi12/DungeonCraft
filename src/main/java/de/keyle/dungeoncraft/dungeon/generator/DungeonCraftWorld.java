@@ -34,7 +34,7 @@ import java.util.Random;
 public class DungeonCraftWorld {
     public static World createWorld() {
 
-        String worldName = "dctestworld";
+        String worldName = "dungeon_craft_world";
         File worldsFolder = new File(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath());
         MinecraftServer console = MinecraftServer.getServer();
         long seed = new Random().nextLong();

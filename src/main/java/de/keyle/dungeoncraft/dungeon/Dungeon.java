@@ -103,7 +103,7 @@ public class Dungeon implements IScheduler {
                 DungeonCraftLogger.write("Ok Lets do something");
                 first = false;
 
-                World world = DungeonCraftPlugin.getPlugin().getServer().getWorld("dctestworld");
+                World world = DungeonCraftPlugin.getPlugin().getServer().getWorld("dungeon_craft_world");
                 OrientationVector ov = dungeonBase.getSpawn();
                 Location spawn = new Location(world, ov.getX() + (position.getX() * 1600), ov.getY(), ov.getZ() + (position.getZ() * 1600), (float) ov.getYaw(), (float) ov.getPitch());
 

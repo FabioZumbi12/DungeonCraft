@@ -49,7 +49,7 @@ public class DungeonCraftPlugin extends JavaPlugin {
         Bukkit.getServer().getScheduler().cancelTasks(plugin);
         DebugLogger.info("DungeonCraft disabled!");
 
-        Bukkit.getServer().unloadWorld("dctestworld", true);
+        Bukkit.getServer().unloadWorld("dungeon_craft_world", true);
     }
 
     public void onEnable() {

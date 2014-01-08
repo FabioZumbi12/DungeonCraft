@@ -28,12 +28,13 @@ import de.keyle.dungeoncraft.util.schematic.Schematic;
 import de.keyle.dungeoncraft.util.schematic.SchematicLoader;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 import org.apache.commons.lang.Validate;
-import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+
+import static org.bukkit.World.Environment;
 
 public class DungeonBase implements ISchematicReveiver {
     int maxPlayerCount = 0;
@@ -41,7 +42,7 @@ public class DungeonBase implements ISchematicReveiver {
     String name;
     OrientationVector spawn;
     int timeLimit = 0;
-    World.Environment environment = World.Environment.NORMAL;
+    Environment environment = Environment.NORMAL;
     boolean isLoading = false;
     ConfigurationSection customConfigOptions;
 
@@ -78,6 +79,10 @@ public class DungeonBase implements ISchematicReveiver {
 
     public OrientationVector getSpawn() {
         return spawn;
+    }
+
+    public Environment getEnvironment() {
+        return environment;
     }
 
     public boolean isSchematicLoaded() {
@@ -133,6 +138,7 @@ public class DungeonBase implements ISchematicReveiver {
         spawn = new OrientationVector(x, y, z, yaw, pitch);
 
         timeLimit = config.getInt("time.limit", 0);
+        environment = Environment.valueOf(config.getString("world.environment", "NORMAL").toUpperCase());
 
         customConfigOptions = config.getConfigurationSection("custom");
         if (hasCustomConfigOptions()) {

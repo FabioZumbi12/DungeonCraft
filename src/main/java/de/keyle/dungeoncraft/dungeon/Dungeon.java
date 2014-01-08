@@ -23,6 +23,7 @@ package de.keyle.dungeoncraft.dungeon;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.group.Group;
+import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.IScheduler;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
@@ -109,6 +110,7 @@ public class Dungeon implements IScheduler {
                 for (DungeonCraftPlayer p : playerList) {
                     if (p.isOnline()) {
                         p.getPlayer().teleport(spawn);
+                        BukkitUtil.setPlayerEnvironment(p.getPlayer(), dungeonBase.getEnvironment());
                     }
                 }
                 if (dungeonBase.hasTimeLimit()) {

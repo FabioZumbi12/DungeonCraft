@@ -20,14 +20,14 @@
 
 package de.keyle.dungeoncraft.util;
 
-import net.minecraft.server.v1_7_R1.ChatSerializer;
-import net.minecraft.server.v1_7_R1.EntityPlayer;
-import net.minecraft.server.v1_7_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
+
+import static org.bukkit.World.Environment;
 
 public class BukkitUtil {
     public static String getPlayerLanguage(Player player) {
@@ -57,5 +57,12 @@ public class BukkitUtil {
         if (player instanceof CraftPlayer) {
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(ChatSerializer.a(message)));
         }
+    }
+
+    public static void setPlayerEnvironment(Player player, Environment skyType) {
+        if (player instanceof CraftPlayer) {
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutRespawn(skyType.getId(), EnumDifficulty.NORMAL, WorldType.NORMAL, EnumGamemode.ADVENTURE));
+        }
+        //ToDo refresh chunks, dntities and fly mode to allow environment switching on the fly
     }
 }

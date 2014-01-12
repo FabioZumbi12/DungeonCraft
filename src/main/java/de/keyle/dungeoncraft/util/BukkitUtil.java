@@ -61,8 +61,9 @@ public class BukkitUtil {
 
     public static void setPlayerEnvironment(Player player, Environment skyType) {
         if (player instanceof CraftPlayer) {
-            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutRespawn(skyType.getId(), EnumDifficulty.NORMAL, WorldType.NORMAL, EnumGamemode.ADVENTURE));
+            EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+            entityPlayer.playerConnection.sendPacket(new PacketPlayOutRespawn(skyType.getId(), EnumDifficulty.NORMAL, WorldType.NORMAL, entityPlayer.playerInteractManager.getGameMode()));
         }
-        //ToDo refresh chunks, dntities and fly mode to allow environment switching on the fly
+        //ToDo refresh chunks, entities and fly mode to allow environment switching on the fly
     }
 }

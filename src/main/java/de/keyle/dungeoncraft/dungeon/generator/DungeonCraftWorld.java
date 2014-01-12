@@ -32,19 +32,19 @@ import java.io.File;
 import java.util.Random;
 
 public class DungeonCraftWorld {
-    public static World createWorld() {
+    public static final String WORLD_NAME = "dungeon_craft_world";
 
-        String worldName = "dungeon_craft_world";
+    public static World createWorld() {
         File worldsFolder = new File(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath());
         MinecraftServer console = MinecraftServer.getServer();
         long seed = new Random().nextLong();
 
-        if (Bukkit.getWorld(worldName) != null) {
-            Bukkit.getServer().unloadWorld(Bukkit.getWorld(worldName), true);
+        if (Bukkit.getWorld(WORLD_NAME) != null) {
+            Bukkit.getServer().unloadWorld(Bukkit.getWorld(WORLD_NAME), true);
         }
 
         if ((worldsFolder.exists()) && (!worldsFolder.isDirectory())) {
-            throw new IllegalArgumentException("File exists with the name '" + worldName + "' and isn't a folder");
+            throw new IllegalArgumentException("File exists with the name '" + WORLD_NAME + "' and isn't a folder");
         }
 
         int dimension = 10 + console.worlds.size();
@@ -60,11 +60,11 @@ public class DungeonCraftWorld {
         }
         while (used);
 
-        ChunkGenerator generator = console.server.getGenerator(worldName);
+        ChunkGenerator generator = console.server.getGenerator(WORLD_NAME);
         ServerNBTManager nbtManager = new ServerNBTManager(worldsFolder, "world", true);
         WorldSettings worldSettings = new WorldSettings(seed, EnumGamemode.ADVENTURE, false, false, WorldType.NORMAL);
 
-        WorldServer internal = new DungeonCraftWorldServer(console, nbtManager, worldName, dimension, worldSettings, console.methodProfiler, World.Environment.NORMAL, generator);
+        WorldServer internal = new DungeonCraftWorldServer(console, nbtManager, WORLD_NAME, dimension, worldSettings, console.methodProfiler, World.Environment.NORMAL, generator);
 
         internal.scoreboard = ((CraftScoreboard) Bukkit.getScoreboardManager().getMainScoreboard()).getHandle();
         //internal.tracker = new EntityTracker(internal); //doppelte zuweisung?!?! (WorldServer.java)

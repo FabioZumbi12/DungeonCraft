@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.dungeon;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
+import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.group.Group;
 import de.keyle.dungeoncraft.util.BukkitUtil;
@@ -103,7 +104,7 @@ public class Dungeon implements IScheduler {
                 DungeonCraftLogger.write("Ok Lets do something");
                 first = false;
 
-                World world = DungeonCraftPlugin.getPlugin().getServer().getWorld("dungeon_craft_world");
+                World world = DungeonCraftPlugin.getPlugin().getServer().getWorld(DungeonCraftWorld.WORLD_NAME);
                 OrientationVector ov = dungeonBase.getSpawn();
                 Location spawn = new Location(world, ov.getX() + (position.getX() * 1600), ov.getY(), ov.getZ() + (position.getZ() * 1600), (float) ov.getYaw(), (float) ov.getPitch());
 

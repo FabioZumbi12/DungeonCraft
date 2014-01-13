@@ -40,6 +40,10 @@ public class DungeonManager {
         dungeon2Field.put(dungeon, dungeon.position);
     }
 
+    public static Dungeon getDungeonAt(DungeonField position) {
+        return field2dungeon.get(position);
+    }
+
     public static Set<Dungeon> getDungeons() {
         return Collections.unmodifiableSet(dungeon2Field.keySet());
     }

@@ -118,6 +118,18 @@ public class DungeonBase implements ISchematicReveiver {
         return new File(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "dungeons" + File.separator + name);
     }
 
+    public File getTriggerFolder() {
+        return new File(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "dungeons" + File.separator + name + File.separator + "trigger");
+    }
+
+    public File[] getTriggerFiles() {
+        File[] triggerFiles = getTriggerFolder().listFiles();
+        if (triggerFiles == null) {
+            triggerFiles = new File[0];
+        }
+        return triggerFiles;
+    }
+
     public synchronized void setSchematic(Schematic schematic) {
         this.schematic = new WeakReference<Schematic>(schematic);
         isLoading = false;

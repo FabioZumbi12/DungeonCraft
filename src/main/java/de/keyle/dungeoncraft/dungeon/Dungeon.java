@@ -22,6 +22,8 @@ package de.keyle.dungeoncraft.dungeon;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
+import de.keyle.dungeoncraft.dungeon.scripting.TriggerLoader;
+import de.keyle.dungeoncraft.dungeon.scripting.TriggerRegistry;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.group.Group;
 import de.keyle.dungeoncraft.util.BukkitUtil;
@@ -48,6 +50,7 @@ public class Dungeon implements IScheduler {
     protected long endTime = 0;
     protected Location exitLocation;
     protected boolean isCompleted = false;
+    protected TriggerRegistry triggerRegistry;
 
     protected List<DungeonCraftPlayer> playerList = new ArrayList<DungeonCraftPlayer>();
 
@@ -56,6 +59,9 @@ public class Dungeon implements IScheduler {
         this.dungeonBase = dungeonTheme;
         uuid = UUID.randomUUID();
         position = DungeonFieldManager.getNewDungeonField();
+        triggerRegistry = new TriggerRegistry();
+
+        new TriggerLoader(this);
     }
 
     public Dungeon(String dungeonName, DungeonBase dungeonTheme, Group group) {
@@ -63,6 +69,34 @@ public class Dungeon implements IScheduler {
         for (DungeonCraftPlayer player : group.getGroupMembers()) {
             playerList.add(player);
         }
+    }
+
+    public TriggerRegistry getTriggerRegistry() {
+        return triggerRegistry;
+    }
+
+    public boolean isReady() {
+        return isReady;
+    }
+
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public String getDungeonName() {
+        return dungeonName;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public DungeonField getPosition() {
+        return position;
+    }
+
+    public long getEndTime() {
+        return endTime;
     }
 
     public synchronized void setReady() {
@@ -153,5 +187,9 @@ public class Dungeon implements IScheduler {
 
     public void unlockSchematic() {
         DungeonFieldManager.dissociateSchematicFromDungeonField(position);
+    }
+
+    public DungeonBase getDungeonBase() {
+        return dungeonBase;
     }
 }

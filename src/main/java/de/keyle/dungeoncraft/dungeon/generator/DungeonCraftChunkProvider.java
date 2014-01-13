@@ -24,7 +24,6 @@ import com.google.common.collect.ArrayListMultimap;
 import de.keyle.dungeoncraft.api.events.DungeonChunkLoadedEvent;
 import de.keyle.dungeoncraft.dungeon.DungeonFieldManager;
 import de.keyle.dungeoncraft.util.IScheduler;
-import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.Bukkit;
@@ -46,7 +45,7 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer implements IS
 
     public void generateChunkAt(final int chunkX, final int chunkZ, final Runnable callback) {
         Schematic schematic = DungeonFieldManager.getSchematicForChunk(chunkX, chunkZ);
-        DungeonCraftLogger.write("Schematic found for X(" + chunkX + ") Z(" + chunkZ + ") -> " + (schematic != null));
+        //DungeonCraftLogger.write("Schematic found for X(" + chunkX + ") Z(" + chunkZ + ") -> " + (schematic != null));
         if (schematic != null) {
             if (callback != null) {
                 synchronized (callbacks) {
@@ -65,7 +64,7 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer implements IS
 
         if (chunk == null) {
             Schematic schematic = DungeonFieldManager.getSchematicForChunk(chunkX, chunkZ);
-            DungeonCraftLogger.write("Schematic found for X(" + chunkX + ") Z(" + chunkZ + ") -> " + (schematic != null));
+            //DungeonCraftLogger.write("Schematic found for X(" + chunkX + ") Z(" + chunkZ + ") -> " + (schematic != null));
             if (schematic != null) {
                 if (callback != null) {
                     callbacks.put(LongHash.toLong(chunkX, chunkZ), callback);
@@ -91,7 +90,7 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer implements IS
     }
 
     public Chunk getOrCreateChunkGrass(int chunkX, int chunkZ) {
-        DungeonCraftLogger.write("Generate Grass Chunk at X(" + chunkX + ") Z(" + chunkZ + ")");
+        //DungeonCraftLogger.write("Generate Grass Chunk at X(" + chunkX + ") Z(" + chunkZ + ")");
 
         Chunk localChunk = new EmptyChunk(this.world, chunkX, chunkZ);
 
@@ -160,7 +159,7 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer implements IS
         }
         synchronized (callbacks) {
             if (callbacks.containsKey(LongHash.toLong(chunk.locX, chunk.locZ))) {
-                DungeonCraftLogger.write("Executed Runnables for chunk at X(" + chunk.locX + ") Z(" + chunk.locZ + ")");
+                //DungeonCraftLogger.write("Executed Runnables for chunk at X(" + chunk.locX + ") Z(" + chunk.locZ + ")");
                 List<Runnable> runnables = callbacks.get(LongHash.toLong(chunk.locX, chunk.locZ));
                 for (Runnable runnable : runnables) {
                     runnable.run();

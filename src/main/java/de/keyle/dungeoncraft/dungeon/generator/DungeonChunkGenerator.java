@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.dungeon.generator;
 
 import de.keyle.dungeoncraft.dungeon.DungeonField;
 import de.keyle.dungeoncraft.dungeon.DungeonFieldManager;
-import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import net.minecraft.server.v1_7_R1.Block;
 import net.minecraft.server.v1_7_R1.Chunk;
@@ -66,7 +65,7 @@ public class DungeonChunkGenerator extends Thread {
             // ----------------------
 
             provider.addChunk(chunk);
-            DungeonCraftLogger.write("Generated Chunk from schematic at X(" + chunkX + ") Z(" + chunkZ + ")");
+            //DungeonCraftLogger.write("Generated Chunk from schematic at X(" + chunkX + ") Z(" + chunkZ + ")");
         }
     }
 

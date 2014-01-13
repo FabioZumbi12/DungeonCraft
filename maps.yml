@@ -1,0 +1,9 @@
+members:
+  "de/keyle/dungeoncraft/entity/types/CraftDungeonCraftEntity _INVALID_damage (I)V": damage
+  "de/keyle/dungeoncraft/entity/types/CraftDungeonCraftEntity _INVALID_damage (ILorg/bukkit/entity/Entity;)V": damage
+  "de/keyle/dungeoncraft/entity/types/CraftDungeonCraftEntity _INVALID_getHealth ()I": getHealth
+  "de/keyle/dungeoncraft/entity/types/CraftDungeonCraftEntity _INVALID_setHealth (I)V": setHealth
+  "de/keyle/dungeoncraft/entity/types/CraftDungeonCraftEntity _INVALID_getMaxHealth ()I": getMaxHealth
+  "de/keyle/dungeoncraft/entity/types/CraftDungeonCraftEntity _INVALID_setMaxHealth (I)V": setMaxHealth
+  "de/keyle/dungeoncraft/entity/types/CraftDungeonCraftEntity _INVALID_getLastDamage ()I": getLastDamage
+  "de/keyle/dungeoncraft/entity/types/CraftDungeonCraftEntity _INVALID_setLastDamage (I)V": setLastDamage

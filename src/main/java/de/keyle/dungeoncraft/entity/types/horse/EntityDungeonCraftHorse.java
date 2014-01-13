@@ -1,0 +1,211 @@
+/*
+ * This file is part of DungeonCraft
+ *
+ * Copyright (C) 2013-2014 Keyle & xXLupoXx
+ * DungeonCraft is licensed under the GNU Lesser General Public License.
+ *
+ * DungeonCraft is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * DungeonCraft is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package de.keyle.dungeoncraft.entity.types.horse;
+
+import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
+import de.keyle.dungeoncraft.entity.types.EntityInfo;
+import de.keyle.dungeoncraft.util.logger.DebugLogger;
+import net.minecraft.server.v1_7_R1.*;
+
+@EntityInfo(width = 1.4F, height = 1.6F)
+public class EntityDungeonCraftHorse extends EntityDungeonCraft {
+    int soundCounter = 0;
+    int rearCounter = -1;
+    int ageCounter = -1;
+    int ageFailCounter = 1;
+
+    int horseType = 0;
+    int age = 0;
+
+    public EntityDungeonCraftHorse(World world) {
+        super(world);
+    }
+
+    /**
+     * Possible visual horse effects:
+     * 4 saddle
+     * 8 chest
+     * 32 head down
+     * 64 rear
+     * 128 mouth open
+     */
+    private void applyVisual(int value, boolean flag) {
+        int i = this.datawatcher.getInt(16);
+        if (flag) {
+            this.datawatcher.watch(16, Integer.valueOf(i | value));
+        } else {
+            this.datawatcher.watch(16, Integer.valueOf(i & (~value)));
+        }
+    }
+
+    public boolean attack(Entity entity) {
+        boolean flag = false;
+        try {
+            flag = super.attack(entity);
+            if (flag) {
+                applyVisual(64, true);
+                rearCounter = 10;
+                if (horseType == 0) {
+                    this.world.makeSound(this, "mob.horse.angry", 1.0F, 1.0F);
+                } else if (horseType == 2 || horseType == 1) {
+                    this.world.makeSound(this, "mob.horse.donkey.angry", 1.0F, 1.0F);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            DebugLogger.printThrowable(e);
+        }
+        return flag;
+    }
+
+    public void setAge(int value) {
+        this.datawatcher.watch(12, new Integer(value));
+    }
+
+    public void setArmor(int value) {
+        this.datawatcher.watch(22, Integer.valueOf(value));
+    }
+
+    @Override
+    protected String getDeathSound() {
+        if (horseType == 3) {
+            return "mob.horse.zombie.death";
+        }
+        if (horseType == 4) {
+            return "mob.horse.skeleton.death";
+        }
+        if ((horseType == 1) || (horseType == 2)) {
+            return "mob.horse.donkey.death";
+        }
+        return "mob.horse.death";
+    }
+
+    public void setHorseType(byte horseType) {
+        this.datawatcher.watch(19, Byte.valueOf(horseType));
+    }
+
+    @Override
+    protected String getHurtSound() {
+        if (horseType == 3) {
+            return "mob.horse.zombie.hit";
+        }
+        if (horseType == 4) {
+            return "mob.horse.skeleton.hit";
+        }
+        if ((horseType == 1) || (horseType == 2)) {
+            return "mob.horse.donkey.hit";
+        }
+        return "mob.horse.hit";
+    }
+
+    protected String getLivingSound() {
+        if (playIdleSound()) {
+            if (horseType == 3) {
+                return "mob.horse.zombie.idle";
+            }
+            if (horseType == 4) {
+                return "mob.horse.skeleton.idle";
+            }
+            if ((horseType == 1) || (horseType == 2)) {
+                return "mob.horse.donkey.idle";
+            }
+            return "mob.horse.idle";
+        }
+        return null;
+    }
+
+    public void setVariant(int variant) {
+        this.datawatcher.watch(20, Integer.valueOf(variant));
+    }
+
+    private int getHorseArmorId(ItemStack itemstack) {
+        if (itemstack == null) {
+            return 0;
+        }
+        Item item = itemstack.getItem();
+
+        return item == Items.HORSE_ARMOR_DIAMOND ? 3 : item == Items.HORSE_ARMOR_GOLD ? 2 : item == Items.HORSE_ARMOR_IRON ? 1 : 0;
+    }
+
+    protected void initDatawatcher() {
+        super.initDatawatcher();
+        this.datawatcher.a(12, Integer.valueOf(0));     // age
+        this.datawatcher.a(16, Integer.valueOf(0));     // saddle & chest
+        this.datawatcher.a(19, Byte.valueOf((byte) 0)); // horse type
+        this.datawatcher.a(20, Integer.valueOf(0));     // variant
+        this.datawatcher.a(21, String.valueOf(""));     // N/A
+        this.datawatcher.a(22, Integer.valueOf(0));     // armor
+    }
+
+    public void setBaby(boolean flag) {
+        if (flag) {
+            this.datawatcher.watch(12, Integer.valueOf(-24000));
+        } else {
+            this.datawatcher.watch(12, new Integer(0));
+        }
+    }
+
+    public void onLivingUpdate() {
+        super.onLivingUpdate();
+        if (rearCounter > -1 && rearCounter-- == 0) {
+            applyVisual(64, false);
+            rearCounter = -1;
+        }
+        if (ageCounter > -1 && ageCounter-- == 0) {
+            this.datawatcher.watch(12, new Integer(age + ageFailCounter++));
+            ageCounter = -1;
+            ageFailCounter %= 1000;
+        }
+    }
+
+    @Override
+    public void playStepSound(int i, int j, int k, Block block) {
+        StepSound localStepSound = block.stepSound;
+        if (this.world.getType(i, j + 1, k) == Blocks.SNOW) {
+            localStepSound = Blocks.SNOW.stepSound;
+        }
+        if (!block.getMaterial().isLiquid()) {
+            if ((this.passenger != null) && (horseType != 1) && (horseType != 2)) {
+                this.soundCounter += 1;
+                if ((this.soundCounter > 5) && (this.soundCounter % 3 == 0)) {
+                    makeSound("mob.horse.gallop", localStepSound.getVolume1() * 0.15F, localStepSound.getVolume2());
+                    if ((horseType == 0) && (this.random.nextInt(10) == 0)) {
+                        makeSound("mob.horse.breathe", localStepSound.getVolume1() * 0.6F, localStepSound.getVolume2());
+                    }
+                } else if (this.soundCounter <= 5) {
+                    makeSound("mob.horse.wood", localStepSound.getVolume1() * 0.15F, localStepSound.getVolume2());
+                }
+            } else if (localStepSound == Block.f) {
+                makeSound("mob.horse.wood", localStepSound.getVolume1() * 0.15F, localStepSound.getVolume2());
+            } else {
+                makeSound("mob.horse.soft", localStepSound.getVolume1() * 0.15F, localStepSound.getVolume2());
+            }
+        }
+    }
+
+    public void setChest(boolean flag) {
+        applyVisual(8, flag);
+    }
+
+    public void setSaddle(boolean flag) {
+        applyVisual(4, flag);
+    }
+}

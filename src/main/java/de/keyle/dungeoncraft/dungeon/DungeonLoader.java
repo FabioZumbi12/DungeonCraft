@@ -23,9 +23,10 @@ package de.keyle.dungeoncraft.dungeon;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftChunkProvider;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class DungeonLoader extends Thread {
     private final Dungeon dungeon;
-    private int callbackCount = 0;
 
     public DungeonLoader(Dungeon dungeon) {
         this.dungeon = dungeon;
@@ -46,20 +47,21 @@ public class DungeonLoader extends Thread {
         int xCount = (int) Math.ceil(schematic.getLenght() / 16.);
         int zCount = (int) Math.ceil(schematic.getWidth() / 16.);
 
-        callbackCount = xCount * zCount;
-
+        final AtomicInteger callbackCount = new AtomicInteger(xCount * zCount);
         for (int x = 0; x < xCount; x++) {
             for (int z = 0; z < zCount; z++) {
                 DungeonCraftChunkProvider.chunkloader.generateChunkAt(dungeon.position.getX() + x, dungeon.position.getZ() + z, new Runnable() {
                     @Override
                     public void run() {
-                        callbackCount--;
+                        synchronized (callbackCount) {
+                            callbackCount.decrementAndGet();
+                        }
                     }
                 });
             }
         }
         while (true) {
-            if (callbackCount <= 0) {
+            if (callbackCount.get() <= 0) {
                 break;
             }
         }

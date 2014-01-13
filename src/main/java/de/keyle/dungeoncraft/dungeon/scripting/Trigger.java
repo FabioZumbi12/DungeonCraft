@@ -20,8 +20,8 @@
 
 package de.keyle.dungeoncraft.dungeon.scripting;
 
-import sun.org.mozilla.javascript.internal.Context;
-import sun.org.mozilla.javascript.internal.NativeFunction;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeFunction;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -22,9 +22,9 @@ package de.keyle.dungeoncraft.dungeon.scripting;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
-import sun.org.mozilla.javascript.internal.Context;
-import sun.org.mozilla.javascript.internal.Function;
-import sun.org.mozilla.javascript.internal.NativeFunction;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Function;
+import org.mozilla.javascript.NativeFunction;
 
 import javax.script.*;
 import java.io.File;

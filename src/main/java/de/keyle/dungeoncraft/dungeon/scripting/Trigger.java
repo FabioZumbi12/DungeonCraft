@@ -23,21 +23,14 @@ package de.keyle.dungeoncraft.dungeon.scripting;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeFunction;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Trigger {
     private boolean isActive = true;
     private String name;
     private NativeFunction function;
-    private List<String> functionParameters = new ArrayList<String>();
 
     public Trigger(String name, NativeFunction function) {
         this.name = name;
         this.function = function;
-        for (int i = 0; i < function.getDebuggableView().getParamCount(); i++) {
-            functionParameters.add(function.getDebuggableView().getParamOrVarName(i));
-        }
     }
 
     public boolean isActive() {
@@ -71,9 +64,5 @@ public class Trigger {
         } finally {
             Context.exit();
         }
-    }
-
-    public List<String> getFunctionParameterNames() {
-        return functionParameters;
     }
 }

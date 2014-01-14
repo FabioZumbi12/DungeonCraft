@@ -23,21 +23,16 @@ package de.keyle.dungeoncraft.dungeon.scripting;
 import de.keyle.dungeoncraft.dungeon.Dungeon;
 import de.keyle.dungeoncraft.dungeon.scripting.contexts.DungeonContext;
 import de.keyle.dungeoncraft.dungeon.scripting.contexts.EntityContext;
+import de.keyle.dungeoncraft.dungeon.scripting.contexts.LoggerContext;
 import de.keyle.dungeoncraft.dungeon.scripting.contexts.TriggerContext;
-import de.keyle.dungeoncraft.util.logger.DebugLogger;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Function;
-import org.mozilla.javascript.NativeFunction;
+import org.mozilla.javascript.*;
 
-import javax.script.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.lang.reflect.InvocationTargetException;
+import java.io.IOException;
 
 public class TriggerLoader {
-    private TriggerScript triggerScript = null;
-
     private final Dungeon dungeon;
 
     public TriggerLoader(Dungeon d) {
@@ -46,64 +41,34 @@ public class TriggerLoader {
     }
 
     private void initScriptEngines() {
-        if (triggerScript == null) {
-            ScriptEngineManager manager = new ScriptEngineManager();
-            for (File f : dungeon.getDungeonBase().getTriggerFiles()) {
-                ScriptEngine scriptEngine = manager.getEngineByName("js"); // JavaScript
-                if (scriptEngine != null) {
-                    Context.enter();
-                    try {
-                        final String fileName = f.getName().substring(0, f.getName().lastIndexOf("."));
-                        final ScriptContext scriptContext = new SimpleScriptContext();
 
-                        scriptContext.setAttribute("Dungeon", new DungeonContext(dungeon), ScriptContext.ENGINE_SCOPE);
-                        scriptContext.setAttribute("Entity", new EntityContext(dungeon), ScriptContext.ENGINE_SCOPE);
-                        scriptContext.setAttribute("Trigger", new TriggerContext(dungeon) {
-                            @SuppressWarnings("unused")
-                            @Override
-                            public void registerTrigger(int id, Function function) {
-                                NativeFunction f = (NativeFunction) function;
-                                DebugLogger.info("register Trigger (d: " + dungeon.getDungeonName() + "): " + fileName + "_" + TriggerRegistry.getEventClassById(id).getName());
-                                Trigger t = new Trigger(fileName + "_" + TriggerRegistry.getEventClassById(id).getName(), f);
-                                dungeon.getTriggerRegistry().registerTrigger(id, t);
-                            }
+        DungeonContext dungeonContext = new DungeonContext(dungeon);
+        EntityContext entityContext = new EntityContext(dungeon);
+        LoggerContext loggerContext = new LoggerContext(dungeon);
 
-                            @Override
-                            public void enableTrigger(int id) {
-                                this.enableTrigger(id, fileName);
-                            }
+        for (File f : dungeon.getDungeonBase().getTriggerFiles()) {
+            Context cx = Context.enter();
+            try {
+                String fileName = f.getName().substring(0, f.getName().lastIndexOf("."));
+                ScriptableObject scriptable = new ImporterTopLevel(cx);
+                Scriptable scope = cx.initStandardObjects(scriptable);
+                ScriptableObject.putConstProperty(scope, "Dungeon", dungeonContext);
+                ScriptableObject.putConstProperty(scope, "Entity", entityContext);
+                ScriptableObject.putConstProperty(scope, "Trigger", new TriggerContext(dungeon, fileName));
+                ScriptableObject.putConstProperty(scope, "Logger", loggerContext);
 
-                            @Override
-                            public void disableTrigger(int id) {
-                                this.disableTrigger(id, fileName);
-                            }
-                        }, ScriptContext.ENGINE_SCOPE);
-                        scriptEngine.setContext(scriptContext);
+                cx.evaluateReader(scope, new FileReader(f), fileName, 0, null);
 
-                        scriptEngine.eval(new FileReader(f));
-                        if (scriptEngine instanceof Invocable) {
-                            Invocable inv = (Invocable) scriptEngine;
-                            triggerScript = inv.getInterface(TriggerScript.class);
+                Function initFunction = (Function) scope.get("init", scope);
+                initFunction.call(cx, scope, scope, null);
 
-                            try {
-                                triggerScript.init();
-                            } catch (InvocationTargetException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    } catch (ScriptException e) {
-                        e.printStackTrace();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } finally {
-                        Context.exit();
-                    }
-                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                Context.exit();
             }
         }
-    }
-
-    interface TriggerScript {
-        public abstract void init() throws InvocationTargetException;
     }
 }

@@ -24,17 +24,28 @@ import de.keyle.dungeoncraft.dungeon.Dungeon;
 import de.keyle.dungeoncraft.dungeon.scripting.Trigger;
 import de.keyle.dungeoncraft.dungeon.scripting.TriggerRegistry;
 import org.mozilla.javascript.Function;
+import org.mozilla.javascript.NativeFunction;
 
-public abstract class TriggerContext {
+@SuppressWarnings("unused")
+public class TriggerContext {
     protected final Dungeon dungeon;
+    protected final String fileName;
 
-    public TriggerContext(Dungeon dungeon) {
+    public TriggerContext(Dungeon dungeon, String fileName) {
         this.dungeon = dungeon;
+        this.fileName = fileName;
     }
 
-    public abstract void registerTrigger(int id, Function function);
+    public void registerTrigger(int id, Function function) {
+        NativeFunction f = (NativeFunction) function;
+        //DebugLogger.info("register Trigger (d: " + dungeon.getDungeonName() + "): " + fileName + "_" + TriggerRegistry.getEventClassById(id).getName());
+        Trigger t = new Trigger(fileName + "_" + TriggerRegistry.getEventClassById(id).getName(), f);
+        dungeon.getTriggerRegistry().registerTrigger(id, t);
+    }
 
-    public abstract void enableTrigger(int id);
+    public void enableTrigger(int id) {
+        this.enableTrigger(id, fileName);
+    }
 
     public void enableTrigger(int id, String filename) {
         for (Trigger t : dungeon.getTriggerRegistry().getTriggers(id)) {
@@ -44,7 +55,9 @@ public abstract class TriggerContext {
         }
     }
 
-    public abstract void disableTrigger(int id);
+    public void disableTrigger(int id) {
+        this.disableTrigger(id, fileName);
+    }
 
     public void disableTrigger(int id, String filename) {
         for (Trigger t : dungeon.getTriggerRegistry().getTriggers(id)) {

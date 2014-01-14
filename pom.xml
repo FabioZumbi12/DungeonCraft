@@ -45,6 +45,7 @@
         <fanciful-chat.version>0.0.2</fanciful-chat.version>
         <ancientrpg.version>1.0</ancientrpg.version>
         <metrics.version>R7</metrics.version>
+        <rhino.version>1.7R2</rhino.version>
     </properties>
 
     <repositories>
@@ -159,7 +160,13 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.gmail.nossr50.mcMMO</groupId>
+            <groupId>rhino</groupId>
+            <artifactId>js</artifactId>
+            <version>${rhino.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+        <groupId>com.gmail.nossr50.mcMMO</groupId>
             <artifactId>mcMMO</artifactId>
             <version>${mcmmo.version}</version>
             <scope>provided</scope>
@@ -226,6 +233,7 @@
                     <jarName>${project.name}-${project.version}</jarName>
                     <archive>
                         <manifestEntries>
+                            <Class-Path>js.jar DungeonCraft/js.jar</Class-Path>
                             <Project-Authors>Keyle, xXLupoXx</Project-Authors>
                             <Project-Name>${project.name}</Project-Name>
                             <Project-Version>${project.version}</Project-Version>

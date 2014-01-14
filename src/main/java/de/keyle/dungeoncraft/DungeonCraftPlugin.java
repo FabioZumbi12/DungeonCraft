@@ -21,10 +21,7 @@
 package de.keyle.dungeoncraft;
 
 import de.keyle.command.framework.CommandFramework;
-import de.keyle.dungeoncraft.commands.CreateGroupCommand;
-import de.keyle.dungeoncraft.commands.InviteToGroupCommand;
-import de.keyle.dungeoncraft.commands.JoinGroupCommand;
-import de.keyle.dungeoncraft.commands.TestCommand;
+import de.keyle.dungeoncraft.commands.*;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import de.keyle.dungeoncraft.entity.types.bat.EntityDungeonCraftBat;
 import de.keyle.dungeoncraft.entity.types.blaze.EntityDungeonCraftBlaze;
@@ -122,6 +119,7 @@ public class DungeonCraftPlugin extends JavaPlugin {
         framework.registerCommands(new JoinGroupCommand());
 
         framework.registerCommands(new TestCommand());
+        framework.registerCommands(new SpawnTemplateEntityCommand());
 
         BukkitUtil.registerMyPetEntity(EntityDungeonCraftCreeper.class, "Creeper", 50);
         BukkitUtil.registerMyPetEntity(EntityDungeonCraftSkeleton.class, "Skeleton", 51);

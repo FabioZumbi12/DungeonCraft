@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.dungeon;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
+import de.keyle.dungeoncraft.entity.template.EntityTemplateRegistry;
 import de.keyle.dungeoncraft.util.config.ConfigurationYaml;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.schematic.ISchematicReveiver;
@@ -45,12 +46,18 @@ public class DungeonBase implements ISchematicReveiver {
     Environment environment = Environment.NORMAL;
     boolean isLoading = false;
     ConfigurationSection customConfigOptions;
+    EntityTemplateRegistry entityTemplateRegistry;
 
     WeakReference<Schematic> schematic = null;
 
     public DungeonBase(String name) {
         this.name = name;
+        entityTemplateRegistry = new EntityTemplateRegistry();
         load();
+    }
+
+    public EntityTemplateRegistry getEntityTemplateRegistry() {
+        return entityTemplateRegistry;
     }
 
     public boolean hasTimeLimit() {

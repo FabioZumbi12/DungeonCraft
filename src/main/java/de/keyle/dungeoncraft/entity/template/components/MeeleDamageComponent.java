@@ -18,14 +18,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.entity.ai.attack.ranged;
+package de.keyle.dungeoncraft.entity.template.components;
 
+import de.keyle.dungeoncraft.entity.ai.attack.MeleeAttack;
+import de.keyle.dungeoncraft.entity.ai.target.HurtByTarget;
+import de.keyle.dungeoncraft.entity.template.EntityTemplateComonent;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
-public interface MyPetProjectile {
-    public EntityDungeonCraft getShooter();
+public class MeeleDamageComponent extends EntityTemplateComonent {
+    double damage = 0;
 
-    public enum Projectile {
-        Snowball, LargeFireball, SmallFireball, WitherSkull, Arrow
+    public MeeleDamageComponent(double damage) {
+        this.damage = damage;
+    }
+
+    public double getDamage() {
+        return damage;
+    }
+
+    @Override
+    public void applyComponent(EntityDungeonCraft entity) {
+        entity.petPathfinderSelector.addGoal("MeleeAttack", new MeleeAttack(entity, 0.1F, 3, 20));
+        entity.petTargetSelector.addGoal("HurtByTarget", new HurtByTarget(entity));
     }
 }

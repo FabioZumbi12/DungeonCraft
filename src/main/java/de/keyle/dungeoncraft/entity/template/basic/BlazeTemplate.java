@@ -18,14 +18,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.entity.ai.attack.ranged;
+package de.keyle.dungeoncraft.entity.template.basic;
 
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
+import de.keyle.dungeoncraft.entity.ai.attack.ranged.MyPetProjectile;
+import de.keyle.dungeoncraft.entity.template.BasicTemplate;
+import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
+import de.keyle.dungeoncraft.entity.template.components.RangedDamageComponent;
+import de.keyle.dungeoncraft.entity.types.EntityType;
 
-public interface MyPetProjectile {
-    public EntityDungeonCraft getShooter();
+public class BlazeTemplate extends BasicTemplate {
+    public BlazeTemplate() {
+        super("blaze", 20, EntityType.Blaze);
+        addBasicComponent(new MeeleDamageComponent(6));
+        addBasicComponent(new RangedDamageComponent(5, MyPetProjectile.Projectile.SmallFireball));
+    }
 
-    public enum Projectile {
-        Snowball, LargeFireball, SmallFireball, WitherSkull, Arrow
+    public float getWalkSpeed() {
+        return walkSpeed;
     }
 }

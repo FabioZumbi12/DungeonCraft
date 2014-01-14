@@ -18,14 +18,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.entity.ai.attack.ranged;
+package de.keyle.dungeoncraft.entity.template;
 
+import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 
-public interface MyPetProjectile {
-    public EntityDungeonCraft getShooter();
+public class EntityFactory {
+    public static EntityDungeonCraft createEntityByTemplate(EntityTemplate template) {
+        net.minecraft.server.v1_7_R1.World mcWorld = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
+        EntityDungeonCraft entity = template.getType().getNewEntityInstance(mcWorld);
 
-    public enum Projectile {
-        Snowball, LargeFireball, SmallFireball, WitherSkull, Arrow
+        entity.getBukkitEntity().setMaxHealth(template.getMaxHealth());
+
+        for (EntityTemplateComonent comonent : template.getComponents()) {
+            comonent.applyComponent(entity);
+        }
+
+        return entity;
     }
 }

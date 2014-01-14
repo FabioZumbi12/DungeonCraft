@@ -141,8 +141,8 @@ public enum EntityType {
                 petEntity = (EntityDungeonCraft) obj;
             }
         } catch (Exception e) {
-            DungeonCraftLogger.write(ChatColor.RED + entityClass.getName() + " is no valid MyPet(Entity)!");
-            DebugLogger.warning(entityClass.getName() + " is no valid MyPet(Entity)!");
+            DungeonCraftLogger.write(ChatColor.RED + entityClass.getName() + " is no valid DungeonCraftEntity!");
+            DebugLogger.warning(entityClass.getName() + " is no valid DungeonCraftEntity!");
             e.printStackTrace();
         }
         return petEntity;

@@ -21,17 +21,13 @@
 package de.keyle.dungeoncraft.entity.types;
 
 import de.keyle.dungeoncraft.entity.ai.AIGoalSelector;
-import de.keyle.dungeoncraft.entity.ai.attack.MeleeAttack;
-import de.keyle.dungeoncraft.entity.ai.attack.RangedAttack;
 import de.keyle.dungeoncraft.entity.ai.movement.LookAtPlayer;
 import de.keyle.dungeoncraft.entity.ai.movement.RandomLookaround;
 import de.keyle.dungeoncraft.entity.ai.navigation.AbstractNavigation;
 import de.keyle.dungeoncraft.entity.ai.navigation.VanillaNavigation;
-import de.keyle.dungeoncraft.entity.ai.target.HurtByTarget;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftEntity;
 
 import java.lang.reflect.Field;
 import java.util.Random;
@@ -76,11 +72,8 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
 
     public void setPathfinder() {
         petPathfinderSelector.addGoal("Float", new de.keyle.dungeoncraft.entity.ai.movement.Float(this));
-        petPathfinderSelector.addGoal("RangedTarget", new RangedAttack(this, -0.1F, 12.0F));
-        petPathfinderSelector.addGoal("MeleeAttack", new MeleeAttack(this, 0.1F, 3, 20));
         petPathfinderSelector.addGoal("LookAtPlayer", new LookAtPlayer(this, 8.0F));
         petPathfinderSelector.addGoal("RandomLockaround", new RandomLookaround(this));
-        petTargetSelector.addGoal("HurtByTarget", new HurtByTarget(this));
     }
 
     public void setSize() {
@@ -153,11 +146,11 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
     }
 
     @Override
-    public CraftEntity getBukkitEntity() {
+    public CraftDungeonCraftEntity getBukkitEntity() {
         if (this.bukkitEntity == null) {
             this.bukkitEntity = new CraftDungeonCraftEntity(this.world.getServer(), this);
         }
-        return this.bukkitEntity;
+        return (CraftDungeonCraftEntity) this.bukkitEntity;
     }
 
     // Obfuscated Method handler ------------------------------------------------------------------------------------

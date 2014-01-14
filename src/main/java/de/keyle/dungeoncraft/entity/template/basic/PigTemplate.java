@@ -18,14 +18,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.entity.ai.attack.ranged;
+package de.keyle.dungeoncraft.entity.template.basic;
 
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
+import de.keyle.dungeoncraft.entity.template.BasicTemplate;
+import de.keyle.dungeoncraft.entity.types.EntityType;
 
-public interface MyPetProjectile {
-    public EntityDungeonCraft getShooter();
+public class PigTemplate extends BasicTemplate {
+    public PigTemplate() {
+        super("pig", 10, EntityType.Pig);
+    }
 
-    public enum Projectile {
-        Snowball, LargeFireball, SmallFireball, WitherSkull, Arrow
+    public float getWalkSpeed() {
+        return walkSpeed;
     }
 }

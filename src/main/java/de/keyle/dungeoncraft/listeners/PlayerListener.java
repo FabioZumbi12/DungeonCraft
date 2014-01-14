@@ -48,9 +48,10 @@ public class PlayerListener implements Listener {
             DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(l.getChunk().getX(), l.getChunk().getZ());
             Dungeon d = DungeonManager.getDungeonAt(position);
             if (d != null) {
+                DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getEntity());
                 List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerDeathEvent.class);
                 for (Trigger trigger : triggers) {
-                    trigger.execute(event.getEntity());
+                    trigger.execute(dungeonCraftPlayer);
                 }
             }
         }
@@ -63,9 +64,10 @@ public class PlayerListener implements Listener {
             DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(l.getChunk().getX(), l.getChunk().getZ());
             Dungeon d = DungeonManager.getDungeonAt(position);
             if (d != null) {
+                DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
                 List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerDropItemEvent.class);
                 for (Trigger trigger : triggers) {
-                    if (trigger.execute(event.getPlayer(), event.getItemDrop())) {
+                    if (trigger.execute(dungeonCraftPlayer, event.getItemDrop())) {
                         event.setCancelled(true);
                     }
                 }
@@ -80,9 +82,10 @@ public class PlayerListener implements Listener {
             DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(l.getChunk().getX(), l.getChunk().getZ());
             Dungeon d = DungeonManager.getDungeonAt(position);
             if (d != null) {
+                DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
                 List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerInteractEntityEvent.class);
                 for (Trigger trigger : triggers) {
-                    if (trigger.execute(event.getPlayer(), event.getRightClicked())) {
+                    if (trigger.execute(dungeonCraftPlayer, event.getRightClicked())) {
                         event.setCancelled(true);
                     }
                 }
@@ -97,9 +100,10 @@ public class PlayerListener implements Listener {
             DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(l.getChunk().getX(), l.getChunk().getZ());
             Dungeon d = DungeonManager.getDungeonAt(position);
             if (d != null) {
+                DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
                 List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerRespawnEvent.class);
                 for (Trigger trigger : triggers) {
-                    trigger.execute(event.getPlayer(), event.getRespawnLocation());
+                    trigger.execute(dungeonCraftPlayer, event.getRespawnLocation());
                 }
             }
         }
@@ -115,9 +119,10 @@ public class PlayerListener implements Listener {
             if (blockPosition.equals(position)) {
                 Dungeon d = DungeonManager.getDungeonAt(position);
                 if (d != null) {
+                    DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
                     List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerInteractEvent.class);
                     for (Trigger trigger : triggers) {
-                        trigger.execute(event.getPlayer(), event.getAction(), event.getClickedBlock(), event.getBlockFace());
+                        trigger.execute(dungeonCraftPlayer, event.getAction(), event.getClickedBlock(), event.getBlockFace());
                     }
                 }
             } else {

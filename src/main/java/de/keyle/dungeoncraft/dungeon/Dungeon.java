@@ -23,6 +23,7 @@ package de.keyle.dungeoncraft.dungeon;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.api.events.DungeonStartEvent;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
+import de.keyle.dungeoncraft.dungeon.region.RegionRegistry;
 import de.keyle.dungeoncraft.dungeon.scripting.TriggerRegistry;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.group.Group;
@@ -40,16 +41,16 @@ public class Dungeon implements IScheduler {
     protected boolean isReady = false;
     protected boolean isLoading = false;
     protected boolean first = true;
+    protected boolean isCompleted = false;
+    protected long endTime = 0;
+    protected Location exitLocation;
+    protected List<DungeonCraftPlayer> playerList = new ArrayList<DungeonCraftPlayer>();
     protected final String dungeonName;
     protected final DungeonBase dungeonBase;
     protected final UUID uuid;
     protected final DungeonField position;
-    protected long endTime = 0;
-    protected Location exitLocation;
-    protected boolean isCompleted = false;
-    protected TriggerRegistry triggerRegistry;
-
-    protected List<DungeonCraftPlayer> playerList = new ArrayList<DungeonCraftPlayer>();
+    protected final TriggerRegistry triggerRegistry;
+    protected final RegionRegistry regionRegistry;
 
     public Dungeon(String dungeonName, DungeonBase dungeonTheme) {
         this.dungeonName = dungeonName;
@@ -57,6 +58,7 @@ public class Dungeon implements IScheduler {
         uuid = UUID.randomUUID();
         position = DungeonFieldManager.getNewDungeonField();
         triggerRegistry = new TriggerRegistry();
+        regionRegistry = new RegionRegistry();
     }
 
     public Dungeon(String dungeonName, DungeonBase dungeonTheme, Group group) {
@@ -68,6 +70,10 @@ public class Dungeon implements IScheduler {
 
     public TriggerRegistry getTriggerRegistry() {
         return triggerRegistry;
+    }
+
+    public RegionRegistry getRegionRegistry() {
+        return regionRegistry;
     }
 
     public boolean isLoading() {

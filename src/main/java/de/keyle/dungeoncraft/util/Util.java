@@ -20,6 +20,7 @@
 
 package de.keyle.dungeoncraft.util;
 
+import de.keyle.dungeoncraft.util.vector.Vector;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.WordUtils;
 
@@ -44,5 +45,13 @@ public class Util {
         name = WordUtils.capitalizeFully(name);
         name = name.replace(" ", "");
         return name;
+    }
+
+    public static boolean isInsideCuboid(Vector point, Vector pointMin, Vector pointMax) {
+        double px = point.getX();
+        double py = point.getY();
+        double pz = point.getZ();
+
+        return (px >= pointMin.getX() && px <= pointMax.getX() && py >= pointMin.getY() && py <= pointMax.getY() && pz >= pointMin.getZ() && pz <= pointMax.getZ());
     }
 }

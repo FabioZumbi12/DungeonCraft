@@ -20,20 +20,23 @@
 
 package de.keyle.dungeoncraft.listeners;
 
+import de.keyle.dungeoncraft.api.events.PlayerEnterRegionEvent;
+import de.keyle.dungeoncraft.api.events.PlayerLeaveRegionEvent;
 import de.keyle.dungeoncraft.dungeon.Dungeon;
 import de.keyle.dungeoncraft.dungeon.DungeonField;
 import de.keyle.dungeoncraft.dungeon.DungeonFieldManager;
 import de.keyle.dungeoncraft.dungeon.DungeonManager;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
+import de.keyle.dungeoncraft.dungeon.region.Region;
 import de.keyle.dungeoncraft.dungeon.scripting.Trigger;
+import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.util.vector.Vector;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.*;
 
 import java.util.List;
 
@@ -120,6 +123,61 @@ public class PlayerListener implements Listener {
             } else {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerMove(final PlayerMoveEvent event) {
+        if (event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ()) {
+            return;
+        }
+        Location l = event.getTo();
+        if (l.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
+            DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(l.getChunk().getX(), l.getChunk().getZ());
+            Dungeon d = DungeonManager.getDungeonAt(position);
+            if (d != null) {
+                Vector playerPoint = new Vector(l.getBlockX(), l.getBlockY(), l.getBlockZ());
+                DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
+                List<Region> regionsAt = d.getRegionRegistry().getRegionsAt(playerPoint);
+                for (Region region : Region.getPlayerRegions(dungeonCraftPlayer)) {
+                    if (!region.isVectorInside(playerPoint)) {
+                        PlayerLeaveRegionEvent regionEvent = new PlayerLeaveRegionEvent(d, dungeonCraftPlayer, region);
+                        Bukkit.getPluginManager().callEvent(regionEvent);
+                        if (regionEvent.isCancelled()) {
+                            event.setCancelled(true);
+                        } else {
+                            region.removePlayer(dungeonCraftPlayer);
+                        }
+                    }
+                }
+                for (Region region : regionsAt) {
+                    if (!region.getPlayers().contains(dungeonCraftPlayer)) {
+                        PlayerEnterRegionEvent regionEvent = new PlayerEnterRegionEvent(d, dungeonCraftPlayer, region);
+                        Bukkit.getPluginManager().callEvent(regionEvent);
+                        if (regionEvent.isCancelled()) {
+                            event.setCancelled(true);
+                        } else {
+                            region.addPlayer(dungeonCraftPlayer);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerEnterRegion(final PlayerEnterRegionEvent event) {
+        List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerEnterRegionEvent.class);
+        for (Trigger trigger : triggers) {
+            trigger.execute(event.getPlayer(), event.getDungeon(), event.getRegion());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerLeaveRegion(final PlayerLeaveRegionEvent event) {
+        List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerLeaveRegionEvent.class);
+        for (Trigger trigger : triggers) {
+            trigger.execute(event.getPlayer(), event.getDungeon(), event.getRegion());
         }
     }
 }

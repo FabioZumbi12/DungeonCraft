@@ -26,6 +26,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class TriggerRegistry {
     public static final int PLAYER_DROP_ITEM = 21;
     public static final int PLAYER_INTERACT_ENTITY = 22;
     public static final int PLAYER_RESPAWN = 23;
+    public static final int PLAYER_INTERACT = 24;
 
     private ArrayListMultimap<Class<? extends Event>, Trigger> triggers = ArrayListMultimap.create();
 
@@ -63,6 +65,8 @@ public class TriggerRegistry {
                 return PlayerInteractEntityEvent.class;
             case PLAYER_RESPAWN:
                 return PlayerRespawnEvent.class;
+            case PLAYER_INTERACT:
+                return PlayerInteractEvent.class;
             default:
                 return Event.class;
         }

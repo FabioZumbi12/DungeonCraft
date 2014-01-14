@@ -32,6 +32,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.List;
@@ -97,6 +98,27 @@ public class PlayerListener implements Listener {
                 for (Trigger trigger : triggers) {
                     trigger.execute(event.getPlayer(), event.getRespawnLocation());
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(final PlayerInteractEvent event) {
+        Location l = event.getPlayer().getLocation();
+        if (l.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
+            Location clickedBlockLocation = event.getClickedBlock().getLocation();
+            DungeonField blockPosition = DungeonFieldManager.getDungeonFieldForChunk(clickedBlockLocation.getChunk().getX(), clickedBlockLocation.getChunk().getZ());
+            DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(l.getChunk().getX(), l.getChunk().getZ());
+            if (blockPosition.equals(position)) {
+                Dungeon d = DungeonManager.getDungeonAt(position);
+                if (d != null) {
+                    List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerInteractEvent.class);
+                    for (Trigger trigger : triggers) {
+                        trigger.execute(event.getPlayer(), event.getAction(), event.getClickedBlock(), event.getBlockFace());
+                    }
+                }
+            } else {
+                event.setCancelled(true);
             }
         }
     }

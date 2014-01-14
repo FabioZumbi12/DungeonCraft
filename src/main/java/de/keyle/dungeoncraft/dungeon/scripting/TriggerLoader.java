@@ -21,10 +21,7 @@
 package de.keyle.dungeoncraft.dungeon.scripting;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
-import de.keyle.dungeoncraft.dungeon.scripting.contexts.DungeonContext;
-import de.keyle.dungeoncraft.dungeon.scripting.contexts.EntityContext;
-import de.keyle.dungeoncraft.dungeon.scripting.contexts.LoggerContext;
-import de.keyle.dungeoncraft.dungeon.scripting.contexts.TriggerContext;
+import de.keyle.dungeoncraft.dungeon.scripting.contexts.*;
 import org.mozilla.javascript.*;
 
 import java.io.File;
@@ -45,6 +42,7 @@ public class TriggerLoader {
         DungeonContext dungeonContext = new DungeonContext(dungeon);
         EntityContext entityContext = new EntityContext(dungeon);
         LoggerContext loggerContext = new LoggerContext(dungeon);
+        VariablesContext variablesContext = new VariablesContext();
 
         for (File f : dungeon.getDungeonBase().getTriggerFiles()) {
             Context cx = Context.enter();
@@ -56,6 +54,7 @@ public class TriggerLoader {
                 ScriptableObject.putConstProperty(scope, "Entity", entityContext);
                 ScriptableObject.putConstProperty(scope, "Trigger", new TriggerContext(dungeon, fileName));
                 ScriptableObject.putConstProperty(scope, "Logger", loggerContext);
+                ScriptableObject.putConstProperty(scope, "Variables", variablesContext);
 
                 cx.evaluateReader(scope, new FileReader(f), fileName, 0, null);
 

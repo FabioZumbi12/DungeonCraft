@@ -26,7 +26,7 @@ import net.minecraft.server.v1_7_R1.World;
 
 @EntityInfo(width = 0.6F, height = 1.7F)
 public class EntityDungeonCraftBlaze extends EntityDungeonCraft {
-    public EntityDungeonCraftBlaze(World world, EntityDungeonCraft myPet) {
+    public EntityDungeonCraftBlaze(World world) {
         super(world);
     }
 

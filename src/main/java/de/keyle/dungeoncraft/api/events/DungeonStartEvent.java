@@ -33,7 +33,7 @@ public class DungeonStartEvent extends Event {
         this.dungeon = dungeon;
     }
 
-    public Dungeon getDungein() {
+    public Dungeon getDungeon() {
         return dungeon;
     }
 

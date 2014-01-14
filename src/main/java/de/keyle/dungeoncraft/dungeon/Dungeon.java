@@ -23,8 +23,6 @@ package de.keyle.dungeoncraft.dungeon;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.api.events.DungeonStartEvent;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
-import de.keyle.dungeoncraft.dungeon.scripting.Trigger;
-import de.keyle.dungeoncraft.dungeon.scripting.TriggerLoader;
 import de.keyle.dungeoncraft.dungeon.scripting.TriggerRegistry;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.group.Group;
@@ -36,10 +34,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Dungeon implements IScheduler {
     protected boolean isReady = false;
@@ -62,8 +57,6 @@ public class Dungeon implements IScheduler {
         uuid = UUID.randomUUID();
         position = DungeonFieldManager.getNewDungeonField();
         triggerRegistry = new TriggerRegistry();
-
-        new TriggerLoader(this);
     }
 
     public Dungeon(String dungeonName, DungeonBase dungeonTheme, Group group) {
@@ -75,10 +68,6 @@ public class Dungeon implements IScheduler {
 
     public TriggerRegistry getTriggerRegistry() {
         return triggerRegistry;
-    }
-
-    public boolean isReady() {
-        return isReady;
     }
 
     public boolean isLoading() {
@@ -106,7 +95,7 @@ public class Dungeon implements IScheduler {
         DungeonCraftLogger.write("Dungeon is now ready to use!");
     }
 
-    public synchronized boolean isRready() {
+    public synchronized boolean isReady() {
         return isReady;
     }
 
@@ -118,6 +107,10 @@ public class Dungeon implements IScheduler {
 
     public void removePlayer(DungeonCraftPlayer player) {
         playerList.remove(player);
+    }
+
+    public List<DungeonCraftPlayer> getPlayerList() {
+        return Collections.unmodifiableList(playerList);
     }
 
     public Location getExitLocation() {
@@ -132,9 +125,27 @@ public class Dungeon implements IScheduler {
         return isCompleted;
     }
 
+    public void completeDungeon() {
+        Iterator<DungeonCraftPlayer> iterator = playerList.iterator();
+        while (iterator.hasNext()) {
+            DungeonCraftPlayer p = iterator.next();
+            if (p.isOnline()) {
+                if (exitLocation == null) {
+                    p.getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+                } else {
+                    p.getPlayer().teleport(exitLocation);
+                }
+                p.getPlayer().sendMessage("Time is over!");
+                iterator.remove();
+            }
+        }
+        unlockSchematic();
+        isCompleted = true;
+    }
+
     @Override
     public void schedule() {
-        if (isRready()) {
+        if (isReady()) {
             if (first) {
                 unlockSchematic();
                 DungeonCraftLogger.write("Ok Lets do something");
@@ -154,28 +165,11 @@ public class Dungeon implements IScheduler {
                     endTime = System.currentTimeMillis() + (dungeonBase.getTimeLimit() * 1000);
                 }
 
-                List<Trigger> triggers = getTriggerRegistry().getTriggers(DungeonStartEvent.class);
-                for (Trigger trigger : triggers) {
-                    trigger.execute();
-                }
+                Bukkit.getPluginManager().callEvent(new DungeonStartEvent(this));
             }
             if (endTime > 0) {
                 if (System.currentTimeMillis() >= endTime) {
-                    Iterator<DungeonCraftPlayer> iterator = playerList.iterator();
-                    while (iterator.hasNext()) {
-                        DungeonCraftPlayer p = iterator.next();
-                        if (p.isOnline()) {
-                            if (exitLocation == null) {
-                                p.getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-                            } else {
-                                p.getPlayer().teleport(exitLocation);
-                            }
-                            p.getPlayer().sendMessage("Time is over!");
-                            iterator.remove();
-                        }
-                    }
-                    unlockSchematic();
-                    isCompleted = true;
+                    completeDungeon();
                 }
             }
             //ToDo Weather & Time

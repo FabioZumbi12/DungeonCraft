@@ -29,7 +29,9 @@ import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
+import org.bukkit.entity.LivingEntity;
 
+@SuppressWarnings("unused")
 public class EntityContext {
     protected final Dungeon dungeon;
 
@@ -50,5 +52,13 @@ public class EntityContext {
             entity.setPosition(dungeon.getPosition().getBlockX() + posX, posY, dungeon.getPosition().getBlockZ() + posZ);
             mcWorld.addEntity(entity);
         }
+    }
+
+    public void killEntity(LivingEntity entity) {
+        entity.setHealth(0);
+    }
+
+    public void removeEntity(LivingEntity entity) {
+        entity.remove();
     }
 }

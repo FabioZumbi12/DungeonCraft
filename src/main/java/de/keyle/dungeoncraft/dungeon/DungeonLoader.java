@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.dungeon;
 
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftChunkProvider;
+import de.keyle.dungeoncraft.dungeon.scripting.TriggerLoader;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -65,6 +66,9 @@ public class DungeonLoader extends Thread {
                 break;
             }
         }
+
+        new TriggerLoader(dungeon);
+
         dungeon.setReady();
     }
 }

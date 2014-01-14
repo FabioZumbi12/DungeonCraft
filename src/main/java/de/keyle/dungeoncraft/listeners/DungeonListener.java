@@ -18,32 +18,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.dungeon.scripting.contexts;
+package de.keyle.dungeoncraft.listeners;
 
-import de.keyle.dungeoncraft.dungeon.Dungeon;
-import de.keyle.dungeoncraft.util.vector.OrientationVector;
+import de.keyle.dungeoncraft.api.events.DungeonStartEvent;
+import de.keyle.dungeoncraft.dungeon.scripting.Trigger;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
-@SuppressWarnings("unused")
-public class DungeonContext {
-    protected final Dungeon dungeon;
+import java.util.List;
 
-    public DungeonContext(Dungeon dungeon) {
-        this.dungeon = dungeon;
-    }
-
-    public OrientationVector getSpawnPoint() {
-        return dungeon.getDungeonBase().getSpawn();
-    }
-
-    public long getEndTime() {
-        return dungeon.getEndTime();
-    }
-
-    public void completeDungeon() {
-        dungeon.completeDungeon();
-    }
-
-    public int getPlayerCount() {
-        return dungeon.getPlayerList().size();
+public class DungeonListener implements Listener {
+    @EventHandler
+    public void onDungeonStart(final DungeonStartEvent event) {
+        List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(DungeonStartEvent.class);
+        for (Trigger trigger : triggers) {
+            trigger.execute();
+        }
     }
 }

@@ -21,7 +21,9 @@
 package de.keyle.dungeoncraft.dungeon;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
+import de.keyle.dungeoncraft.api.events.DungeonStartEvent;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
+import de.keyle.dungeoncraft.dungeon.scripting.Trigger;
 import de.keyle.dungeoncraft.dungeon.scripting.TriggerLoader;
 import de.keyle.dungeoncraft.dungeon.scripting.TriggerRegistry;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
@@ -150,6 +152,11 @@ public class Dungeon implements IScheduler {
                 }
                 if (dungeonBase.hasTimeLimit()) {
                     endTime = System.currentTimeMillis() + (dungeonBase.getTimeLimit() * 1000);
+                }
+
+                List<Trigger> triggers = getTriggerRegistry().getTriggers(DungeonStartEvent.class);
+                for (Trigger trigger : triggers) {
+                    trigger.execute();
                 }
             }
             if (endTime > 0) {

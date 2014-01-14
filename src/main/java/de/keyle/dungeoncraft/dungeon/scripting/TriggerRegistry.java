@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.dungeon.scripting;
 
 import com.google.common.collect.ArrayListMultimap;
+import de.keyle.dungeoncraft.api.events.DungeonStartEvent;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -30,6 +31,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import java.util.List;
 
 public class TriggerRegistry {
+    public static final int DUNGEON_START = 0;
     public static final int ENTITY_DIES = 10;
     public static final int CREATURE_SPAWN = 11;
     public static final int ENTITY_INTERACT = 12;
@@ -43,6 +45,8 @@ public class TriggerRegistry {
 
     public static Class<? extends Event> getEventClassById(int eventId) {
         switch (eventId) {
+            case DUNGEON_START:
+                return DungeonStartEvent.class;
             case ENTITY_DIES:
                 return EntityDeathEvent.class;
             case CREATURE_SPAWN:

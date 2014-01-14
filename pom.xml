@@ -37,14 +37,15 @@
 
         <vault.version>1.2.27</vault.version>
         <worldedit.version>5.5.6</worldedit.version>
-        <knbt.version>0.0.1-SNAPSHOT</knbt.version>
         <mcmmo.version>1.4.06</mcmmo.version>
         <heroes.version>1.5.2</heroes.version>
         <heroes.build>b1713</heroes.build>
+        <ancientrpg.version>1.0</ancientrpg.version>
+
         <commandframework.version>0.0.1-SNAPSHOT</commandframework.version>
         <fanciful-chat.version>0.0.2</fanciful-chat.version>
-        <ancientrpg.version>1.0</ancientrpg.version>
         <metrics.version>R7</metrics.version>
+        <knbt.version>0.0.1-SNAPSHOT</knbt.version>
         <rhino.version>1.7R2</rhino.version>
     </properties>
 
@@ -124,12 +125,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>de.keyle</groupId>
-            <artifactId>command-framework</artifactId>
-            <version>${commandframework.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>com.sk89q</groupId>
             <artifactId>worldedit</artifactId>
             <version>${worldedit.version}</version>
@@ -140,24 +135,6 @@
                     <artifactId>bukkit</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.mcstats.bukkit</groupId>
-            <artifactId>metrics</artifactId>
-            <version>${metrics.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.keyle</groupId>
-            <artifactId>fanciful-chat</artifactId>
-            <version>${fanciful-chat.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.keyle</groupId>
-            <artifactId>knbt</artifactId>
-            <version>${knbt.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>rhino</groupId>
@@ -189,6 +166,30 @@
             <version>${heroes.version}</version>
             <classifier>${heroes.build}</classifier>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.keyle</groupId>
+            <artifactId>command-framework</artifactId>
+            <version>${commandframework.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mcstats.bukkit</groupId>
+            <artifactId>metrics</artifactId>
+            <version>${metrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.keyle</groupId>
+            <artifactId>fanciful-chat</artifactId>
+            <version>${fanciful-chat.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.keyle</groupId>
+            <artifactId>knbt</artifactId>
+            <version>${knbt.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

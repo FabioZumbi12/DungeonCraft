@@ -21,6 +21,9 @@
 package de.keyle.dungeoncraft.dungeon.scripting;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
+import de.keyle.dungeoncraft.dungeon.scripting.contexts.DungeonContext;
+import de.keyle.dungeoncraft.dungeon.scripting.contexts.EntityContext;
+import de.keyle.dungeoncraft.dungeon.scripting.contexts.TriggerContext;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
@@ -53,8 +56,11 @@ public class TriggerLoader {
                         final String fileName = f.getName().substring(0, f.getName().lastIndexOf("."));
                         final ScriptContext scriptContext = new SimpleScriptContext();
 
-                        scriptContext.setAttribute("Trigger", new TriggerContext() {
+                        scriptContext.setAttribute("Dungeon", new DungeonContext(dungeon), ScriptContext.ENGINE_SCOPE);
+                        scriptContext.setAttribute("Entity", new EntityContext(dungeon), ScriptContext.ENGINE_SCOPE);
+                        scriptContext.setAttribute("Trigger", new TriggerContext(dungeon) {
                             @SuppressWarnings("unused")
+                            @Override
                             public void registerTrigger(int id, Function function) {
                                 NativeFunction f = (NativeFunction) function;
                                 DebugLogger.info("register Trigger (d: " + dungeon.getDungeonName() + "): " + fileName + "_" + TriggerRegistry.getEventClassById(id).getName());
@@ -92,30 +98,6 @@ public class TriggerLoader {
                     } finally {
                         Context.exit();
                     }
-                }
-            }
-        }
-    }
-
-    public abstract class TriggerContext {
-        public abstract void registerTrigger(int id, Function function);
-
-        public abstract void enableTrigger(int id);
-
-        public void enableTrigger(int id, String filename) {
-            for (Trigger t : dungeon.getTriggerRegistry().getTriggers(id)) {
-                if (t.getName().equals(filename + "_" + TriggerRegistry.getEventClassById(id).getName())) {
-                    t.setActive(true);
-                }
-            }
-        }
-
-        public abstract void disableTrigger(int id);
-
-        public void disableTrigger(int id, String filename) {
-            for (Trigger t : dungeon.getTriggerRegistry().getTriggers(id)) {
-                if (t.getName().equals(filename + "_" + TriggerRegistry.getEventClassById(id).getName())) {
-                    t.setActive(false);
                 }
             }
         }

@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.util;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
+import de.keyle.dungeoncraft.api.util.Scheduler;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import org.bukkit.Bukkit;
 
@@ -28,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SchedulePlaner {
-    private static final Map<IScheduler, Integer> tasks = new HashMap<IScheduler, Integer>();
+    private static final Map<Scheduler, Integer> tasks = new HashMap<Scheduler, Integer>();
 
     private SchedulePlaner() {
     }
@@ -47,7 +48,7 @@ public class SchedulePlaner {
         stopTimers();
     }
 
-    public static void addTask(final IScheduler task, int interval) {
+    public static void addTask(final Scheduler task, int interval) {
         int timer = Bukkit.getScheduler().scheduleSyncRepeatingTask(DungeonCraftPlugin.getPlugin(), new Runnable() {
             @Override
             public void run() {
@@ -57,7 +58,7 @@ public class SchedulePlaner {
         tasks.put(task, timer);
     }
 
-    public static void removeTask(IScheduler task) {
+    public static void removeTask(Scheduler task) {
         tasks.remove(task);
     }
 }

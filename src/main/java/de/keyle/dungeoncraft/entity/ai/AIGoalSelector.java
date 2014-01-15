@@ -20,6 +20,8 @@
 
 package de.keyle.dungeoncraft.entity.ai;
 
+import de.keyle.dungeoncraft.api.entity.ai.AIGoal;
+
 import java.util.*;
 
 public class AIGoalSelector {

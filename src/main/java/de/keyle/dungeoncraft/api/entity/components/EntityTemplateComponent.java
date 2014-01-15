@@ -18,8 +18,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.util;
+package de.keyle.dungeoncraft.api.entity.components;
 
-public interface IScheduler {
-    public void schedule();
+import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
+
+public abstract class EntityTemplateComponent {
+
+    public abstract void applyComponent(EntityDungeonCraft entity);
 }

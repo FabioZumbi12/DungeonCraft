@@ -20,10 +20,10 @@
 
 package de.keyle.dungeoncraft.entity.template.components;
 
+import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
+import de.keyle.dungeoncraft.api.entity.components.Parameter;
 import de.keyle.dungeoncraft.entity.ai.attack.RangedAttack;
 import de.keyle.dungeoncraft.entity.ai.target.HurtByTarget;
-import de.keyle.dungeoncraft.entity.template.EntityTemplateComponent;
-import de.keyle.dungeoncraft.entity.template.components.parameter.Parameter;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
 import static de.keyle.dungeoncraft.entity.ai.attack.ranged.Projectile.ProjectileTypes;

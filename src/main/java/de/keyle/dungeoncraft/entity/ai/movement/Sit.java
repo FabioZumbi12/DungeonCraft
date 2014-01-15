@@ -20,7 +20,7 @@
 
 package de.keyle.dungeoncraft.entity.ai.movement;
 
-import de.keyle.dungeoncraft.entity.ai.AIGoal;
+import de.keyle.dungeoncraft.api.entity.ai.AIGoal;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.ocelot.EntityDungeonCraftOcelot;
 import de.keyle.dungeoncraft.entity.types.wolf.EntityDungeonCraftWolf;

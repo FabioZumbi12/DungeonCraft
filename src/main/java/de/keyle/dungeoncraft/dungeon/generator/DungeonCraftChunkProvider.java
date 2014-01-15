@@ -22,8 +22,8 @@ package de.keyle.dungeoncraft.dungeon.generator;
 
 import com.google.common.collect.ArrayListMultimap;
 import de.keyle.dungeoncraft.api.events.DungeonChunkLoadedEvent;
+import de.keyle.dungeoncraft.api.util.Scheduler;
 import de.keyle.dungeoncraft.dungeon.DungeonFieldManager;
-import de.keyle.dungeoncraft.util.IScheduler;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.Bukkit;
@@ -32,7 +32,7 @@ import org.bukkit.craftbukkit.v1_7_R1.util.LongHash;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DungeonCraftChunkProvider extends ChunkProviderServer implements IScheduler {
+public class DungeonCraftChunkProvider extends ChunkProviderServer implements Scheduler {
     public static DungeonCraftChunkProvider chunkloader;
 
     private final List<DungeonChunkLoadedEvent> events = new ArrayList<DungeonChunkLoadedEvent>();

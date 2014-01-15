@@ -20,6 +20,7 @@
 
 package de.keyle.dungeoncraft.entity.template;
 
+import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 
 public abstract class BasicTemplate extends EntityTemplate {

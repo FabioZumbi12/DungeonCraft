@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.entity.ai;
+package de.keyle.dungeoncraft.api.entity.ai;
 
 public abstract class AIGoal {
     public abstract boolean shouldStart();

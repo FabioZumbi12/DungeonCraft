@@ -20,7 +20,7 @@
 
 package de.keyle.dungeoncraft.entity.ai.attack;
 
-import de.keyle.dungeoncraft.entity.ai.AIGoal;
+import de.keyle.dungeoncraft.api.entity.ai.AIGoal;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.pigzombie.EntityDungeonCraftPigZombie;
 import de.keyle.dungeoncraft.entity.types.skeleton.EntityDungeonCraftSkeleton;

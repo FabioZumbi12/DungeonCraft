@@ -20,8 +20,9 @@
 
 package de.keyle.dungeoncraft.entity.template;
 
+import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
+import de.keyle.dungeoncraft.api.entity.components.Parameter;
 import de.keyle.dungeoncraft.dungeon.DungeonBase;
-import de.keyle.dungeoncraft.entity.template.components.parameter.Parameter;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 import de.keyle.dungeoncraft.util.Util;
 import de.keyle.dungeoncraft.util.config.ConfigurationJson;

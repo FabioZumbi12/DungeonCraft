@@ -22,13 +22,13 @@ package de.keyle.dungeoncraft.dungeon;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.api.events.DungeonStartEvent;
+import de.keyle.dungeoncraft.api.util.Scheduler;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import de.keyle.dungeoncraft.dungeon.region.RegionRegistry;
 import de.keyle.dungeoncraft.dungeon.scripting.TriggerRegistry;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.group.Group;
 import de.keyle.dungeoncraft.util.BukkitUtil;
-import de.keyle.dungeoncraft.util.IScheduler;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 import org.bukkit.Bukkit;
@@ -37,7 +37,7 @@ import org.bukkit.World;
 
 import java.util.*;
 
-public class Dungeon implements IScheduler {
+public class Dungeon implements Scheduler {
     protected boolean isReady = false;
     protected boolean isLoading = false;
     protected boolean first = true;

@@ -18,20 +18,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.entity.template.components.parameter;
+package de.keyle.dungeoncraft.api.util;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-@Retention(RetentionPolicy.RUNTIME)
-@java.lang.annotation.Target(ElementType.PARAMETER)
-public @interface Parameter {
-    Type type();
-
-    String name();
-
-    public enum Type {
-        Number, String, Boolean
-    }
+public interface Scheduler {
+    public void schedule();
 }

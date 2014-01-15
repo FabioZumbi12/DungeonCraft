@@ -24,7 +24,8 @@ import de.keyle.dungeoncraft.entity.types.EntityType;
 
 public abstract class BasicTemplate extends EntityTemplate {
     public BasicTemplate(String templateId, double maxHp, EntityType type) {
-        super(templateId, maxHp, type);
+        super(templateId, type);
+        super.setMaxHealth(maxHp);
     }
 
     public void setMaxHealth(double maxHp) {
@@ -33,10 +34,10 @@ public abstract class BasicTemplate extends EntityTemplate {
     public void setWalkSpeed(float walkSpeed) {
     }
 
-    public void addComponent(EntityTemplateComonent comonent) {
+    public void addComponent(EntityTemplateComponent comonent) {
     }
 
-    protected void addBasicComponent(EntityTemplateComonent comonent) {
+    protected void addBasicComponent(EntityTemplateComponent comonent) {
         super.addComponent(comonent);
     }
 }

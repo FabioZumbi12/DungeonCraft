@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.entity.template;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
-public abstract class EntityTemplateComonent {
+public abstract class EntityTemplateComponent {
 
     public abstract void applyComponent(EntityDungeonCraft entity);
 }

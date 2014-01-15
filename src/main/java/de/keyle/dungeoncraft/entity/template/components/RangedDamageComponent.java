@@ -22,18 +22,31 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.entity.ai.attack.RangedAttack;
 import de.keyle.dungeoncraft.entity.ai.target.HurtByTarget;
-import de.keyle.dungeoncraft.entity.template.EntityTemplateComonent;
+import de.keyle.dungeoncraft.entity.template.EntityTemplateComponent;
+import de.keyle.dungeoncraft.entity.template.components.parameter.Parameter;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
 import static de.keyle.dungeoncraft.entity.ai.attack.ranged.Projectile.ProjectileTypes;
 
-public class RangedDamageComponent extends EntityTemplateComonent {
+public class RangedDamageComponent extends EntityTemplateComponent {
     double damage = 0;
     private final ProjectileTypes projectileTypes;
 
-    public RangedDamageComponent(double damage, ProjectileTypes projectileTypes) {
+    public RangedDamageComponent(double damage, ProjectileTypes projectileType) {
         this.damage = damage;
-        this.projectileTypes = projectileTypes;
+        this.projectileTypes = projectileType;
+    }
+
+    public RangedDamageComponent(@Parameter(type = Parameter.Type.Number, name = "damage") Double damage,
+                                 @Parameter(type = Parameter.Type.String, name = "projectile") String projectileType) {
+        this.damage = damage;
+        for (ProjectileTypes type : ProjectileTypes.values()) {
+            if (type.name().equalsIgnoreCase(projectileType)) {
+                this.projectileTypes = type;
+                return;
+            }
+        }
+        this.projectileTypes = ProjectileTypes.Arrow;
     }
 
     public double getDamage() {

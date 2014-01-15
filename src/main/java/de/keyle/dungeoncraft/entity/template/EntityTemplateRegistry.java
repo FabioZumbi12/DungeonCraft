@@ -21,7 +21,7 @@
 package de.keyle.dungeoncraft.entity.template;
 
 import de.keyle.dungeoncraft.entity.template.basic.*;
-import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
+import de.keyle.dungeoncraft.util.logger.DebugLogger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +65,7 @@ public class EntityTemplateRegistry {
             registeredTemplates.put(template.getTemplateId(), template);
             return;
         }
-        DungeonCraftLogger.write("Entity Template with id \"" + template.getTemplateId() + "\" is already registered!");
+        DebugLogger.warning("Entity Template with id \"" + template.getTemplateId() + "\" is already registered!");
     }
 
     public EntityTemplate getTemplate(String templateId) {

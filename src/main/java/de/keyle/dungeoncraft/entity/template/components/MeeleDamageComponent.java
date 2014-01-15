@@ -22,13 +22,14 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.entity.ai.attack.MeleeAttack;
 import de.keyle.dungeoncraft.entity.ai.target.HurtByTarget;
-import de.keyle.dungeoncraft.entity.template.EntityTemplateComonent;
+import de.keyle.dungeoncraft.entity.template.EntityTemplateComponent;
+import de.keyle.dungeoncraft.entity.template.components.parameter.Parameter;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
-public class MeeleDamageComponent extends EntityTemplateComonent {
+public class MeeleDamageComponent extends EntityTemplateComponent {
     double damage = 0;
 
-    public MeeleDamageComponent(double damage) {
+    public MeeleDamageComponent(@Parameter(type = Parameter.Type.Number, name = "damage") double damage) {
         this.damage = damage;
     }
 

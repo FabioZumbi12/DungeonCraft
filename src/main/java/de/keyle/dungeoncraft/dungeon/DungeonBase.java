@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.dungeon;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
+import de.keyle.dungeoncraft.entity.template.EntityTemplateLoader;
 import de.keyle.dungeoncraft.entity.template.EntityTemplateRegistry;
 import de.keyle.dungeoncraft.util.config.ConfigurationYaml;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
@@ -125,6 +126,10 @@ public class DungeonBase implements ISchematicReveiver {
         return new File(getFolder(), "regions.yml");
     }
 
+    public File getEntityTemplateFile() {
+        return new File(getFolder(), "entity-templates.json");
+    }
+
     public File getFolder() {
         return new File(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "dungeons" + File.separator + name);
     }
@@ -169,5 +174,7 @@ public class DungeonBase implements ISchematicReveiver {
                 DungeonCraftLogger.write("keys: " + customConfigOptions.getKeys(false));
             }
         }
+
+        new EntityTemplateLoader(this);
     }
 }

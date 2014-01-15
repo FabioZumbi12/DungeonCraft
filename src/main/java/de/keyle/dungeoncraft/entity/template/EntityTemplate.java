@@ -26,14 +26,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityTemplate {
-    protected double maxHealth;
+    protected double maxHealth = 10;
     protected float walkSpeed = 0.3F;
+    protected String displayName = "";
     protected final String templateId;
     protected final EntityType type;
-    protected List<EntityTemplateComonent> components = new ArrayList<EntityTemplateComonent>();
+    protected List<EntityTemplateComponent> components = new ArrayList<EntityTemplateComponent>();
 
-    public EntityTemplate(String templateId, double maxHealth, EntityType type) {
-        this.maxHealth = maxHealth;
+    public EntityTemplate(String templateId, EntityType type) {
         this.templateId = templateId;
         this.type = type;
     }
@@ -65,11 +65,19 @@ public class EntityTemplate {
         this.walkSpeed = walkSpeed;
     }
 
-    public void addComponent(EntityTemplateComonent comonent) {
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public void addComponent(EntityTemplateComponent comonent) {
         components.add(comonent);
     }
 
-    public List<EntityTemplateComonent> getComponents() {
+    public List<EntityTemplateComponent> getComponents() {
         return components;
     }
 }

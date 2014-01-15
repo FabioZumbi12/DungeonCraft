@@ -18,24 +18,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.entity.template;
+package de.keyle.dungeoncraft.entity.template.components.parameter;
 
-import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-public class EntityFactory {
-    public static EntityDungeonCraft createEntityByTemplate(EntityTemplate template) {
-        net.minecraft.server.v1_7_R1.World mcWorld = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
-        EntityDungeonCraft entity = template.getType().getNewEntityInstance(mcWorld);
+@Retention(RetentionPolicy.RUNTIME)
+@java.lang.annotation.Target(ElementType.PARAMETER)
+public @interface Parameter {
+    Type type();
 
-        entity.getBukkitEntity().setMaxHealth(template.getMaxHealth());
+    String name();
 
-        for (EntityTemplateComponent comonent : template.getComponents()) {
-            comonent.applyComponent(entity);
-        }
-
-        return entity;
+    public enum Type {
+        Number, String, Boolean
     }
 }

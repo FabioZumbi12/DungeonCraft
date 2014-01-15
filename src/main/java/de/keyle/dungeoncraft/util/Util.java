@@ -54,4 +54,22 @@ public class Util {
 
         return (px >= pointMin.getX() && px <= pointMax.getX() && py >= pointMin.getY() && py <= pointMax.getY() && pz >= pointMin.getZ() && pz <= pointMax.getZ());
     }
+
+    public static boolean isDouble(String number) {
+        try {
+            Double.parseDouble(number);
+            return true;
+        } catch (NumberFormatException nFE) {
+            return false;
+        }
+    }
+
+    public static boolean isFloat(String number) {
+        try {
+            Float.parseFloat(number);
+            return true;
+        } catch (NumberFormatException nFE) {
+            return false;
+        }
+    }
 }

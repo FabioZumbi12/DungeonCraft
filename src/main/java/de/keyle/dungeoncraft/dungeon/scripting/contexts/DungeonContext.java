@@ -20,6 +20,7 @@
 
 package de.keyle.dungeoncraft.dungeon.scripting.contexts;
 
+import de.keyle.dungeoncraft.api.dungeon.Result;
 import de.keyle.dungeoncraft.dungeon.Dungeon;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 
@@ -39,8 +40,12 @@ public class DungeonContext {
         return dungeon.getEndTime();
     }
 
-    public void completeDungeon() {
-        dungeon.completeDungeon();
+    public void completeDungeonSuccess() {
+        dungeon.completeDungeon(Result.Success);
+    }
+
+    public void completeDungeonFailure() {
+        dungeon.completeDungeon(Result.Failure);
     }
 
     public int getPlayerCount() {

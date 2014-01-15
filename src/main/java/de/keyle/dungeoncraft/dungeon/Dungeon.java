@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.dungeon;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
+import de.keyle.dungeoncraft.api.dungeon.Result;
 import de.keyle.dungeoncraft.api.events.DungeonStartEvent;
 import de.keyle.dungeoncraft.api.util.Scheduler;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
@@ -47,6 +48,7 @@ public class Dungeon implements Scheduler {
     protected boolean weather = false;
     protected long endTime = 0;
     protected int localTime = 0;
+    protected Result result = Result.Running;
     protected Location exitLocation;
     protected List<DungeonCraftPlayer> playerList = new ArrayList<DungeonCraftPlayer>();
     protected final String dungeonName;
@@ -186,7 +188,13 @@ public class Dungeon implements Scheduler {
         return isCompleted;
     }
 
-    public void completeDungeon() {
+    public Result getResult() {
+        return result;
+    }
+
+    public void completeDungeon(Result result) {
+        this.result = result;
+        isCompleted = true;
         Iterator<DungeonCraftPlayer> iterator = playerList.iterator();
         while (iterator.hasNext()) {
             DungeonCraftPlayer p = iterator.next();
@@ -197,12 +205,10 @@ public class Dungeon implements Scheduler {
                     p.getPlayer().teleport(exitLocation);
                 }
                 p.getPlayer().resetPlayerTime();
-                p.getPlayer().sendMessage("Time is over!");
                 iterator.remove();
             }
         }
         unlockSchematic();
-        isCompleted = true;
     }
 
     @Override
@@ -231,10 +237,13 @@ public class Dungeon implements Scheduler {
 
                 Bukkit.getPluginManager().callEvent(new DungeonStartEvent(this));
             }
-            if (endTime > 0) {
-                if (System.currentTimeMillis() >= endTime) {
-                    completeDungeon();
+            if (endTime > 0 && System.currentTimeMillis() >= endTime) {
+                for (DungeonCraftPlayer p : playerList) {
+                    if (p.isOnline()) {
+                        p.getPlayer().sendMessage("Time is over!");
+                    }
                 }
+                completeDungeon(Result.Failure);
             }
             //ToDo Weather
             if (!timeLock) {

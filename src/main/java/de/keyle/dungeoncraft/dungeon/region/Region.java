@@ -40,6 +40,15 @@ public class Region {
 
     public Region(String regionId, Vector min, Vector max) {
         this.regionId = regionId;
+        if (min.getX() < 0 || min.getY() < 0 || min.getZ() < 0 || min.getX() >= 1600 || min.getY() >= 256 || min.getZ() >= 1600) {
+            throw new IllegalArgumentException("Min vector not inside valid boundaries: " + min);
+        }
+        if (max.getX() < 0 || max.getY() < 0 || max.getZ() < 0 || max.getX() >= 1600 || max.getY() >= 256 || max.getZ() >= 1600) {
+            throw new IllegalArgumentException("Max vector not inside valid boundaries: " + max);
+        }
+        if (min.getX() >= max.getX() || min.getY() >= max.getY() || min.getZ() >= max.getZ()) {
+            throw new IllegalArgumentException("Max vector has to be bigger than the min vector: " + min + " > " + max);
+        }
         this.min = min;
         this.max = max;
     }
@@ -80,5 +89,10 @@ public class Region {
 
     public static List<Region> getPlayerRegions(DungeonCraftPlayer player) {
         return Collections.unmodifiableList(playerRegionMultimap.get(player));
+    }
+
+    @Override
+    public String toString() {
+        return "Region{regionId='" + regionId + '\'' + ", min=" + min + ", max=" + max + '}';
     }
 }

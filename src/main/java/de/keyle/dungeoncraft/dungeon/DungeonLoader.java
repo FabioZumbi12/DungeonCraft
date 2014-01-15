@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.dungeon;
 
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftChunkProvider;
+import de.keyle.dungeoncraft.dungeon.region.RegionLoader;
 import de.keyle.dungeoncraft.dungeon.scripting.TriggerLoader;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 
@@ -67,6 +68,7 @@ public class DungeonLoader extends Thread {
             }
         }
 
+        new RegionLoader(dungeon);
         new TriggerLoader(dungeon);
 
         dungeon.setReady();

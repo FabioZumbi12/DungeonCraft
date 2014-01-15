@@ -101,4 +101,9 @@ public class Vector implements Comparable<Vector> {
         hash = 79 * hash + (int) (Double.doubleToLongBits(this.z) ^ Double.doubleToLongBits(this.z) >>> 32);
         return hash;
     }
+
+    @Override
+    public String toString() {
+        return "Vector{x=" + x + ", y=" + y + ", z=" + z + '}';
+    }
 }

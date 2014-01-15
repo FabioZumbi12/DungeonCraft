@@ -121,6 +121,10 @@ public class DungeonBase implements ISchematicReveiver {
         return new File(getFolder(), "config.yml");
     }
 
+    public File getRegionFile() {
+        return new File(getFolder(), "regions.yml");
+    }
+
     public File getFolder() {
         return new File(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "dungeons" + File.separator + name);
     }
@@ -143,25 +147,27 @@ public class DungeonBase implements ISchematicReveiver {
     }
 
     public void load() {
-        ConfigurationYaml configurationYaml = new ConfigurationYaml(getConfigFile());
-        FileConfiguration config = configurationYaml.getConfig();
+        if (getConfigFile().exists()) {
+            ConfigurationYaml configurationYaml = new ConfigurationYaml(getConfigFile());
+            FileConfiguration config = configurationYaml.getConfig();
 
-        double x = config.getDouble("spawn.location.x", -1D);
-        double y = config.getDouble("spawn.location.y", -1D);
-        double z = config.getDouble("spawn.location.z", -1D);
-        double yaw = config.getDouble("spawn.location.yaw");
-        double pitch = config.getDouble("spawn.location.pitch");
-        Validate.isTrue(x >= 0 && x < 1600, "The X part of the spawn location has to be between 0 and 1600");
-        Validate.isTrue(y >= 0 && y < 256, "The Y part of the spawn location has to be between 0 and 256");
-        Validate.isTrue(z >= 0 && z < 1600, "The Z part of the spawn location has to be between 0 and 1600");
-        spawn = new OrientationVector(x, y, z, yaw, pitch);
+            double x = config.getDouble("spawn.location.x", -1D);
+            double y = config.getDouble("spawn.location.y", -1D);
+            double z = config.getDouble("spawn.location.z", -1D);
+            double yaw = config.getDouble("spawn.location.yaw");
+            double pitch = config.getDouble("spawn.location.pitch");
+            Validate.isTrue(x >= 0 && x < 1600, "The X part of the spawn location has to be between 0 and 1600");
+            Validate.isTrue(y >= 0 && y < 256, "The Y part of the spawn location has to be between 0 and 256");
+            Validate.isTrue(z >= 0 && z < 1600, "The Z part of the spawn location has to be between 0 and 1600");
+            spawn = new OrientationVector(x, y, z, yaw, pitch);
 
-        timeLimit = config.getInt("time.limit", 0);
-        environment = Environment.valueOf(config.getString("world.environment", "NORMAL").toUpperCase());
+            timeLimit = config.getInt("time.limit", 0);
+            environment = Environment.valueOf(config.getString("world.environment", "NORMAL").toUpperCase());
 
-        customConfigOptions = config.getConfigurationSection("custom");
-        if (hasCustomConfigOptions()) {
-            DungeonCraftLogger.write("keys: " + customConfigOptions.getKeys(false));
+            customConfigOptions = config.getConfigurationSection("custom");
+            if (hasCustomConfigOptions()) {
+                DungeonCraftLogger.write("keys: " + customConfigOptions.getKeys(false));
+            }
         }
     }
 }

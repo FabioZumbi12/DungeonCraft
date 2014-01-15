@@ -21,21 +21,49 @@
 package de.keyle.dungeoncraft.dungeon.scripting.contexts;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
-import de.keyle.dungeoncraft.dungeon.region.Region;
-import de.keyle.dungeoncraft.util.vector.Vector;
-
-import java.util.List;
 
 @SuppressWarnings("unused")
-public class RegionContext {
+public class EnvironmentContext {
     protected final Dungeon dungeon;
 
-    public RegionContext(Dungeon dungeon) {
+    public EnvironmentContext(Dungeon dungeon) {
         this.dungeon = dungeon;
     }
 
-    public List<Region> getRegionsAt(int x, int y, int z) {
-        Vector p = new Vector(x, y, z);
-        return dungeon.getRegionRegistry().getRegionsAt(p);
+    public void setWeather(boolean weather) {
+        dungeon.setWeather(weather);
+    }
+
+    public boolean getWeather() {
+        return dungeon.getWeather();
+    }
+
+    /*
+    // Not working properly
+    public void setSkyDarkness(float value) {
+        value = Math.max(Math.min(value, 1F), 0);
+
+        for(DungeonCraftPlayer player : dungeon.getPlayerList()) {
+            if(player.isOnline()) {
+                BukkitUtil.setPlayerGameState(player.getPlayer(),7,value);
+            }
+        }
+    }
+    */
+
+    public void setTime(int time) {
+        dungeon.setTime(time);
+    }
+
+    public int getTime() {
+        return dungeon.getLocalTime();
+    }
+
+    public void setTimeLock(boolean timeLock) {
+        dungeon.setTimeLock(timeLock);
+    }
+
+    public boolean isTimeLocked() {
+        return dungeon.isTimeLocked();
     }
 }

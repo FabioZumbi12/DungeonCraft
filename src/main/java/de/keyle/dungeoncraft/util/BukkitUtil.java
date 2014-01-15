@@ -22,6 +22,7 @@ package de.keyle.dungeoncraft.util;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
+import de.keyle.dungeoncraft.util.vector.Vector;
 import net.minecraft.server.v1_7_R1.*;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
@@ -71,6 +72,35 @@ public class BukkitUtil {
             entityPlayer.playerConnection.sendPacket(new PacketPlayOutRespawn(skyType.getId(), EnumDifficulty.NORMAL, WorldType.NORMAL, entityPlayer.playerInteractManager.getGameMode()));
         }
         //ToDo refresh chunks, entities and fly mode to allow environment switching on the fly
+    }
+
+    public static void setPlayerGameState(Player player, int code, float value) {
+        if (player instanceof CraftPlayer) {
+            EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+            entityPlayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(code, value));
+        }
+    }
+
+    public static void setPlayerTime(Player player, int time, boolean lock) {
+        if (player instanceof CraftPlayer) {
+            player.setPlayerTime(Math.abs(time), !lock);
+        }
+    }
+
+    // https://github.com/SirCmpwn/Craft.Net/blob/master/source/Craft.Net.Common/SoundEffect.cs
+    public static void playSoundEffect(Player player, String soundName, Vector pos, float volume, byte pitch) {
+        if (player instanceof CraftPlayer) {
+            EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+            entityPlayer.playerConnection.sendPacket(new PacketPlayOutNamedSoundEffect(soundName, pos.getX(), pos.getY(), pos.getZ(), volume, pitch));
+        }
+    }
+
+    // https://gist.github.com/riking/5759002
+    public static void playParticleEffect(Player player, Vector pos, String effectName, float offsetX, float offsetY, float offsetZ, float speed, int count) {
+        if (player instanceof CraftPlayer) {
+            EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+            entityPlayer.playerConnection.sendPacket(new PacketPlayOutWorldParticles(effectName, (float) pos.getX(), (float) pos.getY(), (float) pos.getZ(), offsetX, offsetY, offsetZ, speed, count));
+        }
     }
 
     /**

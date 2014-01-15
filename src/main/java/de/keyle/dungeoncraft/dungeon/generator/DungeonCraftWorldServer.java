@@ -105,6 +105,9 @@ public class DungeonCraftWorldServer extends WorldServer {
         if (j != this.j) {
             this.j = j;
         }
+
+        this.worldData.setTime((this.worldData.getTime() % 24000) + 1L);
+
         this.methodProfiler.c("tickPending");
         a(false);
         this.methodProfiler.c("tickBlocks");

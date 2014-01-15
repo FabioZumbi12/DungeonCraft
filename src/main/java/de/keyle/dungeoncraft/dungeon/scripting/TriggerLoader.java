@@ -43,6 +43,8 @@ public class TriggerLoader {
         EntityContext entityContext = new EntityContext(dungeon);
         LoggerContext loggerContext = new LoggerContext(dungeon);
         RegionContext regionContext = new RegionContext(dungeon);
+        EffectContext effectContext = new EffectContext(dungeon);
+        EnvironmentContext environmentContext = new EnvironmentContext(dungeon);
         VariablesContext variablesContext = new VariablesContext();
 
         for (File f : dungeon.getDungeonBase().getTriggerFiles()) {
@@ -57,6 +59,8 @@ public class TriggerLoader {
                 ScriptableObject.putConstProperty(scope, "Logger", loggerContext);
                 ScriptableObject.putConstProperty(scope, "Variables", variablesContext);
                 ScriptableObject.putConstProperty(scope, "Region", regionContext);
+                ScriptableObject.putConstProperty(scope, "Effect", effectContext);
+                ScriptableObject.putConstProperty(scope, "Environment", environmentContext);
 
                 cx.evaluateReader(scope, new FileReader(f), fileName, 0, null);
 

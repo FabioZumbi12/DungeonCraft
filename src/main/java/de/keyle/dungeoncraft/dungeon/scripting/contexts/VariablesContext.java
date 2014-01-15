@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public class VariablesContext {
     private Map<String, Object> variables = new HashMap<String, Object>();
 

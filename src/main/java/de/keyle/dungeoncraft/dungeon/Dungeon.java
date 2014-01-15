@@ -33,6 +33,7 @@ import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.WeatherType;
 import org.bukkit.World;
 
 import java.util.*;
@@ -42,7 +43,10 @@ public class Dungeon implements Scheduler {
     protected boolean isLoading = false;
     protected boolean first = true;
     protected boolean isCompleted = false;
+    protected boolean timeLock = false;
+    protected boolean weather = false;
     protected long endTime = 0;
+    protected int localTime = 0;
     protected Location exitLocation;
     protected List<DungeonCraftPlayer> playerList = new ArrayList<DungeonCraftPlayer>();
     protected final String dungeonName;
@@ -127,6 +131,55 @@ public class Dungeon implements Scheduler {
         this.exitLocation = exitLocation;
     }
 
+    public void setTime(int time) {
+        if (time < 0) {
+            setTimeLock(true);
+            time = Math.abs(time);
+        }
+        localTime = time % 24000;
+        updatePlayerTime();
+    }
+
+    public int getLocalTime() {
+        return localTime;
+    }
+
+    public void setTimeLock(boolean timeLock) {
+        this.timeLock = timeLock;
+        updatePlayerTime();
+    }
+
+    public boolean isTimeLocked() {
+        return timeLock;
+    }
+
+    public void updatePlayerTime() {
+        int worldTime = (int) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME).getTime();
+        int worldDifference = 24000 - worldTime + Math.abs(getLocalTime());
+        for (DungeonCraftPlayer player : getPlayerList()) {
+            if (player.isOnline()) {
+                BukkitUtil.setPlayerTime(player.getPlayer(), worldDifference, isTimeLocked());
+            }
+        }
+    }
+
+    public void setWeather(boolean weather) {
+        this.weather = weather;
+        updatePlayerWeather();
+    }
+
+    public boolean getWeather() {
+        return weather;
+    }
+
+    public void updatePlayerWeather() {
+        for (DungeonCraftPlayer player : getPlayerList()) {
+            if (player.isOnline()) {
+                player.getPlayer().setPlayerWeather(getWeather() ? WeatherType.DOWNFALL : WeatherType.CLEAR);
+            }
+        }
+    }
+
     public boolean isCompleted() {
         return isCompleted;
     }
@@ -141,6 +194,7 @@ public class Dungeon implements Scheduler {
                 } else {
                     p.getPlayer().teleport(exitLocation);
                 }
+                p.getPlayer().resetPlayerTime();
                 p.getPlayer().sendMessage("Time is over!");
                 iterator.remove();
             }
@@ -165,6 +219,7 @@ public class Dungeon implements Scheduler {
                     if (p.isOnline()) {
                         p.getPlayer().teleport(spawn);
                         BukkitUtil.setPlayerEnvironment(p.getPlayer(), dungeonBase.getEnvironment());
+                        updatePlayerTime();
                     }
                 }
                 if (dungeonBase.hasTimeLimit()) {
@@ -178,7 +233,10 @@ public class Dungeon implements Scheduler {
                     completeDungeon();
                 }
             }
-            //ToDo Weather & Time
+            //ToDo Weather
+            if (!timeLock) {
+                localTime++;
+            }
             return;
         }
         if (!isLoading) {

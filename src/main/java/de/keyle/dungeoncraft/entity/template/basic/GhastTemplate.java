@@ -28,7 +28,7 @@ import de.keyle.dungeoncraft.entity.types.EntityType;
 public class GhastTemplate extends BasicTemplate {
     public GhastTemplate() {
         super("ghast", 10, EntityType.Ghast);
-        addBasicComponent(new RangedDamageComponent(17, Projectile.Projectile.LargeFireball));
+        addBasicComponent(new RangedDamageComponent(17, Projectile.ProjectileTypes.LargeFireball));
     }
 
     public float getWalkSpeed() {

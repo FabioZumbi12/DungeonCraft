@@ -35,19 +35,19 @@ public class RangedAttack extends AIGoal {
     private float walkSpeedModifier;
     private int lastSeenTimer;
     private float rangeSquared;
-    private Projectile.Projectile projectile = Projectile.Projectile.Arrow;
+    private Projectile.ProjectileTypes projectileTypes = Projectile.ProjectileTypes.Arrow;
 
     public RangedAttack(EntityDungeonCraft entityDungeonCraft, float walkSpeedModifier, float range) {
-        this(entityDungeonCraft, walkSpeedModifier, range, Projectile.Projectile.Arrow);
+        this(entityDungeonCraft, walkSpeedModifier, range, Projectile.ProjectileTypes.Arrow);
     }
 
-    public RangedAttack(EntityDungeonCraft entityDungeonCraft, float walkSpeedModifier, float range, Projectile.Projectile projectile) {
+    public RangedAttack(EntityDungeonCraft entityDungeonCraft, float walkSpeedModifier, float range, Projectile.ProjectileTypes projectileTypes) {
         this.entityDungeonCraft = entityDungeonCraft;
         this.shootTimer = -1;
         this.lastSeenTimer = 0;
         this.walkSpeedModifier = walkSpeedModifier;
         this.rangeSquared = (range * range);
-        this.projectile = projectile;
+        this.projectileTypes = projectileTypes;
     }
 
     @Override
@@ -108,26 +108,26 @@ public class RangedAttack extends AIGoal {
 
         if (--this.shootTimer <= 0) {
             if (distanceToTarget < this.rangeSquared && canSee) {
-                shootProjectile(this.target, 1, getProjectile());
+                shootProjectile(this.target, 1, getProjectileTypes());
                 this.shootTimer = 20;
             }
         }
     }
 
-    private Projectile.Projectile getProjectile() {
-        return projectile;
+    private Projectile.ProjectileTypes getProjectileTypes() {
+        return projectileTypes;
     }
 
-    public void shootProjectile(EntityLiving target, float damage, Projectile.Projectile projectile) {
+    public void shootProjectile(EntityLiving target, float damage, Projectile.ProjectileTypes projectileTypes) {
         World world = target.world;
 
-        if (projectile == Projectile.Projectile.Arrow) {
+        if (projectileTypes == Projectile.ProjectileTypes.Arrow) {
             EntityArrow arrow = new Arrow(world, entityDungeonCraft, target, 1.6F, 1);
             arrow.b(damage);
             arrow.a(false);
             entityDungeonCraft.makeSound("random.bow", 1.0F, 1.0F / (entityDungeonCraft.getRandom().nextFloat() * 0.4F + 0.8F));
             world.addEntity(arrow);
-        } else if (projectile == Projectile.Projectile.Snowball) {
+        } else if (projectileTypes == Projectile.ProjectileTypes.Snowball) {
             Snowball snowball = new Snowball(world, entityDungeonCraft);
             double distanceX = target.locX - entityDungeonCraft.locX;
             double distanceY = target.locY + target.getHeadHeight() - 1.100000023841858D - snowball.locY;
@@ -137,7 +137,7 @@ public class RangedAttack extends AIGoal {
             snowball.shoot(distanceX, distanceY + distance20percent, distanceZ, 1.6F, 1);
             entityDungeonCraft.makeSound("random.bow", 1.0F, 1.0F / (entityDungeonCraft.getRandom().nextFloat() * 0.4F + 0.8F));
             world.addEntity(snowball);
-        } else if (projectile == Projectile.Projectile.LargeFireball) {
+        } else if (projectileTypes == Projectile.ProjectileTypes.LargeFireball) {
             double distanceX = this.target.locX - entityDungeonCraft.locX;
             double distanceY = this.target.boundingBox.b + this.target.length / 2.0F - (entityDungeonCraft.locY + entityDungeonCraft.length / 2.0F);
             double distanceZ = this.target.locZ - entityDungeonCraft.locZ;
@@ -146,7 +146,7 @@ public class RangedAttack extends AIGoal {
             largeFireball.setDamage(damage);
             world.addEntity(largeFireball);
             world.makeSound(entityDungeonCraft.locX + 0.5D, entityDungeonCraft.locY + 0.5D, entityDungeonCraft.locZ + 0.5D, "mob.ghast.fireball", 1.0F + entityDungeonCraft.getRandom().nextFloat(), entityDungeonCraft.getRandom().nextFloat() * 0.7F + 0.3F);
-        } else if (projectile == Projectile.Projectile.SmallFireball) {
+        } else if (projectileTypes == Projectile.ProjectileTypes.SmallFireball) {
             double distanceX = this.target.locX - entityDungeonCraft.locX;
             double distanceY = this.target.boundingBox.b + this.target.length / 2.5F - (entityDungeonCraft.locY + entityDungeonCraft.length / 2.5F);
             double distanceZ = this.target.locZ - entityDungeonCraft.locZ;
@@ -155,7 +155,7 @@ public class RangedAttack extends AIGoal {
             smallFireball.setDamage(damage);
             world.addEntity(smallFireball);
             world.makeSound(entityDungeonCraft.locX + 0.5D, entityDungeonCraft.locY + 0.5D, entityDungeonCraft.locZ + 0.5D, "mob.ghast.fireball", 1.0F + entityDungeonCraft.getRandom().nextFloat(), entityDungeonCraft.getRandom().nextFloat() * 0.7F + 0.3F);
-        } else if (projectile == Projectile.Projectile.WitherSkull) {
+        } else if (projectileTypes == Projectile.ProjectileTypes.WitherSkull) {
             double distanceX = this.target.locX - entityDungeonCraft.locX;
             double distanceY = this.target.boundingBox.b + this.target.length / 2.5F - (entityDungeonCraft.locY + entityDungeonCraft.length / 2.5F);
             double distanceZ = this.target.locZ - entityDungeonCraft.locZ;

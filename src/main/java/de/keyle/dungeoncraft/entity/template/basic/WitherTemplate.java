@@ -28,7 +28,7 @@ import de.keyle.dungeoncraft.entity.types.EntityType;
 public class WitherTemplate extends BasicTemplate {
     public WitherTemplate() {
         super("wither", 300, EntityType.Wither);
-        addBasicComponent(new RangedDamageComponent(8, Projectile.Projectile.WitherSkull));
+        addBasicComponent(new RangedDamageComponent(8, Projectile.ProjectileTypes.WitherSkull));
     }
 
     public float getWalkSpeed() {

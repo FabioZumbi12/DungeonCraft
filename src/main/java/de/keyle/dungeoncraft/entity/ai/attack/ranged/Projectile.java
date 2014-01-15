@@ -25,7 +25,7 @@ import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 public interface Projectile {
     public EntityDungeonCraft getShooter();
 
-    public enum Projectile {
+    public enum ProjectileTypes {
         Snowball, LargeFireball, SmallFireball, WitherSkull, Arrow
     }
 }

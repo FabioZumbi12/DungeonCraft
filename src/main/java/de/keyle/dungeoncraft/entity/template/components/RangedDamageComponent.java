@@ -25,28 +25,28 @@ import de.keyle.dungeoncraft.entity.ai.target.HurtByTarget;
 import de.keyle.dungeoncraft.entity.template.EntityTemplateComonent;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
-import static de.keyle.dungeoncraft.entity.ai.attack.ranged.Projectile.Projectile;
+import static de.keyle.dungeoncraft.entity.ai.attack.ranged.Projectile.ProjectileTypes;
 
 public class RangedDamageComponent extends EntityTemplateComonent {
     double damage = 0;
-    private final Projectile projectile;
+    private final ProjectileTypes projectileTypes;
 
-    public RangedDamageComponent(double damage, Projectile projectile) {
+    public RangedDamageComponent(double damage, ProjectileTypes projectileTypes) {
         this.damage = damage;
-        this.projectile = projectile;
+        this.projectileTypes = projectileTypes;
     }
 
     public double getDamage() {
         return damage;
     }
 
-    public Projectile getProjectile() {
-        return projectile;
+    public ProjectileTypes getProjectileTypes() {
+        return projectileTypes;
     }
 
     @Override
     public void applyComponent(EntityDungeonCraft entity) {
-        entity.petPathfinderSelector.addGoal("RangedAttack", new RangedAttack(entity, -0.1F, 12.0F, projectile));
+        entity.petPathfinderSelector.addGoal("RangedAttack", new RangedAttack(entity, -0.1F, 12.0F, projectileTypes));
         entity.petTargetSelector.addGoal("HurtByTarget", new HurtByTarget(entity));
     }
 }

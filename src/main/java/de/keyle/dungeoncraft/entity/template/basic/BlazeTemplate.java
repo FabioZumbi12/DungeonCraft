@@ -30,7 +30,7 @@ public class BlazeTemplate extends BasicTemplate {
     public BlazeTemplate() {
         super("blaze", 20, EntityType.Blaze);
         addBasicComponent(new MeeleDamageComponent(6));
-        addBasicComponent(new RangedDamageComponent(5, Projectile.Projectile.SmallFireball));
+        addBasicComponent(new RangedDamageComponent(5, Projectile.ProjectileTypes.SmallFireball));
     }
 
     public float getWalkSpeed() {

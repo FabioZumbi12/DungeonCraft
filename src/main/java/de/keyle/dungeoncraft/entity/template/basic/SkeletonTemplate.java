@@ -30,7 +30,7 @@ public class SkeletonTemplate extends BasicTemplate {
     public SkeletonTemplate() {
         super("skeleton", 20, EntityType.Skeleton);
         addBasicComponent(new MeeleDamageComponent(2));
-        addBasicComponent(new RangedDamageComponent(3, Projectile.Projectile.Arrow));
+        addBasicComponent(new RangedDamageComponent(3, Projectile.ProjectileTypes.Arrow));
     }
 
     public float getWalkSpeed() {

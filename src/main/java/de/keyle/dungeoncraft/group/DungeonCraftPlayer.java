@@ -109,7 +109,7 @@ public class DungeonCraftPlayer {
     }
 
     public boolean isOnline() {
-        return getPlayer().isOnline(); // This could cause lag on bigger servers.
+        return getPlayer() != null && getPlayer().isOnline(); // This could cause lag on bigger servers.
     }
 
     public boolean equals(Object o) {

@@ -63,6 +63,8 @@ public class Dungeon implements Scheduler {
         position = DungeonFieldManager.getNewDungeonField();
         triggerRegistry = new TriggerRegistry();
         regionRegistry = new RegionRegistry();
+        localTime = dungeonBase.getStartTime();
+        weather = dungeonBase.getWeather();
     }
 
     public Dungeon(String dungeonName, DungeonBase dungeonTheme, Group group) {
@@ -220,6 +222,7 @@ public class Dungeon implements Scheduler {
                         p.getPlayer().teleport(spawn);
                         BukkitUtil.setPlayerEnvironment(p.getPlayer(), dungeonBase.getEnvironment());
                         updatePlayerTime();
+                        updatePlayerWeather();
                     }
                 }
                 if (dungeonBase.hasTimeLimit()) {

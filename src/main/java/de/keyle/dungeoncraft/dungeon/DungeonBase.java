@@ -44,7 +44,10 @@ public class DungeonBase implements ISchematicReveiver {
     String name;
     OrientationVector spawn;
     int timeLimit = 0;
+    int startTime = 1000;
+    boolean timeLock = false;
     Environment environment = Environment.NORMAL;
+    boolean weather = false;
     boolean isLoading = false;
     ConfigurationSection customConfigOptions;
     EntityTemplateRegistry entityTemplateRegistry;
@@ -91,6 +94,18 @@ public class DungeonBase implements ISchematicReveiver {
 
     public Environment getEnvironment() {
         return environment;
+    }
+
+    public int getStartTime() {
+        return startTime;
+    }
+
+    public boolean isTimeLocked() {
+        return timeLock;
+    }
+
+    public boolean getWeather() {
+        return weather;
     }
 
     public boolean isSchematicLoaded() {
@@ -167,7 +182,10 @@ public class DungeonBase implements ISchematicReveiver {
             spawn = new OrientationVector(x, y, z, yaw, pitch);
 
             timeLimit = config.getInt("time.limit", 0);
+            startTime = config.getInt("time.start", 1000);
+            timeLock = config.getBoolean("time.lock", false);
             environment = Environment.valueOf(config.getString("world.environment", "NORMAL").toUpperCase());
+            weather = config.getBoolean("world.weather", false);
 
             customConfigOptions = config.getConfigurationSection("custom");
             if (hasCustomConfigOptions()) {

@@ -34,7 +34,7 @@ public class EntityDungeonCraftZombie extends EntityDungeonCraft {
     }
 
     /**
-     * Returns the sound that is played when the MyPet dies
+     * Returns the sound that is played when the Entity dies
      */
     @Override
     protected String getDeathSound() {
@@ -42,7 +42,7 @@ public class EntityDungeonCraftZombie extends EntityDungeonCraft {
     }
 
     /**
-     * Returns the sound that is played when the MyPet get hurt
+     * Returns the sound that is played when the Entity get hurt
      */
     @Override
     protected String getHurtSound() {
@@ -50,7 +50,7 @@ public class EntityDungeonCraftZombie extends EntityDungeonCraft {
     }
 
     /**
-     * Returns the default sound of the MyPet
+     * Returns the default sound of the Entity
      */
     protected String getLivingSound() {
         return "mob.zombie.say";

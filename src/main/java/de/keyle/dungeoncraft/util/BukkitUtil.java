@@ -98,7 +98,7 @@ public class BukkitUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static boolean registerMyPetEntity(Class<? extends EntityDungeonCraft> dungeonCraftEntityClass, String entityTypeName, int entityTypeId) {
+    public static boolean registerEntity(Class<? extends EntityDungeonCraft> dungeonCraftEntityClass, String entityTypeName, int entityTypeId) {
         try {
             Field EntityTypes_d = EntityTypes.class.getDeclaredField("d");
             Field EntityTypes_f = EntityTypes.class.getDeclaredField("f");

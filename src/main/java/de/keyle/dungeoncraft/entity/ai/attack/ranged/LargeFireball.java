@@ -23,13 +23,13 @@ package de.keyle.dungeoncraft.entity.ai.attack.ranged;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftSnowball;
+import org.bukkit.craftbukkit.v1_7_R1.entity.CraftLargeFireball;
 
-public class MyPetSnowball extends EntitySnowball implements MyPetProjectile {
+public class LargeFireball extends EntityLargeFireball implements Projectile {
     protected float damage = 0;
 
-    public MyPetSnowball(World world, EntityDungeonCraft entityLiving) {
-        super(world, entityLiving);
+    public LargeFireball(World world, EntityDungeonCraft entityliving, double d0, double d1, double d2) {
+        super(world, entityliving, d0, d1, d2);
     }
 
     @Override
@@ -42,9 +42,20 @@ public class MyPetSnowball extends EntitySnowball implements MyPetProjectile {
     }
 
     @Override
+    public void setDirection(double d0, double d1, double d2) {
+        d0 += this.random.nextGaussian() * 0.2D;
+        d1 += this.random.nextGaussian() * 0.2D;
+        d2 += this.random.nextGaussian() * 0.2D;
+        double d3 = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+        this.dirX = (d0 / d3 * 0.1D);
+        this.dirY = (d1 / d3 * 0.1D);
+        this.dirZ = (d2 / d3 * 0.1D);
+    }
+
+    @Override
     public CraftEntity getBukkitEntity() {
         if (this.bukkitEntity == null) {
-            this.bukkitEntity = new CraftSnowball(this.world.getServer(), this);
+            this.bukkitEntity = new CraftLargeFireball(this.world.getServer(), this);
         }
         return this.bukkitEntity;
     }
@@ -58,12 +69,9 @@ public class MyPetSnowball extends EntitySnowball implements MyPetProjectile {
     }
 
     @Override
-    protected void a(MovingObjectPosition paramMovingObjectPosition) {
-        if (paramMovingObjectPosition.entity != null) {
-            paramMovingObjectPosition.entity.damageEntity(DamageSource.projectile(this, getShooter()), damage);
-        }
-        for (int i = 0; i < 8; i++) {
-            this.world.addParticle("snowballpoof", this.locX, this.locY, this.locZ, 0.0D, 0.0D, 0.0D);
+    protected void a(MovingObjectPosition movingobjectposition) {
+        if (movingobjectposition.entity != null) {
+            movingobjectposition.entity.damageEntity(DamageSource.fireball(this, this.shooter), damage);
         }
         die();
     }

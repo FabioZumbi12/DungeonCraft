@@ -20,7 +20,7 @@
 
 package de.keyle.dungeoncraft.entity.template.basic;
 
-import de.keyle.dungeoncraft.entity.ai.attack.ranged.MyPetProjectile;
+import de.keyle.dungeoncraft.entity.ai.attack.ranged.Projectile;
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
 import de.keyle.dungeoncraft.entity.template.components.RangedDamageComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
@@ -28,7 +28,7 @@ import de.keyle.dungeoncraft.entity.types.EntityType;
 public class WitherTemplate extends BasicTemplate {
     public WitherTemplate() {
         super("wither", 300, EntityType.Wither);
-        addBasicComponent(new RangedDamageComponent(8, MyPetProjectile.Projectile.WitherSkull));
+        addBasicComponent(new RangedDamageComponent(8, Projectile.Projectile.WitherSkull));
     }
 
     public float getWalkSpeed() {

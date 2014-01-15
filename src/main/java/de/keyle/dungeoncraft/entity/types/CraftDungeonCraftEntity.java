@@ -108,9 +108,6 @@ public class CraftDungeonCraftEntity extends CraftCreature {
         if (target == null) {
             entity.target = null;
         } else if (target instanceof CraftLivingEntity) {
-            if (!getHandle().isMyPet) {
-                return;
-            }
             petEntity.setGoalTarget(((CraftLivingEntity) target).getHandle());
         }
     }

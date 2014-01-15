@@ -30,14 +30,14 @@ import org.bukkit.entity.LivingEntity;
 public class VanillaNavigation extends AbstractNavigation {
     Navigation nav;
 
-    public VanillaNavigation(EntityDungeonCraft entityMyPet) {
-        super(entityMyPet);
-        nav = entityMyPet.getNavigation();
+    public VanillaNavigation(EntityDungeonCraft entityDungeonCraft) {
+        super(entityDungeonCraft);
+        nav = entityDungeonCraft.getNavigation();
     }
 
-    public VanillaNavigation(EntityDungeonCraft entityMyPet, NavigationParameters parameters) {
-        super(entityMyPet, parameters);
-        nav = entityMyPet.getNavigation();
+    public VanillaNavigation(EntityDungeonCraft entityDungeonCraft, NavigationParameters parameters) {
+        super(entityDungeonCraft, parameters);
+        nav = entityDungeonCraft.getNavigation();
     }
 
     @Override

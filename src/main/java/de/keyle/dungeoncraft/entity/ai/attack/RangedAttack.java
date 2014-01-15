@@ -35,13 +35,13 @@ public class RangedAttack extends AIGoal {
     private float walkSpeedModifier;
     private int lastSeenTimer;
     private float rangeSquared;
-    private MyPetProjectile.Projectile projectile = MyPetProjectile.Projectile.Arrow;
+    private Projectile.Projectile projectile = Projectile.Projectile.Arrow;
 
     public RangedAttack(EntityDungeonCraft entityDungeonCraft, float walkSpeedModifier, float range) {
-        this(entityDungeonCraft, walkSpeedModifier, range, MyPetProjectile.Projectile.Arrow);
+        this(entityDungeonCraft, walkSpeedModifier, range, Projectile.Projectile.Arrow);
     }
 
-    public RangedAttack(EntityDungeonCraft entityDungeonCraft, float walkSpeedModifier, float range, MyPetProjectile.Projectile projectile) {
+    public RangedAttack(EntityDungeonCraft entityDungeonCraft, float walkSpeedModifier, float range, Projectile.Projectile projectile) {
         this.entityDungeonCraft = entityDungeonCraft;
         this.shootTimer = -1;
         this.lastSeenTimer = 0;
@@ -114,21 +114,21 @@ public class RangedAttack extends AIGoal {
         }
     }
 
-    private MyPetProjectile.Projectile getProjectile() {
+    private Projectile.Projectile getProjectile() {
         return projectile;
     }
 
-    public void shootProjectile(EntityLiving target, float damage, MyPetProjectile.Projectile projectile) {
+    public void shootProjectile(EntityLiving target, float damage, Projectile.Projectile projectile) {
         World world = target.world;
 
-        if (projectile == MyPetProjectile.Projectile.Arrow) {
-            EntityArrow arrow = new MyPetArrow(world, entityDungeonCraft, target, 1.6F, 1);
+        if (projectile == Projectile.Projectile.Arrow) {
+            EntityArrow arrow = new Arrow(world, entityDungeonCraft, target, 1.6F, 1);
             arrow.b(damage);
             arrow.a(false);
             entityDungeonCraft.makeSound("random.bow", 1.0F, 1.0F / (entityDungeonCraft.getRandom().nextFloat() * 0.4F + 0.8F));
             world.addEntity(arrow);
-        } else if (projectile == MyPetProjectile.Projectile.Snowball) {
-            MyPetSnowball snowball = new MyPetSnowball(world, entityDungeonCraft);
+        } else if (projectile == Projectile.Projectile.Snowball) {
+            Snowball snowball = new Snowball(world, entityDungeonCraft);
             double distanceX = target.locX - entityDungeonCraft.locX;
             double distanceY = target.locY + target.getHeadHeight() - 1.100000023841858D - snowball.locY;
             double distanceZ = target.locZ - entityDungeonCraft.locZ;
@@ -137,29 +137,29 @@ public class RangedAttack extends AIGoal {
             snowball.shoot(distanceX, distanceY + distance20percent, distanceZ, 1.6F, 1);
             entityDungeonCraft.makeSound("random.bow", 1.0F, 1.0F / (entityDungeonCraft.getRandom().nextFloat() * 0.4F + 0.8F));
             world.addEntity(snowball);
-        } else if (projectile == MyPetProjectile.Projectile.LargeFireball) {
+        } else if (projectile == Projectile.Projectile.LargeFireball) {
             double distanceX = this.target.locX - entityDungeonCraft.locX;
             double distanceY = this.target.boundingBox.b + this.target.length / 2.0F - (entityDungeonCraft.locY + entityDungeonCraft.length / 2.0F);
             double distanceZ = this.target.locZ - entityDungeonCraft.locZ;
-            MyPetLargeFireball largeFireball = new MyPetLargeFireball(world, entityDungeonCraft, distanceX, distanceY, distanceZ);
+            LargeFireball largeFireball = new LargeFireball(world, entityDungeonCraft, distanceX, distanceY, distanceZ);
             largeFireball.locY = (entityDungeonCraft.locY + entityDungeonCraft.length / 2.0F + 0.5D);
             largeFireball.setDamage(damage);
             world.addEntity(largeFireball);
             world.makeSound(entityDungeonCraft.locX + 0.5D, entityDungeonCraft.locY + 0.5D, entityDungeonCraft.locZ + 0.5D, "mob.ghast.fireball", 1.0F + entityDungeonCraft.getRandom().nextFloat(), entityDungeonCraft.getRandom().nextFloat() * 0.7F + 0.3F);
-        } else if (projectile == MyPetProjectile.Projectile.SmallFireball) {
+        } else if (projectile == Projectile.Projectile.SmallFireball) {
             double distanceX = this.target.locX - entityDungeonCraft.locX;
             double distanceY = this.target.boundingBox.b + this.target.length / 2.5F - (entityDungeonCraft.locY + entityDungeonCraft.length / 2.5F);
             double distanceZ = this.target.locZ - entityDungeonCraft.locZ;
-            MyPetSmallFireball smallFireball = new MyPetSmallFireball(world, entityDungeonCraft, distanceX, distanceY, distanceZ);
+            SmallFireball smallFireball = new SmallFireball(world, entityDungeonCraft, distanceX, distanceY, distanceZ);
             smallFireball.locY = (entityDungeonCraft.locY + entityDungeonCraft.length / 2.0F + 0.5D);
             smallFireball.setDamage(damage);
             world.addEntity(smallFireball);
             world.makeSound(entityDungeonCraft.locX + 0.5D, entityDungeonCraft.locY + 0.5D, entityDungeonCraft.locZ + 0.5D, "mob.ghast.fireball", 1.0F + entityDungeonCraft.getRandom().nextFloat(), entityDungeonCraft.getRandom().nextFloat() * 0.7F + 0.3F);
-        } else if (projectile == MyPetProjectile.Projectile.WitherSkull) {
+        } else if (projectile == Projectile.Projectile.WitherSkull) {
             double distanceX = this.target.locX - entityDungeonCraft.locX;
             double distanceY = this.target.boundingBox.b + this.target.length / 2.5F - (entityDungeonCraft.locY + entityDungeonCraft.length / 2.5F);
             double distanceZ = this.target.locZ - entityDungeonCraft.locZ;
-            MyPetWitherSkull witherSkull = new MyPetWitherSkull(world, entityDungeonCraft, distanceX, distanceY, distanceZ);
+            WitherSkull witherSkull = new WitherSkull(world, entityDungeonCraft, distanceX, distanceY, distanceZ);
             witherSkull.locY = (entityDungeonCraft.locY + entityDungeonCraft.length / 2.0F + 0.5D);
             witherSkull.setDamage(damage);
             world.addEntity(witherSkull);

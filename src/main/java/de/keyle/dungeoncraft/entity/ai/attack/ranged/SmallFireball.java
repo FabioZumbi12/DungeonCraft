@@ -23,12 +23,12 @@ package de.keyle.dungeoncraft.entity.ai.attack.ranged;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftLargeFireball;
+import org.bukkit.craftbukkit.v1_7_R1.entity.CraftSmallFireball;
 
-public class MyPetLargeFireball extends EntityLargeFireball implements MyPetProjectile {
+public class SmallFireball extends EntitySmallFireball implements Projectile {
     protected float damage = 0;
 
-    public MyPetLargeFireball(World world, EntityDungeonCraft entityliving, double d0, double d1, double d2) {
+    public SmallFireball(World world, EntityDungeonCraft entityliving, double d0, double d1, double d2) {
         super(world, entityliving, d0, d1, d2);
     }
 
@@ -55,7 +55,7 @@ public class MyPetLargeFireball extends EntityLargeFireball implements MyPetProj
     @Override
     public CraftEntity getBukkitEntity() {
         if (this.bukkitEntity == null) {
-            this.bukkitEntity = new CraftLargeFireball(this.world.getServer(), this);
+            this.bukkitEntity = new CraftSmallFireball(this.world.getServer(), this);
         }
         return this.bukkitEntity;
     }

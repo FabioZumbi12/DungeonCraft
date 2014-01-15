@@ -37,7 +37,6 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
     public EntityLiving goalTarget = null;
     protected double walkSpeed = 0.3F;
     protected boolean hasRider = false;
-    protected boolean isMyPet = false;
     protected int idleSoundTimer = 0;
     public AbstractNavigation petNavigation;
 
@@ -127,7 +126,7 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
     }
 
     /**
-     * Is called when a MyPet attemps to do damge to another entity
+     * Is called when a Entity attemps to do damge to another entity
      */
     public boolean attack(Entity entity) {
         boolean damageEntity = false;
@@ -156,7 +155,7 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
     // Obfuscated Method handler ------------------------------------------------------------------------------------
 
     /**
-     * Is called when player rightclicks this MyPet
+     * Is called when player rightclicks this Entity
      * return:
      * true: there was a reaction on rightclick
      * false: no reaction on rightclick
@@ -190,17 +189,17 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
     }
 
     /**
-     * Returns the default sound of the MyPet
+     * Returns the default sound of the Entity
      */
     protected abstract String getLivingSound();
 
     /**
-     * Returns the sound that is played when the MyPet get hurt
+     * Returns the sound that is played when the Entity get hurt
      */
     protected abstract String getHurtSound();
 
     /**
-     * Returns the sound that is played when the MyPet dies
+     * Returns the sound that is played when the Entity dies
      */
     protected abstract String getDeathSound();
 
@@ -227,7 +226,7 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
     }
 
     /**
-     * Is called when player rightclicks this MyPet
+     * Is called when player rightclicks this Entity
      * return:
      * true: there was a reaction on rightclick
      * false: no reaction on rightclick
@@ -256,7 +255,7 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
     }
 
     /**
-     * Returns the sound that is played when the MyPet get hurt
+     * Returns the sound that is played when the Entity get hurt
      * -> getHurtSound()
      */
     protected String aT() {
@@ -270,7 +269,7 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
     }
 
     /**
-     * Returns the sound that is played when the MyPet dies
+     * Returns the sound that is played when the Entity dies
      * -> getDeathSound()
      */
     protected String aU() {
@@ -388,7 +387,7 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
 
 
     /**
-     * Returns the default sound of the MyPet
+     * Returns the default sound of the Entity
      * -> getLivingSound()
      */
     protected String t() {

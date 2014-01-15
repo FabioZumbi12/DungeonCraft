@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.entity.ai.attack.ranged;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
-public interface MyPetProjectile {
+public interface Projectile {
     public EntityDungeonCraft getShooter();
 
     public enum Projectile {

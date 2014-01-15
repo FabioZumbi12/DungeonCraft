@@ -20,7 +20,7 @@
 
 package de.keyle.dungeoncraft.entity.template.basic;
 
-import de.keyle.dungeoncraft.entity.ai.attack.ranged.MyPetProjectile;
+import de.keyle.dungeoncraft.entity.ai.attack.ranged.Projectile;
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
 import de.keyle.dungeoncraft.entity.template.components.RangedDamageComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
@@ -28,7 +28,7 @@ import de.keyle.dungeoncraft.entity.types.EntityType;
 public class GhastTemplate extends BasicTemplate {
     public GhastTemplate() {
         super("ghast", 10, EntityType.Ghast);
-        addBasicComponent(new RangedDamageComponent(17, MyPetProjectile.Projectile.LargeFireball));
+        addBasicComponent(new RangedDamageComponent(17, Projectile.Projectile.LargeFireball));
     }
 
     public float getWalkSpeed() {

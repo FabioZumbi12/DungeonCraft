@@ -21,17 +21,15 @@
 package de.keyle.dungeoncraft.entity.ai.attack.ranged;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
-import de.keyle.dungeoncraft.util.logger.DebugLogger;
-import net.minecraft.server.v1_7_R1.EntityArrow;
-import net.minecraft.server.v1_7_R1.EntityLiving;
-import net.minecraft.server.v1_7_R1.NBTTagCompound;
-import net.minecraft.server.v1_7_R1.World;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftArrow;
+import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_7_R1.entity.CraftSnowball;
 
-public class MyPetArrow extends EntityArrow implements MyPetProjectile {
-    public MyPetArrow(World world, EntityDungeonCraft entityMyPet, EntityLiving target, float v, int i) {
-        super(world, entityMyPet, target, v, i);
+public class Snowball extends EntitySnowball implements Projectile {
+    protected float damage = 0;
+
+    public Snowball(World world, EntityDungeonCraft entityLiving) {
+        super(world, entityLiving);
     }
 
     @Override
@@ -39,10 +37,14 @@ public class MyPetArrow extends EntityArrow implements MyPetProjectile {
         return (EntityDungeonCraft) this.shooter;
     }
 
+    public void setDamage(float damage) {
+        this.damage = damage;
+    }
+
     @Override
     public CraftEntity getBukkitEntity() {
         if (this.bukkitEntity == null) {
-            this.bukkitEntity = new CraftArrow(this.world.getServer(), this);
+            this.bukkitEntity = new CraftSnowball(this.world.getServer(), this);
         }
         return this.bukkitEntity;
     }
@@ -55,15 +57,14 @@ public class MyPetArrow extends EntityArrow implements MyPetProjectile {
     public void b(NBTTagCompound nbtTagCompound) {
     }
 
-    public void h() {
-        try {
-            super.h();
-            if (this.isInGround()) {
-                die();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            DebugLogger.printThrowable(e);
+    @Override
+    protected void a(MovingObjectPosition paramMovingObjectPosition) {
+        if (paramMovingObjectPosition.entity != null) {
+            paramMovingObjectPosition.entity.damageEntity(DamageSource.projectile(this, getShooter()), damage);
         }
+        for (int i = 0; i < 8; i++) {
+            this.world.addParticle("snowballpoof", this.locX, this.locY, this.locZ, 0.0D, 0.0D, 0.0D);
+        }
+        die();
     }
 }

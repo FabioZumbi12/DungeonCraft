@@ -37,7 +37,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class Locales {
-    private static Locales latestMyPetLocales = null;
+    private static Locales latestLocales = null;
 
     private Map<String, ResourceBundle> locales = new HashMap<String, ResourceBundle>();
     private JarFile jarFile;
@@ -50,7 +50,7 @@ public class Locales {
             jarFile = null;
         }
         loadLocale("en");
-        latestMyPetLocales = this;
+        latestLocales = this;
     }
 
     public static String getString(String key, Player player) {
@@ -73,10 +73,10 @@ public class Locales {
         localeString = Util.cutString(localeString, 2);
         LocaleUtils.toLocale(localeString);
 
-        if (latestMyPetLocales == null) {
+        if (latestLocales == null) {
             return key;
         }
-        return latestMyPetLocales.getText(key, localeString);
+        return latestLocales.getText(key, localeString);
     }
 
     public String getText(String key, String localeString) {

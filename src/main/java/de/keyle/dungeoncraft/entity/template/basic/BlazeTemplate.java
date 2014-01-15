@@ -20,7 +20,7 @@
 
 package de.keyle.dungeoncraft.entity.template.basic;
 
-import de.keyle.dungeoncraft.entity.ai.attack.ranged.MyPetProjectile;
+import de.keyle.dungeoncraft.entity.ai.attack.ranged.Projectile;
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
 import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
 import de.keyle.dungeoncraft.entity.template.components.RangedDamageComponent;
@@ -30,7 +30,7 @@ public class BlazeTemplate extends BasicTemplate {
     public BlazeTemplate() {
         super("blaze", 20, EntityType.Blaze);
         addBasicComponent(new MeeleDamageComponent(6));
-        addBasicComponent(new RangedDamageComponent(5, MyPetProjectile.Projectile.SmallFireball));
+        addBasicComponent(new RangedDamageComponent(5, Projectile.Projectile.SmallFireball));
     }
 
     public float getWalkSpeed() {

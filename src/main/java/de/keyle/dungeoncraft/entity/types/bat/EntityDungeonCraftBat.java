@@ -33,7 +33,7 @@ public class EntityDungeonCraftBat extends EntityDungeonCraft {
     }
 
     /**
-     * Returns the sound that is played when the MyPet dies
+     * Returns the sound that is played when the MyEntityPet dies
      */
     @Override
     protected String getDeathSound() {
@@ -41,7 +41,7 @@ public class EntityDungeonCraftBat extends EntityDungeonCraft {
     }
 
     /**
-     * Returns the sound that is played when the MyPet get hurt
+     * Returns the sound that is played when the Entity get hurt
      */
     @Override
     protected String getHurtSound() {

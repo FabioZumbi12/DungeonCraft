@@ -25,7 +25,7 @@ import de.keyle.dungeoncraft.entity.ai.target.HurtByTarget;
 import de.keyle.dungeoncraft.entity.template.EntityTemplateComonent;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
-import static de.keyle.dungeoncraft.entity.ai.attack.ranged.MyPetProjectile.Projectile;
+import static de.keyle.dungeoncraft.entity.ai.attack.ranged.Projectile.Projectile;
 
 public class RangedDamageComponent extends EntityTemplateComonent {
     double damage = 0;

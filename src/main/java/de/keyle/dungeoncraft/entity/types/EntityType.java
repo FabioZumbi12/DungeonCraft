@@ -104,7 +104,7 @@ public enum EntityType {
         return bukkitType;
     }
 
-    public static EntityType getMyPetTypeByEntityClass(Class<? extends EntityCreature> entityClass) {
+    public static EntityType getEntityTypeByEntityClass(Class<? extends EntityCreature> entityClass) {
         for (EntityType entityType : EntityType.values()) {
             if (entityType.entityClass == entityClass) {
                 return entityType;
@@ -113,7 +113,7 @@ public enum EntityType {
         return null;
     }
 
-    public static EntityType getMyPetTypeByEntityType(org.bukkit.entity.EntityType type) {
+    public static EntityType getEntityTypeByEntityType(org.bukkit.entity.EntityType type) {
         for (EntityType entityType : EntityType.values()) {
             if (entityType.bukkitType == type) {
                 return entityType;
@@ -122,7 +122,7 @@ public enum EntityType {
         return null;
     }
 
-    public static EntityType getMyPetTypeByName(String name) {
+    public static EntityType getEntityTypeByName(String name) {
         for (EntityType entityType : EntityType.values()) {
             if (entityType.name.equalsIgnoreCase(name)) {
                 return entityType;

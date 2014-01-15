@@ -20,7 +20,7 @@
 
 package de.keyle.dungeoncraft.entity.template.basic;
 
-import de.keyle.dungeoncraft.entity.ai.attack.ranged.MyPetProjectile;
+import de.keyle.dungeoncraft.entity.ai.attack.ranged.Projectile;
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
 import de.keyle.dungeoncraft.entity.template.components.RangedDamageComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
@@ -28,7 +28,7 @@ import de.keyle.dungeoncraft.entity.types.EntityType;
 public class SnowmanTemplate extends BasicTemplate {
     public SnowmanTemplate() {
         super("snowman", 4, EntityType.Snowman);
-        addBasicComponent(new RangedDamageComponent(0, MyPetProjectile.Projectile.Snowball));
+        addBasicComponent(new RangedDamageComponent(0, Projectile.Projectile.Snowball));
     }
 
     public float getWalkSpeed() {

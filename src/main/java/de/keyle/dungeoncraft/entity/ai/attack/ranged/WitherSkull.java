@@ -25,10 +25,10 @@ import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftWitherSkull;
 
-public class MyPetWitherSkull extends EntityWitherSkull implements MyPetProjectile {
+public class WitherSkull extends EntityWitherSkull implements Projectile {
     protected float damage = 0;
 
-    public MyPetWitherSkull(World world, EntityDungeonCraft entityliving, double d0, double d1, double d2) {
+    public WitherSkull(World world, EntityDungeonCraft entityliving, double d0, double d1, double d2) {
         super(world, entityliving, d0, d1, d2);
     }
 

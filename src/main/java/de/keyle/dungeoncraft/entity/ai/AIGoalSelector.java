@@ -27,23 +27,23 @@ public class AIGoalSelector {
     private List<AIGoal> AIGoalList = new LinkedList<AIGoal>();
     private List<AIGoal> activeAIGoalList = new LinkedList<AIGoal>();
 
-    public void addGoal(String name, AIGoal myPetAIgoal) {
+    public void addGoal(String name, AIGoal aiGoal) {
         if (AIGoalMap.containsKey(name)) {
             return;
         }
-        AIGoalMap.put(name, myPetAIgoal);
-        AIGoalList.add(myPetAIgoal);
+        AIGoalMap.put(name, aiGoal);
+        AIGoalList.add(aiGoal);
     }
 
-    public void addGoal(String name, int pos, AIGoal myPetAIgoal) {
+    public void addGoal(String name, int pos, AIGoal aiGoal) {
         if (AIGoalMap.containsKey(name)) {
             return;
         }
-        AIGoalMap.put(name, myPetAIgoal);
-        AIGoalList.add(pos, myPetAIgoal);
+        AIGoalMap.put(name, aiGoal);
+        AIGoalList.add(pos, aiGoal);
     }
 
-    public void replaceGoal(String name, AIGoal myPetAIgoal) {
+    public void replaceGoal(String name, AIGoal aiGoal) {
         if (AIGoalMap.containsKey(name)) {
             AIGoal oldGoal = AIGoalMap.get(name);
             if (activeAIGoalList.contains(oldGoal)) {
@@ -51,11 +51,11 @@ public class AIGoalSelector {
                 oldGoal.finish();
             }
             int index = AIGoalList.indexOf(oldGoal);
-            AIGoalList.add(index, myPetAIgoal);
+            AIGoalList.add(index, aiGoal);
             AIGoalList.remove(oldGoal);
-            AIGoalMap.put(name, myPetAIgoal);
+            AIGoalMap.put(name, aiGoal);
         } else {
-            addGoal(name, myPetAIgoal);
+            addGoal(name, aiGoal);
         }
     }
 

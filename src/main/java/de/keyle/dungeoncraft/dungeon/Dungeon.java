@@ -52,6 +52,7 @@ public class Dungeon implements Scheduler {
     protected Result result = Result.Running;
     protected Location exitLocation;
     protected List<DungeonCraftPlayer> playerList = new ArrayList<DungeonCraftPlayer>();
+    protected Map<DungeonCraftPlayer, OrientationVector> playerSpawn = new HashMap<DungeonCraftPlayer, OrientationVector>();
     protected final String dungeonName;
     protected final DungeonBase dungeonBase;
     protected final UUID uuid;
@@ -132,6 +133,23 @@ public class Dungeon implements Scheduler {
 
     public List<DungeonCraftPlayer> getPlayerList() {
         return Collections.unmodifiableList(playerList);
+    }
+
+    public Location getPlayerSpawnLoacation(DungeonCraftPlayer player) {
+        OrientationVector ov = getPlayerSpawn(player);
+        World world = DungeonCraftPlugin.getPlugin().getServer().getWorld(DungeonCraftWorld.WORLD_NAME);
+        return new Location(world, ov.getX() + (position.getX() * 1600), ov.getY() + 0.5D, ov.getZ() + (position.getZ() * 1600), (float) ov.getYaw(), (float) ov.getPitch());
+    }
+
+    public OrientationVector getPlayerSpawn(DungeonCraftPlayer player) {
+        if (!playerSpawn.containsKey(player)) {
+            return dungeonBase.getSpawn();
+        }
+        return playerSpawn.get(player);
+    }
+
+    public void setPlayerSpawn(DungeonCraftPlayer player, OrientationVector pos) {
+        playerSpawn.put(player, pos);
     }
 
     public Location getExitLocation() {

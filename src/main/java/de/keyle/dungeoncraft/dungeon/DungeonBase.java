@@ -184,8 +184,12 @@ public class DungeonBase implements ISchematicReveiver {
             timeLimit = config.getInt("time.limit", 0);
             startTime = config.getInt("time.start", 1000);
             timeLock = config.getBoolean("time.lock", false);
+
             environment = Environment.valueOf(config.getString("world.environment", "NORMAL").toUpperCase());
             weather = config.getBoolean("world.weather", false);
+
+            minPlayerCount = config.getInt("player.count.min", 1);
+            maxPlayerCount = config.getInt("player.count.max", 0);
 
             customConfigOptions = config.getConfigurationSection("custom");
             if (hasCustomConfigOptions()) {

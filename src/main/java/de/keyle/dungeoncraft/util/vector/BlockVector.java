@@ -48,4 +48,9 @@ public class BlockVector extends Vector {
     public int hashCode() {
         return (int) this.x << 19 ^ (int) this.y << 12 ^ (int) this.z;
     }
+
+    @Override
+    public String toString() {
+        return "BlockVector{x=" + x + ", y=" + y + ", z=" + z + '}';
+    }
 }

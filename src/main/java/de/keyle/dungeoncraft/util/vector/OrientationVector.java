@@ -55,4 +55,9 @@ public class OrientationVector extends Vector {
     public double getYaw() {
         return yaw;
     }
+
+    @Override
+    public String toString() {
+        return "OrientationVector{x=" + x + ", y=" + y + ", z=" + z + ", yaw=" + yaw + ", pitch=" + pitch + '}';
+    }
 }

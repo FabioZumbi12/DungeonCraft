@@ -38,7 +38,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.List;
 
@@ -102,22 +105,6 @@ public class PlayerListener implements Listener {
                     if (trigger.execute(dungeonCraftPlayer, event.getRightClicked())) {
                         event.setCancelled(true);
                     }
-                }
-            }
-        }
-    }
-
-    @EventHandler
-    public void onPlayerRespawn(final PlayerRespawnEvent event) {
-        Location l = event.getPlayer().getLocation();
-        if (l.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
-            DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(l.getChunk().getX(), l.getChunk().getZ());
-            Dungeon d = DungeonManager.getDungeonAt(position);
-            if (d != null) {
-                DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
-                List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerRespawnEvent.class);
-                for (Trigger trigger : triggers) {
-                    trigger.execute(dungeonCraftPlayer, event.getRespawnLocation());
                 }
             }
         }

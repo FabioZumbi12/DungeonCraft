@@ -20,13 +20,31 @@
 
 package de.keyle.dungeoncraft.dungeon.scripting.contexts;
 
+import de.keyle.dungeoncraft.dungeon.Dungeon;
+import org.bukkit.configuration.ConfigurationSection;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 @SuppressWarnings("unused")
 public class VariablesContext {
+    protected final Dungeon dungeon;
     private Map<String, Object> variables = new HashMap<String, Object>();
+
+    public VariablesContext(Dungeon dungeon) {
+        this.dungeon = dungeon;
+        if (dungeon.getDungeonBase().hasCustomConfigOptions()) {
+            ConfigurationSection configOptions = dungeon.getDungeonBase().getCustomConfigOptions();
+            for (String key : configOptions.getKeys(false)) {
+                Object value = configOptions.get(key);
+                if (value instanceof ConfigurationSection) {
+                    continue;
+                }
+                variables.put(key, value);
+            }
+        }
+    }
 
     public boolean setVariable(String key, Object value) {
         if (variables.containsKey(key)) {

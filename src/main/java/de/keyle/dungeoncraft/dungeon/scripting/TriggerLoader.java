@@ -46,7 +46,7 @@ public class TriggerLoader {
         EffectContext effectContext = new EffectContext(dungeon);
         PlayerContext playerContext = new PlayerContext(dungeon);
         EnvironmentContext environmentContext = new EnvironmentContext(dungeon);
-        VariablesContext variablesContext = new VariablesContext();
+        VariablesContext variablesContext = new VariablesContext(dungeon);
 
         for (File f : dungeon.getDungeonBase().getTriggerFiles()) {
             Context cx = Context.enter();

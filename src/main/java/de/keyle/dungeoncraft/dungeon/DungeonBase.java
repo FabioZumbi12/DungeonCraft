@@ -24,7 +24,6 @@ import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.entity.template.EntityTemplateLoader;
 import de.keyle.dungeoncraft.entity.template.EntityTemplateRegistry;
 import de.keyle.dungeoncraft.util.config.ConfigurationYaml;
-import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.schematic.ISchematicReveiver;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import de.keyle.dungeoncraft.util.schematic.SchematicLoader;
@@ -86,6 +85,10 @@ public class DungeonBase implements ISchematicReveiver {
 
     public boolean hasCustomConfigOptions() {
         return customConfigOptions != null;
+    }
+
+    public ConfigurationSection getCustomConfigOptions() {
+        return customConfigOptions;
     }
 
     public OrientationVector getSpawn() {
@@ -192,9 +195,6 @@ public class DungeonBase implements ISchematicReveiver {
             maxPlayerCount = config.getInt("player.count.max", 0);
 
             customConfigOptions = config.getConfigurationSection("custom");
-            if (hasCustomConfigOptions()) {
-                DungeonCraftLogger.write("keys: " + customConfigOptions.getKeys(false));
-            }
         }
 
         new EntityTemplateLoader(this);

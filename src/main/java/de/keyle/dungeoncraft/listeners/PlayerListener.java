@@ -20,6 +20,7 @@
 
 package de.keyle.dungeoncraft.listeners;
 
+import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.api.events.PlayerEnterRegionEvent;
 import de.keyle.dungeoncraft.api.events.PlayerLeaveRegionEvent;
 import de.keyle.dungeoncraft.dungeon.Dungeon;
@@ -33,6 +34,7 @@ import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -53,6 +55,18 @@ public class PlayerListener implements Listener {
                 for (Trigger trigger : triggers) {
                     trigger.execute(dungeonCraftPlayer);
                 }
+
+                // cancel respawn screen
+                final Location respawnLocation = d.getPlayerSpawnLoacation(dungeonCraftPlayer);
+                final Player player = event.getEntity();
+                player.teleport(respawnLocation);
+                player.setHealth(player.getMaxHealth());
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DungeonCraftPlugin.getPlugin(), new Runnable() {
+                    public void run() {
+                        player.teleport(respawnLocation);
+                        player.setHealth(player.getMaxHealth());
+                    }
+                }, 1L);
             }
         }
     }

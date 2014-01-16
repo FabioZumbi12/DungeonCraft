@@ -21,7 +21,6 @@
 package de.keyle.dungeoncraft.dungeon.scripting.contexts;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
-import de.keyle.dungeoncraft.util.logger.DebugLogger;
 
 @SuppressWarnings("unused")
 public class LoggerContext {
@@ -32,14 +31,14 @@ public class LoggerContext {
     }
 
     public void info(String message) {
-        DebugLogger.info(message, "DC] D:[" + dungeon.getDungeonName());
+        dungeon.getDungeonLogger().info(message);
     }
 
     public void warning(String message) {
-        DebugLogger.warning(message, "DC] D:[" + dungeon.getDungeonName());
+        dungeon.getDungeonLogger().warning(message);
     }
 
     public void severe(String message) {
-        DebugLogger.severe(message, "DC] D:[" + dungeon.getDungeonName());
+        dungeon.getDungeonLogger().severe(message);
     }
 }

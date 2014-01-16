@@ -31,6 +31,7 @@ import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.group.Group;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
+import de.keyle.dungeoncraft.util.logger.DungeonLogger;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -57,6 +58,7 @@ public class Dungeon implements Scheduler {
     protected final DungeonField position;
     protected final TriggerRegistry triggerRegistry;
     protected final RegionRegistry regionRegistry;
+    protected final DungeonLogger dungeonLogger;
 
     public Dungeon(String dungeonName, DungeonBase dungeonTheme) {
         this.dungeonName = dungeonName;
@@ -67,6 +69,7 @@ public class Dungeon implements Scheduler {
         regionRegistry = new RegionRegistry();
         localTime = dungeonBase.getStartTime();
         weather = dungeonBase.getWeather();
+        dungeonLogger = new DungeonLogger(this);
     }
 
     public Dungeon(String dungeonName, DungeonBase dungeonTheme, Group group) {
@@ -82,6 +85,10 @@ public class Dungeon implements Scheduler {
 
     public RegionRegistry getRegionRegistry() {
         return regionRegistry;
+    }
+
+    public DungeonLogger getDungeonLogger() {
+        return dungeonLogger;
     }
 
     public boolean isLoading() {
@@ -245,7 +252,6 @@ public class Dungeon implements Scheduler {
                 }
                 completeDungeon(Result.Failure);
             }
-            //ToDo Weather
             if (!timeLock) {
                 localTime++;
             }

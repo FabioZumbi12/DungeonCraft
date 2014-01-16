@@ -87,7 +87,6 @@ public class DebugLogger {
         }
     }
 
-
     public static void info(String text, String source) {
         if (isEnabled) {
             debugLogger.info("[" + source + "] " + ChatColor.stripColor(text));

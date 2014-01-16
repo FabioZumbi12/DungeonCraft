@@ -84,8 +84,9 @@ public class DungeonCraftPlugin extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
-        new File(getPlugin().getDataFolder().getAbsolutePath(), "dungeons").mkdirs();
-        new File(getPlugin().getDataFolder().getAbsolutePath(), "logs").mkdirs();
+        new File(getPlugin().getDataFolder(), "dungeons").mkdirs();
+        new File(getPlugin().getDataFolder(), "logs").mkdirs();
+        new File(getPlugin().getDataFolder().getAbsolutePath() + File.separator + "logs", "dungeon").mkdirs();
 
         DungeonCraftVersion.reset();
         DungeonCraftLogger.setConsole(getServer().getConsoleSender());

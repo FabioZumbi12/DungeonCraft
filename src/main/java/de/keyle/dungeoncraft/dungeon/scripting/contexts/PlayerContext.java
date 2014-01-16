@@ -22,6 +22,8 @@ package de.keyle.dungeoncraft.dungeon.scripting.contexts;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.util.BukkitUtil;
+import de.keyle.dungeoncraft.util.Colorizer;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 
 import java.util.List;
@@ -85,5 +87,27 @@ public class PlayerContext {
         }
         DungeonCraftPlayer player = dungeon.getPlayerList().get(playerNumber - 1);
         return dungeon.getPlayerSpawn(player);
+    }
+
+    public void sendMessage(int playerNumber, String message) {
+        List<DungeonCraftPlayer> playerList = dungeon.getPlayerList();
+        if (playerNumber < 1 || playerNumber > playerList.size() || message == null) {
+            return;
+        }
+        DungeonCraftPlayer player = playerList.get(playerNumber - 1);
+        if (player.isOnline()) {
+            player.getPlayer().sendMessage(Colorizer.setColors(message));
+        }
+    }
+
+    public void sendMessageRaw(int playerNumber, String message) {
+        List<DungeonCraftPlayer> playerList = dungeon.getPlayerList();
+        if (playerNumber < 1 || playerNumber > playerList.size()) {
+            return;
+        }
+        DungeonCraftPlayer player = playerList.get(playerNumber - 1);
+        if (player.isOnline()) {
+            BukkitUtil.sendMessageRaw(player.getPlayer(), message);
+        }
     }
 }

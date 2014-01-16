@@ -172,6 +172,16 @@ public class EntityTemplateLoader {
                                                                     constructorValues.add(Long.parseLong(parameter.get(p.name()).toString()));
                                                                     continue aLoop;
                                                                 }
+                                                            } else if (p.type() == Parameter.Type.JsonObject && parameter.containsKey(p.name())) {
+                                                                if (c.getParameterTypes()[i].equals(JSONObject.class)) {
+                                                                    constructorValues.add(parameter.get(p.name()));
+                                                                    continue aLoop;
+                                                                }
+                                                            } else if (p.type() == Parameter.Type.JsonArray && parameter.containsKey(p.name())) {
+                                                                if (c.getParameterTypes()[i].equals(JSONArray.class)) {
+                                                                    constructorValues.add(parameter.get(p.name()));
+                                                                    continue aLoop;
+                                                                }
                                                             }
                                                             continue cLoop;
                                                         }

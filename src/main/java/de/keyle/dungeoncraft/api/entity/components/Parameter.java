@@ -32,6 +32,6 @@ public @interface Parameter {
     String name();
 
     public enum Type {
-        Number, String, Boolean
+        Number, String, Boolean, JsonObject, JsonArray
     }
 }

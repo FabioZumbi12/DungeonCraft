@@ -73,6 +73,8 @@ public class DungeonCraftWorld {
         internal.setSpawnFlags(true, true);
         internal.keepSpawnInMemory = false;
         internal.savingDisabled = false;
+        internal.getGameRules().set("keepInventory", "true");
+        //internal.getGameRules().set("commandBlockOutput", "false");
 
         console.worlds.add(internal);
 

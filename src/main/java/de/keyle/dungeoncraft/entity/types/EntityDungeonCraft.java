@@ -41,6 +41,7 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
     public AbstractNavigation petNavigation;
 
     private Field jump = null;
+    private int armor = 0;
 
     public EntityDungeonCraft(World world) {
         super(world);
@@ -84,6 +85,10 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
         if (es != null) {
             this.a(es.width(), es.height() + extra);
         }
+    }
+
+    public void setArmor(int armor) {
+        this.armor = Math.max(0, armor);
     }
 
     public boolean hasRider() {
@@ -153,6 +158,10 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
     }
 
     // Obfuscated Method handler ------------------------------------------------------------------------------------
+
+    public int getArmor() {
+        return armor;
+    }
 
     /**
      * Is called when player rightclicks this Entity
@@ -280,6 +289,20 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
             DebugLogger.printThrowable(e);
         }
         return null;
+    }
+
+    /**
+     * Returns basic armor value of the entity
+     * -> getArmor()
+     */
+    public int aV() {
+        try {
+            return super.aV() + getArmor();
+        } catch (Exception e) {
+            e.printStackTrace();
+            DebugLogger.printThrowable(e);
+        }
+        return super.aV();
     }
 
     /**

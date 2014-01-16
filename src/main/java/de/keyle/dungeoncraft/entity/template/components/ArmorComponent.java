@@ -18,22 +18,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.entity.template.basic;
+package de.keyle.dungeoncraft.entity.template.components;
 
-import de.keyle.dungeoncraft.entity.ai.attack.ranged.Projectile;
-import de.keyle.dungeoncraft.entity.template.BasicTemplate;
-import de.keyle.dungeoncraft.entity.template.components.ArmorComponent;
-import de.keyle.dungeoncraft.entity.template.components.RangedDamageComponent;
-import de.keyle.dungeoncraft.entity.types.EntityType;
+import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
+import de.keyle.dungeoncraft.api.entity.components.Parameter;
+import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
-public class WitherTemplate extends BasicTemplate {
-    public WitherTemplate() {
-        super("wither", 300, EntityType.Wither);
-        addBasicComponent(new RangedDamageComponent(8, Projectile.ProjectileTypes.WitherSkull));
-        addBasicComponent(new ArmorComponent(4));
+public class ArmorComponent extends EntityTemplateComponent {
+    int armor = 0;
+
+    public ArmorComponent(@Parameter(type = Parameter.Type.Number, name = "armor") int armor) {
+        this.armor = armor;
     }
 
-    public float getWalkSpeed() {
-        return walkSpeed;
+    @Override
+    public void applyComponent(EntityDungeonCraft entity) {
+        entity.setArmor(entity.getArmor() + armor);
     }
 }

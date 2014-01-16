@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
+import de.keyle.dungeoncraft.entity.template.components.ArmorComponent;
 import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 
@@ -28,6 +29,7 @@ public class MagmaCubeTemplate extends BasicTemplate {
     public MagmaCubeTemplate() {
         super("magmacube", 1, EntityType.MagmaCube);
         addBasicComponent(new MeeleDamageComponent(3));
+        addBasicComponent(new ArmorComponent(2));
     }
 
     public float getWalkSpeed() {

@@ -22,6 +22,8 @@ package de.keyle.dungeoncraft;
 
 import de.keyle.command.framework.CommandFramework;
 import de.keyle.dungeoncraft.commands.*;
+import de.keyle.dungeoncraft.dungeon.DungeonBaseLoader;
+import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntranceRegistry;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import de.keyle.dungeoncraft.entity.types.bat.EntityDungeonCraftBat;
 import de.keyle.dungeoncraft.entity.types.blaze.EntityDungeonCraftBlaze;
@@ -102,6 +104,8 @@ public class DungeonCraftPlugin extends JavaPlugin {
         DebugLogger.info("Plugins: " + Arrays.toString(getServer().getPluginManager().getPlugins()));
 
         new Locales();
+        new DungeonBaseLoader();
+        DungeonEntranceRegistry.loadEntrances();
 
         WorldListener worldListener = new WorldListener();
         getServer().getPluginManager().registerEvents(worldListener, this);
@@ -121,6 +125,7 @@ public class DungeonCraftPlugin extends JavaPlugin {
         framework.registerCommands(new CreateGroupCommand());
         framework.registerCommands(new InviteToGroupCommand());
         framework.registerCommands(new JoinGroupCommand());
+        framework.registerCommands(new CreateDungeonEntranceCommand());
 
         framework.registerCommands(new TestCommand());
         framework.registerCommands(new SpawnTemplateEntityCommand());

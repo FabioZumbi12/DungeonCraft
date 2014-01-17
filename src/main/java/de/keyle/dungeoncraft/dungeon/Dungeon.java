@@ -51,9 +51,9 @@ public class Dungeon implements Scheduler {
     protected int localTime = 0;
     protected Result result = Result.Running;
     protected Location exitLocation;
-    protected List<DungeonCraftPlayer> playerList = new ArrayList<DungeonCraftPlayer>();
     protected Map<DungeonCraftPlayer, OrientationVector> playerSpawn = new HashMap<DungeonCraftPlayer, OrientationVector>();
     protected final String dungeonName;
+    protected final Group playerGroup;
     protected final DungeonBase dungeonBase;
     protected final UUID uuid;
     protected final DungeonField position;
@@ -61,7 +61,7 @@ public class Dungeon implements Scheduler {
     protected final RegionRegistry regionRegistry;
     protected final DungeonLogger dungeonLogger;
 
-    public Dungeon(String dungeonName, DungeonBase dungeonTheme) {
+    public Dungeon(String dungeonName, DungeonBase dungeonTheme, Group group) {
         this.dungeonName = dungeonName;
         this.dungeonBase = dungeonTheme;
         uuid = UUID.randomUUID();
@@ -71,13 +71,7 @@ public class Dungeon implements Scheduler {
         localTime = dungeonBase.getStartTime();
         weather = dungeonBase.getWeather();
         dungeonLogger = new DungeonLogger(this);
-    }
-
-    public Dungeon(String dungeonName, DungeonBase dungeonTheme, Group group) {
-        this(dungeonName, dungeonTheme);
-        for (DungeonCraftPlayer player : group.getGroupMembers()) {
-            playerList.add(player);
-        }
+        playerGroup = group;
     }
 
     public TriggerRegistry getTriggerRegistry() {
@@ -121,18 +115,12 @@ public class Dungeon implements Scheduler {
         return isReady;
     }
 
-    public void addPlayer(DungeonCraftPlayer player) {
-        if (!playerList.contains(player)) {
-            playerList.add(player);
-        }
-    }
-
-    public void removePlayer(DungeonCraftPlayer player) {
-        playerList.remove(player);
-    }
-
     public List<DungeonCraftPlayer> getPlayerList() {
-        return Collections.unmodifiableList(playerList);
+        return Collections.unmodifiableList(playerGroup.getGroupMembers());
+    }
+
+    public Group getPlayerGroup() {
+        return playerGroup;
     }
 
     public Location getPlayerSpawnLoacation(DungeonCraftPlayer player) {
@@ -220,20 +208,26 @@ public class Dungeon implements Scheduler {
     public void completeDungeon(Result result) {
         this.result = result;
         isCompleted = true;
-        Iterator<DungeonCraftPlayer> iterator = playerList.iterator();
-        while (iterator.hasNext()) {
-            DungeonCraftPlayer p = iterator.next();
-            if (p.isOnline()) {
+        for (DungeonCraftPlayer player : getPlayerList()) {
+            if (player.isOnline()) {
                 if (exitLocation == null) {
-                    p.getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+                    player.getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
                 } else {
-                    p.getPlayer().teleport(exitLocation);
+                    player.getPlayer().teleport(exitLocation);
                 }
-                p.getPlayer().resetPlayerTime();
-                iterator.remove();
+                player.getPlayer().resetPlayerTime();
             }
         }
         unlockSchematic();
+    }
+
+    public void teleport(DungeonCraftPlayer p) {
+        if (playerGroup.containsPlayer(p)) {
+            p.getPlayer().teleport(getPlayerSpawnLoacation(p));
+            BukkitUtil.setPlayerEnvironment(p.getPlayer(), dungeonBase.getEnvironment());
+            updatePlayerTime();
+            updatePlayerWeather();
+        }
     }
 
     @Override
@@ -244,18 +238,13 @@ public class Dungeon implements Scheduler {
                 DungeonCraftLogger.write("Ok Lets do something");
                 first = false;
 
-                World world = DungeonCraftPlugin.getPlugin().getServer().getWorld(DungeonCraftWorld.WORLD_NAME);
-                OrientationVector ov = dungeonBase.getSpawn();
-                Location spawn = new Location(world, ov.getX() + (position.getX() * 1600), ov.getY(), ov.getZ() + (position.getZ() * 1600), (float) ov.getYaw(), (float) ov.getPitch());
-
-                for (DungeonCraftPlayer p : playerList) {
-                    if (p.isOnline()) {
-                        p.getPlayer().teleport(spawn);
-                        BukkitUtil.setPlayerEnvironment(p.getPlayer(), dungeonBase.getEnvironment());
-                        updatePlayerTime();
-                        updatePlayerWeather();
+                teleport(playerGroup.getGroupLeader());
+                for (DungeonCraftPlayer player : getPlayerList()) {
+                    if (player.isOnline()) {
+                        player.getPlayer().sendMessage("[DC] You can enter " + getDungeonName() + " now!");
                     }
                 }
+
                 if (dungeonBase.hasTimeLimit()) {
                     endTime = System.currentTimeMillis() + (dungeonBase.getTimeLimit() * 1000);
                 }
@@ -263,7 +252,7 @@ public class Dungeon implements Scheduler {
                 Bukkit.getPluginManager().callEvent(new DungeonStartEvent(this));
             }
             if (endTime > 0 && System.currentTimeMillis() >= endTime) {
-                for (DungeonCraftPlayer p : playerList) {
+                for (DungeonCraftPlayer p : getPlayerList()) {
                     if (p.isOnline()) {
                         p.getPlayer().sendMessage("Time is over!");
                     }

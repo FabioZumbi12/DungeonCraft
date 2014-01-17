@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.dungeon.region;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
 import de.keyle.dungeoncraft.util.config.ConfigurationYaml;
-import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -51,11 +50,11 @@ public class RegionLoader {
                 Vector max = new Vector(maxX, maxY, maxZ);
 
                 try {
-                    Region r = new Region(key, min, max);
+                    DungeonRegion r = new DungeonRegion(key, min, max);
                     dungeon.getRegionRegistry().addRegion(r);
-                    DebugLogger.info("d:[" + dungeon.getDungeonName() + "] Loaded Region: " + r);
+                    dungeon.getDungeonLogger().info("Region loaded: " + r);
                 } catch (IllegalArgumentException e) {
-                    DebugLogger.warning("d:[" + dungeon.getDungeonName() + "] " + e.getMessage());
+                    dungeon.getDungeonLogger().warning("Region: " + e.getMessage());
                 }
             }
         }

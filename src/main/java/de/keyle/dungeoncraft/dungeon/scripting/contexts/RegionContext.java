@@ -21,7 +21,7 @@
 package de.keyle.dungeoncraft.dungeon.scripting.contexts;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
-import de.keyle.dungeoncraft.dungeon.region.Region;
+import de.keyle.dungeoncraft.dungeon.region.DungeonRegion;
 import de.keyle.dungeoncraft.util.vector.Vector;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class RegionContext {
         this.dungeon = dungeon;
     }
 
-    public List<Region> getRegionsAt(int x, int y, int z) {
+    public List<DungeonRegion> getRegionsAt(int x, int y, int z) {
         Vector p = new Vector(x, y, z);
         return dungeon.getRegionRegistry().getRegionsAt(p);
     }

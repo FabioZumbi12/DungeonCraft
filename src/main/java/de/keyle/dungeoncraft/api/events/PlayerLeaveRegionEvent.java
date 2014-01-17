@@ -21,7 +21,7 @@
 package de.keyle.dungeoncraft.api.events;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
-import de.keyle.dungeoncraft.dungeon.region.Region;
+import de.keyle.dungeoncraft.dungeon.region.DungeonRegion;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -32,10 +32,10 @@ public class PlayerLeaveRegionEvent extends Event implements Cancellable {
 
     private final Dungeon dungeon;
     private final DungeonCraftPlayer player;
-    private final Region region;
+    private final DungeonRegion region;
     private boolean isCancelled = false;
 
-    public PlayerLeaveRegionEvent(Dungeon dungeon, DungeonCraftPlayer player, Region region) {
+    public PlayerLeaveRegionEvent(Dungeon dungeon, DungeonCraftPlayer player, DungeonRegion region) {
         this.dungeon = dungeon;
         this.player = player;
         this.region = region;
@@ -49,7 +49,7 @@ public class PlayerLeaveRegionEvent extends Event implements Cancellable {
         return player;
     }
 
-    public Region getRegion() {
+    public DungeonRegion getRegion() {
         return region;
     }
 

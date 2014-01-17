@@ -29,7 +29,7 @@ public class RegionTest {
         Vector min = new Vector(-1, -1, -1);
         Vector max = new Vector(1, 1, 1);
 
-        new Region("test", min, max);
+        new DungeonRegion("test", min, max);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -37,7 +37,7 @@ public class RegionTest {
         Vector min = new Vector(1, 1, 1);
         Vector max = new Vector(1600, 256, 1600);
 
-        new Region("test", min, max);
+        new DungeonRegion("test", min, max);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -45,6 +45,6 @@ public class RegionTest {
         Vector min = new Vector(2, 2, 2);
         Vector max = new Vector(1, 1, 1);
 
-        new Region("test", min, max);
+        new DungeonRegion("test", min, max);
     }
 }

@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.dungeon.region;
 
 import com.google.common.collect.ArrayListMultimap;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
-import de.keyle.dungeoncraft.util.Util;
+import de.keyle.dungeoncraft.util.vector.Region;
 import de.keyle.dungeoncraft.util.vector.Vector;
 
 import java.util.Collections;
@@ -30,43 +30,25 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Region {
+public class DungeonRegion extends Region {
     protected final String regionId;
-    protected final Vector min;
-    protected final Vector max;
     Set<DungeonCraftPlayer> players = new HashSet<DungeonCraftPlayer>();
 
-    private static ArrayListMultimap<DungeonCraftPlayer, Region> playerRegionMultimap = ArrayListMultimap.create();
+    private static ArrayListMultimap<DungeonCraftPlayer, DungeonRegion> playerRegionMultimap = ArrayListMultimap.create();
 
-    public Region(String regionId, Vector min, Vector max) {
-        this.regionId = regionId;
+    public DungeonRegion(String regionId, Vector min, Vector max) {
+        super(min, max);
         if (min.getX() < 0 || min.getY() < 0 || min.getZ() < 0 || min.getX() >= 1600 || min.getY() >= 256 || min.getZ() >= 1600) {
             throw new IllegalArgumentException("Min vector not inside valid boundaries: " + min);
         }
         if (max.getX() < 0 || max.getY() < 0 || max.getZ() < 0 || max.getX() >= 1600 || max.getY() >= 256 || max.getZ() >= 1600) {
             throw new IllegalArgumentException("Max vector not inside valid boundaries: " + max);
         }
-        if (min.getX() >= max.getX() || min.getY() >= max.getY() || min.getZ() >= max.getZ()) {
-            throw new IllegalArgumentException("Max vector has to be bigger than the min vector: " + min + " > " + max);
-        }
-        this.min = min;
-        this.max = max;
+        this.regionId = regionId;
     }
 
     public String getRegionId() {
         return regionId;
-    }
-
-    public Vector getMin() {
-        return min;
-    }
-
-    public Vector getMax() {
-        return max;
-    }
-
-    public boolean isVectorInside(Vector p) {
-        return Util.isInsideCuboid(p, min, max);
     }
 
     public Set<DungeonCraftPlayer> getPlayers() {
@@ -87,12 +69,12 @@ public class Region {
         }
     }
 
-    public static List<Region> getPlayerRegions(DungeonCraftPlayer player) {
+    public static List<DungeonRegion> getPlayerRegions(DungeonCraftPlayer player) {
         return Collections.unmodifiableList(playerRegionMultimap.get(player));
     }
 
     @Override
     public String toString() {
-        return "Region{regionId='" + regionId + '\'' + ", min=" + min + ", max=" + max + '}';
+        return "DungeonRegion{regionId='" + regionId + '\'' + ", min=" + getMin() + ", max=" + getMax() + '}';
     }
 }

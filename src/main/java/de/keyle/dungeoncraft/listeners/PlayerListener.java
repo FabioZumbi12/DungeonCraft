@@ -23,14 +23,15 @@ package de.keyle.dungeoncraft.listeners;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.api.events.PlayerEnterRegionEvent;
 import de.keyle.dungeoncraft.api.events.PlayerLeaveRegionEvent;
-import de.keyle.dungeoncraft.dungeon.Dungeon;
-import de.keyle.dungeoncraft.dungeon.DungeonField;
-import de.keyle.dungeoncraft.dungeon.DungeonFieldManager;
-import de.keyle.dungeoncraft.dungeon.DungeonManager;
+import de.keyle.dungeoncraft.dungeon.*;
+import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntrance;
+import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntranceRegistry;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
-import de.keyle.dungeoncraft.dungeon.region.Region;
+import de.keyle.dungeoncraft.dungeon.region.DungeonRegion;
 import de.keyle.dungeoncraft.dungeon.scripting.Trigger;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.group.Group;
+import de.keyle.dungeoncraft.group.GroupManager;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -137,15 +138,15 @@ public class PlayerListener implements Listener {
         if (event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ()) {
             return;
         }
-        Location l = event.getTo();
-        if (l.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
-            DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(l.getChunk().getX(), l.getChunk().getZ());
+        Location eventTo = event.getTo();
+        if (eventTo.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
+            DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(eventTo.getChunk().getX(), eventTo.getChunk().getZ());
             Dungeon d = DungeonManager.getDungeonAt(position);
             if (d != null) {
-                Vector playerPoint = new Vector(l.getBlockX(), l.getBlockY(), l.getBlockZ());
+                Vector playerPoint = new Vector(eventTo.getBlockX(), eventTo.getBlockY(), eventTo.getBlockZ());
                 DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
-                List<Region> regionsAt = d.getRegionRegistry().getRegionsAt(playerPoint);
-                for (Region region : Region.getPlayerRegions(dungeonCraftPlayer)) {
+                List<DungeonRegion> regionsAt = d.getRegionRegistry().getRegionsAt(playerPoint);
+                for (DungeonRegion region : DungeonRegion.getPlayerRegions(dungeonCraftPlayer)) {
                     if (!region.isVectorInside(playerPoint)) {
                         PlayerLeaveRegionEvent regionEvent = new PlayerLeaveRegionEvent(d, dungeonCraftPlayer, region);
                         Bukkit.getPluginManager().callEvent(regionEvent);
@@ -156,7 +157,7 @@ public class PlayerListener implements Listener {
                         }
                     }
                 }
-                for (Region region : regionsAt) {
+                for (DungeonRegion region : regionsAt) {
                     if (!region.getPlayers().contains(dungeonCraftPlayer)) {
                         PlayerEnterRegionEvent regionEvent = new PlayerEnterRegionEvent(d, dungeonCraftPlayer, region);
                         Bukkit.getPluginManager().callEvent(regionEvent);
@@ -167,6 +168,48 @@ public class PlayerListener implements Listener {
                         }
                     }
                 }
+            }
+        } else {
+            DungeonEntrance entrance = DungeonEntranceRegistry.getEntranceAt(eventTo);
+            if (entrance != null) {
+                DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
+                Group group = GroupManager.getGroupByPlayer(dungeonCraftPlayer);
+                if (group != null) {
+                    if (DungeonManager.getDungeonFor(group) != null) {
+                        Dungeon dungeon = DungeonManager.getDungeonFor(group);
+                        if (dungeon != null) {
+                            if (dungeon.isReady()) {
+                                event.setCancelled(true);
+                                dungeon.teleport(dungeonCraftPlayer);
+                            } else {
+                                event.getPlayer().sendMessage("The Dungeon isn't ready yet!");
+                            }
+                        } else {
+                            event.getPlayer().sendMessage("The leader of your group must enter this dungeon first!");
+                        }
+                    } else {
+                        if (group.getGroupLeader().equals(dungeonCraftPlayer)) {
+                            DungeonBase base = entrance.getDungeonBase();
+                            if (group.getGroupStrength() >= base.getMinPlayerCount()) {
+                                if (group.getGroupStrength() >= base.getMinPlayerCount()) {
+                                    Dungeon d = new Dungeon(entrance.getDungeonName(), entrance.getDungeonBase(), group);
+                                    d.setExitLocation(entrance.getExitLocation());
+                                    DungeonManager.addDungeon(d);
+                                    event.getPlayer().sendMessage("Dungeon loading . . .");
+                                } else {
+                                    event.getPlayer().sendMessage("Your group is to small!");
+                                }
+                            } else {
+                                event.getPlayer().sendMessage("Your group is to small! You need at least " + base.getMinPlayerCount() + " players.");
+                            }
+                        } else {
+                            event.getPlayer().sendMessage("The leader of your group must enter this Dungeon first!");
+                        }
+                    }
+                } else {
+                    event.getPlayer().sendMessage("You can not enter a dungeon without a group!");
+                }
+                event.setCancelled(true);
             }
         }
     }

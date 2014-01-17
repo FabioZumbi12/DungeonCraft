@@ -29,16 +29,16 @@ import java.util.List;
 import java.util.Set;
 
 public class RegionRegistry {
-    private BiMap<String, Region> idToRegion = HashBiMap.create();
-    private BiMap<Region, String> regionToId = idToRegion.inverse();
+    private BiMap<String, DungeonRegion> idToRegion = HashBiMap.create();
+    private BiMap<DungeonRegion, String> regionToId = idToRegion.inverse();
 
-    public Set<Region> getRegions() {
+    public Set<DungeonRegion> getRegions() {
         return regionToId.keySet();
     }
 
-    public List<Region> getRegionsAt(Vector p) {
-        List<Region> regions = new ArrayList<Region>();
-        for (Region region : regionToId.keySet()) {
+    public List<DungeonRegion> getRegionsAt(Vector p) {
+        List<DungeonRegion> regions = new ArrayList<DungeonRegion>();
+        for (DungeonRegion region : regionToId.keySet()) {
             if (region.isVectorInside(p)) {
                 regions.add(region);
             }
@@ -46,13 +46,13 @@ public class RegionRegistry {
         return regions;
     }
 
-    public void addRegion(Region region) {
+    public void addRegion(DungeonRegion region) {
         if (!idToRegion.containsKey(region.getRegionId())) {
             idToRegion.put(region.getRegionId(), region);
         }
     }
 
-    public void removeRegion(Region region) {
+    public void removeRegion(DungeonRegion region) {
         regionToId.remove(region);
     }
 

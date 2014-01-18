@@ -25,14 +25,13 @@ import de.keyle.dungeoncraft.util.BukkitUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DungeonCraftPlayer {
-
-    private static List<DungeonCraftPlayer> playerList = new ArrayList<DungeonCraftPlayer>();
+    private static Map<String, DungeonCraftPlayer> playerList = new HashMap<String, DungeonCraftPlayer>();
     private Map<String, Long> dungeonLockout = new HashMap<String, Long>();
     private Dungeon dungeon = null;
     private Group group = null;
@@ -53,12 +52,7 @@ public class DungeonCraftPlayer {
     }
 
     public static boolean isDungeonCraftPlayer(String name) {
-        for (DungeonCraftPlayer player : playerList) {
-            if (player.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
+        return playerList.containsKey(name);
     }
 
     public static boolean isDungeonCraftPlayer(Player player) {
@@ -66,14 +60,12 @@ public class DungeonCraftPlayer {
     }
 
     public static DungeonCraftPlayer getPlayer(String name) {
-        for (DungeonCraftPlayer player : playerList) {
-            if (player.getName().equals(name)) {
-                return player;
-            }
+        if (playerList.containsKey(name)) {
+            return playerList.get(name);
         }
 
         DungeonCraftPlayer tmpPlayer = new DungeonCraftPlayer(name);
-        playerList.add(tmpPlayer);
+        playerList.put(name, tmpPlayer);
         return tmpPlayer;
     }
 
@@ -117,8 +109,8 @@ public class DungeonCraftPlayer {
         return getPlayer(player.getName());
     }
 
-    public static List<DungeonCraftPlayer> getAllPlayers() {
-        return playerList;
+    public static Collection<DungeonCraftPlayer> getAllPlayers() {
+        return Collections.unmodifiableCollection(playerList.values());
     }
 
     public String getLanguage() {

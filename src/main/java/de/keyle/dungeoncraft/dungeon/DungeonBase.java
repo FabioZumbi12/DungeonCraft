@@ -209,7 +209,7 @@ public class DungeonBase implements ISchematicReveiver {
                 allowedCommands.add(cmd.toLowerCase());
             }
 
-            customConfigOptions = config.getConfigurationSection("custom");
+            customConfigOptions = config.getConfigurationSection("options");
         }
 
         new EntityTemplateLoader(this);

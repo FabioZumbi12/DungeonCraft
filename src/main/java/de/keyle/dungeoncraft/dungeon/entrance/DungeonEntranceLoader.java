@@ -109,7 +109,7 @@ public class DungeonEntranceLoader {
                         Region region = new Region(minVector, maxVector);
 
                         Location exitLocation;
-                        Object exitObject = entrance.get("min");
+                        Object exitObject = entrance.get("exit");
                         if (exitObject instanceof JSONObject) {
                             JSONObject exit = (JSONObject) exitObject;
                             if (!exit.containsKey("x") || !exit.containsKey("y") || !exit.containsKey("z") || !exit.containsKey("world")) {

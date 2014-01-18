@@ -33,7 +33,7 @@ import java.util.Map;
 public class DungeonCraftPlayer {
 
     private static List<DungeonCraftPlayer> playerList = new ArrayList<DungeonCraftPlayer>();
-    private Map<String, Integer> dungeonLockout = new HashMap<String, Integer>();
+    private Map<String, Long> dungeonLockout = new HashMap<String, Long>();
     private Dungeon dungeon = null;
     private Group group = null;
 
@@ -94,18 +94,23 @@ public class DungeonCraftPlayer {
     }
 
     public boolean hasLockout(String instanceName) {
-        return this.dungeonLockout.containsKey(instanceName);
+        return getRemainingLockout(instanceName) > 0L;
     }
 
-    public int getRemainingLockout(String instanceName) {
-        if (hasLockout(instanceName)) {
-            return this.dungeonLockout.get(instanceName);
+    public Long getRemainingLockout(String instanceName) {
+        if (dungeonLockout.containsKey(instanceName)) {
+            long lockout = this.dungeonLockout.get(instanceName) - System.currentTimeMillis();
+            if (lockout < 0L) {
+                lockout = 0L;
+                dungeonLockout.remove(instanceName);
+            }
+            return lockout;
         }
-        return 0;
+        return 0L;
     }
 
-    public void setDungenLockout(String instanceName, int timeinminutes) {
-        this.dungeonLockout.put(instanceName, timeinminutes);
+    public void setDungenLockout(String instanceName, long time) {
+        this.dungeonLockout.put(instanceName, System.currentTimeMillis() + time);
     }
 
     public static DungeonCraftPlayer getPlayer(Player player) {

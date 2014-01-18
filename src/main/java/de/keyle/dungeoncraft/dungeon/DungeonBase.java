@@ -48,6 +48,7 @@ public class DungeonBase implements ISchematicReveiver {
     int timeLimit = 0;
     int startTime = 1000;
     boolean timeLock = false;
+    long playerLockoutTime = 60000;
     Environment environment = Environment.NORMAL;
     boolean weather = false;
     Set<String> allowedCommands;
@@ -87,6 +88,10 @@ public class DungeonBase implements ISchematicReveiver {
 
     public String getName() {
         return name;
+    }
+
+    public long getPlayerLockoutTime() {
+        return playerLockoutTime;
     }
 
     public boolean hasCustomConfigOptions() {
@@ -197,6 +202,7 @@ public class DungeonBase implements ISchematicReveiver {
             timeLimit = config.getInt("time.limit", 0);
             startTime = config.getInt("time.start", 1000);
             timeLock = config.getBoolean("time.lock", false);
+            playerLockoutTime = config.getLong("time.lockout", 60000L);
 
             environment = Environment.valueOf(config.getString("world.environment", "NORMAL").toUpperCase());
             weather = config.getBoolean("world.weather", false);

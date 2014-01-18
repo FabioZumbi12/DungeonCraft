@@ -215,9 +215,12 @@ public class Dungeon implements Scheduler, Listener {
         this.result = result;
         isCompleted = true;
         for (DungeonCraftPlayer player : getPlayerList()) {
-            if (player.isOnline() && playersInDungeon.contains(player)) {
-                teleportOut(player);
-                player.getPlayer().resetPlayerTime();
+            if (playersInDungeon.contains(player)) {
+                if (player.isOnline()) {
+                    teleportOut(player);
+                    player.getPlayer().resetPlayerTime();
+                }
+                player.setDungenLockout(this.getDungeonName(), getDungeonBase().getPlayerLockoutTime());
             }
         }
         unlockSchematic();

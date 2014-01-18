@@ -225,13 +225,15 @@ public class Dungeon implements Scheduler {
     }
 
     public void teleportIn(DungeonCraftPlayer p) {
-        if (playerGroup.containsPlayer(p)) {
+        if (p.isOnline() && playerGroup.containsPlayer(p)) {
             playersInDungeon.add(p);
             p.setDungeon(this);
             p.getPlayer().teleport(getPlayerSpawnLoacation(p));
             BukkitUtil.setPlayerEnvironment(p.getPlayer(), dungeonBase.getEnvironment());
             updatePlayerTime();
             updatePlayerWeather();
+            // There must be another way to update the inventory properly
+            p.getPlayer().updateInventory();
         }
     }
 

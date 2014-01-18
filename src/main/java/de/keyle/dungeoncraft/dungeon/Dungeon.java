@@ -37,11 +37,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.WeatherType;
 import org.bukkit.World;
-import org.bukkit.event.Listener;
 
 import java.util.*;
 
-public class Dungeon implements Scheduler, Listener {
+public class Dungeon implements Scheduler {
     protected boolean isReady = false;
     protected boolean isLoading = false;
     protected boolean first = true;

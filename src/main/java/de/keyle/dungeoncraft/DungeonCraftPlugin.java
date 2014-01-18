@@ -53,6 +53,7 @@ import de.keyle.dungeoncraft.entity.types.witch.EntityDungeonCraftWitch;
 import de.keyle.dungeoncraft.entity.types.wither.EntityDungeonCraftWither;
 import de.keyle.dungeoncraft.entity.types.wolf.EntityDungeonCraftWolf;
 import de.keyle.dungeoncraft.entity.types.zombie.EntityDungeonCraftZombie;
+import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.listeners.DungeonListener;
 import de.keyle.dungeoncraft.listeners.EntityListener;
 import de.keyle.dungeoncraft.listeners.PlayerListener;
@@ -79,6 +80,12 @@ public class DungeonCraftPlugin extends JavaPlugin {
         DungeonCraftLogger.setConsole(null);
         Bukkit.getServer().getScheduler().cancelTasks(plugin);
         DebugLogger.info("DungeonCraft disabled!");
+
+        for (DungeonCraftPlayer player : DungeonCraftPlayer.getAllPlayers()) {
+            if (player.getDungeon() != null) {
+                player.getDungeon().teleportOut(player);
+            }
+        }
 
         Bukkit.getServer().unloadWorld(DungeonCraftWorld.WORLD_NAME, true);
     }

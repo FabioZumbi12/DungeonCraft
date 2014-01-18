@@ -37,10 +37,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.WeatherType;
 import org.bukkit.World;
+import org.bukkit.event.Listener;
 
 import java.util.*;
 
-public class Dungeon implements Scheduler {
+public class Dungeon implements Scheduler, Listener {
     protected boolean isReady = false;
     protected boolean isLoading = false;
     protected boolean first = true;
@@ -52,6 +53,7 @@ public class Dungeon implements Scheduler {
     protected Result result = Result.Running;
     protected Location exitLocation;
     protected Map<DungeonCraftPlayer, OrientationVector> playerSpawn = new HashMap<DungeonCraftPlayer, OrientationVector>();
+    protected Set<DungeonCraftPlayer> playersInDungeon = new HashSet<DungeonCraftPlayer>();
     protected final String dungeonName;
     protected final Group playerGroup;
     protected final DungeonBase dungeonBase;
@@ -141,7 +143,11 @@ public class Dungeon implements Scheduler {
     }
 
     public Location getExitLocation() {
-        return exitLocation;
+        if (exitLocation == null) {
+            return Bukkit.getWorlds().get(0).getSpawnLocation();
+        } else {
+            return exitLocation;
+        }
     }
 
     public void setExitLocation(Location exitLocation) {
@@ -209,24 +215,35 @@ public class Dungeon implements Scheduler {
         this.result = result;
         isCompleted = true;
         for (DungeonCraftPlayer player : getPlayerList()) {
-            if (player.isOnline()) {
-                if (exitLocation == null) {
-                    player.getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-                } else {
-                    player.getPlayer().teleport(exitLocation);
-                }
+            if (player.isOnline() && playersInDungeon.contains(player)) {
+                teleportOut(player);
                 player.getPlayer().resetPlayerTime();
             }
         }
         unlockSchematic();
     }
 
-    public void teleport(DungeonCraftPlayer p) {
+    public void teleportIn(DungeonCraftPlayer p) {
         if (playerGroup.containsPlayer(p)) {
+            playersInDungeon.add(p);
+            p.setDungeon(this);
             p.getPlayer().teleport(getPlayerSpawnLoacation(p));
             BukkitUtil.setPlayerEnvironment(p.getPlayer(), dungeonBase.getEnvironment());
             updatePlayerTime();
             updatePlayerWeather();
+        }
+    }
+
+    public void teleportOut(DungeonCraftPlayer p) {
+        if (playersInDungeon.contains(p)) {
+            playersInDungeon.remove(p);
+            p.setDungeon(null);
+            if (p.isOnline()) {
+                p.getPlayer().teleport(exitLocation);
+                BukkitUtil.setPlayerEnvironment(p.getPlayer(), dungeonBase.getEnvironment());
+                updatePlayerTime();
+                updatePlayerWeather();
+            }
         }
     }
 
@@ -238,7 +255,7 @@ public class Dungeon implements Scheduler {
                 DungeonCraftLogger.write("Ok Lets do something");
                 first = false;
 
-                teleport(playerGroup.getGroupLeader());
+                teleportIn(playerGroup.getGroupLeader());
                 for (DungeonCraftPlayer player : getPlayerList()) {
                     if (player.isOnline()) {
                         player.getPlayer().sendMessage("[DC] You can enter " + getDungeonName() + " now!");

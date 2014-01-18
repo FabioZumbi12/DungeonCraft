@@ -71,6 +71,13 @@ public class HeroesGroup extends Group implements Listener {
     @EventHandler
     public void onPlayerLeaveParty(final HeroLeavePartyEvent event) {
         if (event.getParty() == party) {
+            DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(event.getHero().getPlayer());
+            if (player.getDungeon() == null) {
+                removePlayer(player);
+            } else {
+                event.getHero().getPlayer().sendMessage("You can not leave this group when you are inside a dungeon!");
+                event.setCancelled(true);
+            }
             removePlayer(event.getHero().getPlayer());
         }
         if (getGroupStrength() == 0 || getGroupLeader().equals(event.getHero().getPlayer())) {

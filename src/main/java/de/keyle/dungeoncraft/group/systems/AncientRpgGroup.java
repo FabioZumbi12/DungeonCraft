@@ -68,7 +68,13 @@ public class AncientRpgGroup extends Group implements Listener {
     @EventHandler
     public void onPlayerLeaveParty(final AncientRPGPartyLeaveEvent event) {
         if (event.getParty() == party) {
-            removePlayer(event.getPlayer());
+            DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(event.getPlayer());
+            if (player.getDungeon() == null) {
+                removePlayer(player);
+            } else {
+                event.getPlayer().sendMessage("You can not leave this group when you are inside a dungeon!");
+                event.setCancelled(true);
+            }
         }
         if (getGroupStrength() == 0 || getGroupLeader().equals(event.getPlayer())) {
             disbandGroup();

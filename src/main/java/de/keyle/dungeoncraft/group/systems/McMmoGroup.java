@@ -20,9 +20,8 @@
 
 package de.keyle.dungeoncraft.group.systems;
 
-import com.gmail.nossr50.datatypes.party.Party;
+import com.gmail.nossr50.api.PartyAPI;
 import com.gmail.nossr50.events.party.McMMOPartyChangeEvent;
-import com.gmail.nossr50.party.PartyManager;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.group.Group;
@@ -32,15 +31,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class McMmoGroup extends Group implements Listener {
-    Party party;
+    String partyName;
 
     public McMmoGroup(DungeonCraftPlayer leader) {
         super(leader);
-        party = PartyManager.getPlayerParty(leader.getName());
-        Validate.isTrue(leader.getName().equals(party.getLeader()), "Player is not leader of the group");
-        for (Player member : party.getOnlineMembers()) {
+        partyName = PartyAPI.getPartyName(leader.getPlayer());
+        Validate.isTrue(leader.getName().equals(PartyAPI.getPartyLeader(partyName)), "Player is not leader of the group.");
+        for (Player member : PartyAPI.getOnlineMembers(partyName)) {
             addPlayer(member);
         }
         Bukkit.getPluginManager().registerEvents(this, DungeonCraftPlugin.getPlugin());
@@ -59,19 +59,25 @@ public class McMmoGroup extends Group implements Listener {
 
     @EventHandler
     public void onPartyChange(final McMMOPartyChangeEvent event) {
-        if (event.getNewParty() != null && event.getNewParty().equals(party.getName())) {
-            if (event.getReason() == McMMOPartyChangeEvent.EventReason.JOINED_PARTY) {
-                addPlayer(event.getPlayer());
-            } else if (event.getReason() == McMMOPartyChangeEvent.EventReason.CHANGED_PARTIES) {
-                addPlayer(event.getPlayer());
+        if (event.getNewParty() != null && event.getNewParty().equals(partyName)) {
+            addPlayer(event.getPlayer());
+        } else if (event.getNewParty() == null && event.getOldParty() != null && event.getOldParty().equals(partyName)) {
+            DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(event.getPlayer());
+            if (player.getDungeon() == null) {
+                removePlayer(player);
+            } else {
+                event.getPlayer().getPlayer().sendMessage("You can not leave this group while inside a dungeon!");
+                event.setCancelled(true);
             }
-        } else if (event.getOldParty() != null && event.getOldParty().equals(party.getName())) {
-            if (event.getReason() == McMMOPartyChangeEvent.EventReason.KICKED_FROM_PARTY) {
-                removePlayer(event.getPlayer());
-            } else if (event.getReason() == McMMOPartyChangeEvent.EventReason.LEFT_PARTY) {
-                removePlayer(event.getPlayer());
-            } else if (event.getReason() == McMMOPartyChangeEvent.EventReason.CHANGED_PARTIES) {
-                removePlayer(event.getPlayer());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(final PlayerJoinEvent event) {
+        if (PartyAPI.getPartyName(event.getPlayer()).equals(partyName)) {
+            DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(event.getPlayer());
+            if (!this.getGroupMembers().contains(player)) {
+                addPlayer(player);
             }
         }
     }

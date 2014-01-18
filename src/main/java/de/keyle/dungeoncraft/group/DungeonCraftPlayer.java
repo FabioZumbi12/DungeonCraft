@@ -20,6 +20,7 @@
 
 package de.keyle.dungeoncraft.group;
 
+import de.keyle.dungeoncraft.dungeon.Dungeon;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -33,6 +34,8 @@ public class DungeonCraftPlayer {
 
     private static List<DungeonCraftPlayer> playerList = new ArrayList<DungeonCraftPlayer>();
     private Map<String, Integer> dungeonLockout = new HashMap<String, Integer>();
+    private Dungeon dungeon = null;
+    private Group group = null;
 
     private final String playerName;
     private String lastLanguage = "en";
@@ -72,6 +75,22 @@ public class DungeonCraftPlayer {
         DungeonCraftPlayer tmpPlayer = new DungeonCraftPlayer(name);
         playerList.add(tmpPlayer);
         return tmpPlayer;
+    }
+
+    public void setDungeon(Dungeon dungeon) {
+        this.dungeon = dungeon;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public Dungeon getDungeon() {
+        return dungeon;
+    }
+
+    public Group getGroup() {
+        return group;
     }
 
     public boolean hasLockout(String instanceName) {

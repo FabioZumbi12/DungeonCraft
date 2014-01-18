@@ -177,9 +177,11 @@ public class PlayerListener implements Listener {
                     if (DungeonManager.getDungeonFor(group) != null) {
                         Dungeon dungeon = DungeonManager.getDungeonFor(group);
                         if (dungeon != null) {
-                            if (dungeon.isReady()) {
+                            if (dungeon.isCompleted()) {
+                                event.getPlayer().sendMessage("The Dungeon is already completed!");
+                            } else if (dungeon.isReady()) {
                                 event.setCancelled(true);
-                                dungeon.teleport(dungeonCraftPlayer);
+                                dungeon.teleportIn(dungeonCraftPlayer);
                             } else {
                                 event.getPlayer().sendMessage("The Dungeon isn't ready yet!");
                             }
@@ -251,6 +253,26 @@ public class PlayerListener implements Listener {
                     event.setCancelled(true);
                     event.getPlayer().sendMessage("You are not allowed to use /" + cmd + " here!");
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(final PlayerQuitEvent event) {
+        if (event.getPlayer().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
+            DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(event.getPlayer());
+            if (player.getDungeon() != null) {
+                player.getDungeon().teleportOut(player);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(final PlayerTeleportEvent event) {
+        if (event.getTo().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME) && !event.getFrom().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
+            DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(event.getPlayer());
+            if (player.getDungeon() == null) {
+                event.setCancelled(true);
             }
         }
     }

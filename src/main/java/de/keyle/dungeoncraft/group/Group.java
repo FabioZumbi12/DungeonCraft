@@ -45,6 +45,7 @@ public abstract class Group implements DungeonCraftGroup {
     public void addPlayer(DungeonCraftPlayer player) {
         if (!this.containsPlayer(player)) {
             members.add(player);
+            player.setGroup(this);
         }
     }
 
@@ -56,6 +57,7 @@ public abstract class Group implements DungeonCraftGroup {
     public void removePlayer(DungeonCraftPlayer player) {
         if (this.containsPlayer(player)) {
             this.members.remove(player);
+            player.setGroup(null);
         }
     }
 

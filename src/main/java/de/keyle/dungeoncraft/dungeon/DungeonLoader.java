@@ -52,7 +52,7 @@ public class DungeonLoader extends Thread {
         final AtomicInteger callbackCount = new AtomicInteger(xCount * zCount);
         for (int x = 0; x < xCount; x++) {
             for (int z = 0; z < zCount; z++) {
-                DungeonCraftChunkProvider.chunkloader.generateChunkAt(dungeon.position.getX() + x, dungeon.position.getZ() + z, new Runnable() {
+                DungeonCraftChunkProvider.chunkloader.generateChunkAt(dungeon.position.getChunkX() + x, dungeon.position.getChunkZ() + z, new Runnable() {
                     @Override
                     public void run() {
                         synchronized (callbackCount) {

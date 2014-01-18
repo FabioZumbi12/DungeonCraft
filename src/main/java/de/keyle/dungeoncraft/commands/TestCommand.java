@@ -22,12 +22,6 @@ package de.keyle.dungeoncraft.commands;
 
 import de.keyle.command.framework.Command;
 import de.keyle.command.framework.CommandArgs;
-import de.keyle.dungeoncraft.dungeon.DungeonBaseRegistry;
-import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntrance;
-import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntranceRegistry;
-import de.keyle.dungeoncraft.util.vector.Region;
-import de.keyle.dungeoncraft.util.vector.Vector;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class TestCommand {
@@ -36,19 +30,8 @@ public class TestCommand {
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof Player) {
             Player p = (Player) args.getSender();
-            /*
-            DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer((Player) args.getSender());
-            Group g = GroupManager.newGroup(player);
-            Dungeon d = new Dungeon("testDungeon", base, g);
-            d.setExitLocation(((Player) args.getSender()).getLocation());
-            DungeonManager.addDungeon(d);
-            */
-            Location playerLocation = p.getLocation();
-            Vector min = new Vector(playerLocation.getBlockX() + 2, playerLocation.getBlockY(), playerLocation.getBlockZ() - 1);
-            Vector max = new Vector(playerLocation.getBlockX() + 3, playerLocation.getBlockY(), playerLocation.getBlockZ() + 1);
-            Region r = new Region(min, max);
-            DungeonEntrance dungeonEntrance = new DungeonEntrance("test_dungeon_1", p.getLocation().getWorld().getName(), r, DungeonBaseRegistry.getDungeonBase("test1"), new Location(p.getLocation().getWorld(), 50D, 31D, -3.5));
-            DungeonEntranceRegistry.registerEntrance(dungeonEntrance);
+
+
         }
     }
 }

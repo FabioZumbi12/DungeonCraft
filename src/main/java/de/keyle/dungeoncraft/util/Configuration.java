@@ -23,13 +23,16 @@ package de.keyle.dungeoncraft.util;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Configuration {
     public static FileConfiguration config;
 
-    public static boolean OPTION = false;
+    public static Set<String> ALLOWED_COMMANDS = new HashSet<String>();
 
     public static void setDefault() {
-        config.addDefault("Option", OPTION);
+        config.addDefault("commands.allowed", new String[]{"kill", "w", "me", "tell", "msg", "help", "?"});
 
 
         config.options().copyDefaults(true);
@@ -37,6 +40,9 @@ public class Configuration {
     }
 
     public static void loadConfiguration() {
-        OPTION = config.getBoolean("Option", false);
+        ALLOWED_COMMANDS.clear();
+        for (String cmd : config.getStringList("commands.allowed")) {
+            ALLOWED_COMMANDS.add(cmd.toLowerCase());
+        }
     }
 }

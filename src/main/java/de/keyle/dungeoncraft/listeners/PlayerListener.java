@@ -32,17 +32,16 @@ import de.keyle.dungeoncraft.dungeon.scripting.Trigger;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.group.Group;
 import de.keyle.dungeoncraft.group.GroupManager;
+import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.*;
 
 import java.util.List;
 
@@ -227,6 +226,32 @@ public class PlayerListener implements Listener {
         List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerLeaveRegionEvent.class);
         for (Trigger trigger : triggers) {
             trigger.execute(event.getPlayer(), event.getDungeon(), event.getRegion());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        if (event.isCancelled() || event.getPlayer() == null) {
+            return;
+        }
+        Player player = event.getPlayer();
+        String cmd = event.getMessage().split("\\s+")[0];
+        cmd.replaceAll("/", "");
+
+        if (!player.isOp()) {
+            if (player.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
+                Dungeon dungeon = DungeonManager.getDungeonAt(DungeonFieldManager.getDungeonFieldForChunk(player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ()));
+                if (dungeon != null) {
+                    if (Configuration.ALLOWED_COMMANDS.contains(cmd)) {
+                        return;
+                    }
+                    if (dungeon.getDungeonBase().getAllowedCommands().contains(cmd)) {
+                        return;
+                    }
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage("You are not allowed to use /" + cmd + " here!");
+                }
+            }
         }
     }
 }

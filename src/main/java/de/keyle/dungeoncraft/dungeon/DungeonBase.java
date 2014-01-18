@@ -34,6 +34,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.bukkit.World.Environment;
 
@@ -47,6 +50,8 @@ public class DungeonBase implements ISchematicReveiver {
     boolean timeLock = false;
     Environment environment = Environment.NORMAL;
     boolean weather = false;
+    Set<String> allowedCommands;
+
     boolean isLoading = false;
     ConfigurationSection customConfigOptions;
     EntityTemplateRegistry entityTemplateRegistry;
@@ -56,6 +61,7 @@ public class DungeonBase implements ISchematicReveiver {
     public DungeonBase(String name) {
         this.name = name;
         entityTemplateRegistry = new EntityTemplateRegistry();
+        allowedCommands = new HashSet<String>();
         load();
     }
 
@@ -89,6 +95,10 @@ public class DungeonBase implements ISchematicReveiver {
 
     public ConfigurationSection getCustomConfigOptions() {
         return customConfigOptions;
+    }
+
+    public Set<String> getAllowedCommands() {
+        return Collections.unmodifiableSet(allowedCommands);
     }
 
     public OrientationVector getSpawn() {
@@ -193,6 +203,11 @@ public class DungeonBase implements ISchematicReveiver {
 
             minPlayerCount = config.getInt("player.count.min", 1);
             maxPlayerCount = config.getInt("player.count.max", 0);
+
+            allowedCommands.clear();
+            for (String cmd : config.getStringList("commands.allowed")) {
+                allowedCommands.add(cmd.toLowerCase());
+            }
 
             customConfigOptions = config.getConfigurationSection("custom");
         }

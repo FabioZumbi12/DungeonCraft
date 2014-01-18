@@ -30,7 +30,6 @@ import de.keyle.dungeoncraft.dungeon.scripting.TriggerRegistry;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.group.Group;
 import de.keyle.dungeoncraft.util.BukkitUtil;
-import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.logger.DungeonLogger;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 import org.bukkit.Bukkit;
@@ -109,7 +108,7 @@ public class Dungeon implements Scheduler {
 
     public synchronized void setReady() {
         isReady = true;
-        DungeonCraftLogger.write("Dungeon is now ready to use!");
+        dungeonLogger.info("Dungeon is now ready to use!");
     }
 
     public synchronized boolean isReady() {
@@ -254,12 +253,11 @@ public class Dungeon implements Scheduler {
         if (isReady()) {
             if (first) {
                 unlockSchematic();
-                DungeonCraftLogger.write("Ok Lets do something");
                 first = false;
 
                 teleportIn(playerGroup.getGroupLeader());
                 for (DungeonCraftPlayer player : getPlayerList()) {
-                    if (player.isOnline()) {
+                    if (player.isOnline() && !player.equals(playerGroup.getGroupLeader())) {
                         player.getPlayer().sendMessage("[DC] You can enter " + getDungeonName() + " now!");
                     }
                 }

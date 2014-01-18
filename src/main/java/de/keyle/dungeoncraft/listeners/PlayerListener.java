@@ -175,7 +175,7 @@ public class PlayerListener implements Listener {
                         if (dungeon != null) {
                             if (dungeon.isCompleted()) {
                                 event.getPlayer().sendMessage("The Dungeon is already completed!");
-                            } else if (dungeon.isReady()) {
+                            } else if (dungeon.isReady() && !dungeon.isLoading()) {
                                 long lockout = dungeonCraftPlayer.getRemainingLockout(dungeon.getDungeonName());
                                 if (lockout > 0) {
                                     event.getPlayer().sendMessage("You have to wait " + DurationFormatUtils.formatDurationWords(lockout, true, true) + " before you can enter this dungeon again!");

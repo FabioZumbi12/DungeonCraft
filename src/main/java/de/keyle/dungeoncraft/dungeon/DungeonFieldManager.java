@@ -27,10 +27,53 @@ import java.util.Map;
 
 public class DungeonFieldManager {
     private final static Map<DungeonField, Schematic> fieldSchematicMap = new HashMap<DungeonField, Schematic>();
-    private static int fieldIndex = 0;
+    private static int fieldIndex = -1;
 
     public static DungeonField getNewDungeonField() {
-        return new DungeonField(fieldIndex++, 0);
+        fieldIndex++;
+        switch (fieldIndex) {
+            case 0:
+                return new DungeonField(0, 0);
+            case 1:
+                return new DungeonField(1, 0);
+            case 2:
+                return new DungeonField(1, 1);
+            default:
+                int index = fieldIndex - 2;
+                boolean first = true;
+                int length = 2;
+                int direction = 0;
+                int x = 1;
+                int z = 1;
+                while (index > 0) {
+                    for (int i = length; i > 0 && index > 0; --i) {
+                        switch (direction) {
+                            case 0:
+                                x--;
+                                break;
+                            case 1:
+                                z--;
+                                break;
+                            case 2:
+                                x++;
+                                break;
+                            case 3:
+                                z++;
+                                break;
+                        }
+                        index--;
+                    }
+                    direction++;
+                    direction %= 4;
+                    if (first) {
+                        first = false;
+                    } else {
+                        first = true;
+                        length++;
+                    }
+                }
+                return new DungeonField(x, z);
+        }
     }
 
     public static void assignSchematicToDungeonField(DungeonField field, Schematic schematic) {

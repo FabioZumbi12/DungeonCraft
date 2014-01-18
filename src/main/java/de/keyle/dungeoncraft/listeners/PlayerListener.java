@@ -31,7 +31,6 @@ import de.keyle.dungeoncraft.dungeon.region.DungeonRegion;
 import de.keyle.dungeoncraft.dungeon.scripting.Trigger;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.group.Group;
-import de.keyle.dungeoncraft.group.GroupManager;
 import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import org.bukkit.Bukkit;
@@ -50,10 +49,9 @@ public class PlayerListener implements Listener {
     public void onPlayerDeath(final PlayerDeathEvent event) {
         Location l = event.getEntity().getLocation();
         if (l.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
-            DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(l.getChunk().getX(), l.getChunk().getZ());
-            Dungeon d = DungeonManager.getDungeonAt(position);
+            DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getEntity());
+            Dungeon d = dungeonCraftPlayer.getDungeon();
             if (d != null) {
-                DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getEntity());
                 List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerDeathEvent.class);
                 for (Trigger trigger : triggers) {
                     trigger.execute(dungeonCraftPlayer);
@@ -78,10 +76,9 @@ public class PlayerListener implements Listener {
     public void onPlayerDropItem(final PlayerDropItemEvent event) {
         Location l = event.getPlayer().getLocation();
         if (l.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
-            DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(l.getChunk().getX(), l.getChunk().getZ());
-            Dungeon d = DungeonManager.getDungeonAt(position);
+            DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
+            Dungeon d = dungeonCraftPlayer.getDungeon();
             if (d != null) {
-                DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
                 List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerDropItemEvent.class);
                 for (Trigger trigger : triggers) {
                     if (trigger.execute(dungeonCraftPlayer, event.getItemDrop())) {
@@ -96,10 +93,9 @@ public class PlayerListener implements Listener {
     public void onPlayerInteractEntity(final PlayerInteractEntityEvent event) {
         Location l = event.getPlayer().getLocation();
         if (l.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
-            DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(l.getChunk().getX(), l.getChunk().getZ());
-            Dungeon d = DungeonManager.getDungeonAt(position);
+            DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
+            Dungeon d = dungeonCraftPlayer.getDungeon();
             if (d != null) {
-                DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
                 List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerInteractEntityEvent.class);
                 for (Trigger trigger : triggers) {
                     if (trigger.execute(dungeonCraftPlayer, event.getRightClicked())) {
@@ -115,12 +111,12 @@ public class PlayerListener implements Listener {
         Location l = event.getPlayer().getLocation();
         if (l.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
             Location clickedBlockLocation = event.getClickedBlock().getLocation();
+            DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
             DungeonField blockPosition = DungeonFieldManager.getDungeonFieldForChunk(clickedBlockLocation.getChunk().getX(), clickedBlockLocation.getChunk().getZ());
-            DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(l.getChunk().getX(), l.getChunk().getZ());
+            DungeonField position = dungeonCraftPlayer.getDungeon().getPosition();
             if (blockPosition.equals(position)) {
-                Dungeon d = DungeonManager.getDungeonAt(position);
+                Dungeon d = dungeonCraftPlayer.getDungeon();
                 if (d != null) {
-                    DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
                     List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerInteractEvent.class);
                     for (Trigger trigger : triggers) {
                         trigger.execute(dungeonCraftPlayer, event.getAction(), event.getClickedBlock(), event.getBlockFace());
@@ -139,11 +135,10 @@ public class PlayerListener implements Listener {
         }
         Location eventTo = event.getTo();
         if (eventTo.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
-            DungeonField position = DungeonFieldManager.getDungeonFieldForChunk(eventTo.getChunk().getX(), eventTo.getChunk().getZ());
-            Dungeon d = DungeonManager.getDungeonAt(position);
+            DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
+            Dungeon d = dungeonCraftPlayer.getDungeon();
             if (d != null) {
                 Vector playerPoint = new Vector(eventTo.getBlockX(), eventTo.getBlockY(), eventTo.getBlockZ());
-                DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
                 List<DungeonRegion> regionsAt = d.getRegionRegistry().getRegionsAt(playerPoint);
                 for (DungeonRegion region : DungeonRegion.getPlayerRegions(dungeonCraftPlayer)) {
                     if (!region.isVectorInside(playerPoint)) {
@@ -172,7 +167,7 @@ public class PlayerListener implements Listener {
             DungeonEntrance entrance = DungeonEntranceRegistry.getEntranceAt(eventTo);
             if (entrance != null) {
                 DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
-                Group group = GroupManager.getGroupByPlayer(dungeonCraftPlayer);
+                Group group = dungeonCraftPlayer.getGroup();
                 if (group != null) {
                     if (DungeonManager.getDungeonFor(group) != null) {
                         Dungeon dungeon = DungeonManager.getDungeonFor(group);

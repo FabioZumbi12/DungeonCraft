@@ -24,6 +24,7 @@ import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.api.dungeon.Result;
 import de.keyle.dungeoncraft.api.events.DungeonStartEvent;
 import de.keyle.dungeoncraft.api.util.Scheduler;
+import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftChunkProvider;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import de.keyle.dungeoncraft.dungeon.region.RegionRegistry;
 import de.keyle.dungeoncraft.dungeon.scripting.TriggerRegistry;
@@ -220,6 +221,7 @@ public class Dungeon implements Scheduler {
         for (Objective objective : scoreboard.getObjectives()) {
             objective.unregister();
         }
+        DungeonCraftChunkProvider.chunkloader.unloadDungeonField(position);
     }
 
     public Result getResult() {

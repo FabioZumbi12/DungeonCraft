@@ -68,6 +68,15 @@ public class DungeonLoader extends Thread {
             }
         }
 
+        /*
+        for (int x = 0; x < xCount; x++) {
+            for (int z = 0; z < zCount; z++) {
+                DungeonCraftChunkProvider.chunkloader.getChunkAt(dungeon.position.getChunkX() + x, dungeon.position.getChunkZ() + z).initLighting();
+
+            }
+        }
+        */
+
         new RegionLoader(dungeon);
         new TriggerLoader(dungeon);
 

@@ -23,6 +23,7 @@ package de.keyle.dungeoncraft.dungeon.generator;
 import com.google.common.collect.ArrayListMultimap;
 import de.keyle.dungeoncraft.api.events.DungeonChunkLoadedEvent;
 import de.keyle.dungeoncraft.api.util.Scheduler;
+import de.keyle.dungeoncraft.dungeon.DungeonField;
 import de.keyle.dungeoncraft.dungeon.DungeonFieldManager;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import net.minecraft.server.v1_7_R1.*;
@@ -135,6 +136,16 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer implements Sc
         List<Chunk> chunkList = new ArrayList<Chunk>();
         chunkList.add(chunk);
         new PacketPlayOutMapChunkBulk(chunkList);
+    }
+
+    public void unloadDungeonField(DungeonField field) {
+        int chunkZ = field.getChunkZ();
+        int chunkX = field.getChunkX();
+        for (int x = 0; x < chunkX; x++) {
+            for (int z = 0; z < chunkZ; z++) {
+                this.unloadQueue.add(x, z);
+            }
+        }
     }
 
     public void queueUnload(int i, int j) {

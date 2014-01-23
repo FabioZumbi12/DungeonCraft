@@ -40,72 +40,55 @@ public class PlayerContext {
         return dungeon.getPlayerList().size();
     }
 
-    public int getPlayerNumber(String name) {
-        if (DungeonCraftPlayer.isDungeonCraftPlayer(name)) {
-            return dungeon.getPlayerList().indexOf(DungeonCraftPlayer.getPlayer(name)) + 1;
+    public String[] getPlayerNames() {
+        List<DungeonCraftPlayer> players = dungeon.getPlayerList();
+        String[] playerNames = new String[players.size()];
+        for (int i = 0; i < players.size(); i++) {
+            DungeonCraftPlayer player = players.get(i);
+            playerNames[i] = player.getName();
         }
-        return -1;
+        return playerNames;
     }
 
-    public String getPlayerName(int playerNumber) {
-        List<DungeonCraftPlayer> playerList = dungeon.getPlayerList();
-        if (playerNumber < 1 || playerNumber > playerList.size()) {
-            return "";
+    public String getPlayerDisplayName(String name) {
+        DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(name);
+        if (player.isOnline()) {
+            return player.getPlayer().getDisplayName();
         }
-        return dungeon.getPlayerList().get(playerNumber - 1).getName();
+        return "";
     }
 
-    public String getPlayerDisplayName(int playerNumber) {
-        List<DungeonCraftPlayer> playerList = dungeon.getPlayerList();
-        if (playerNumber < 1 || playerNumber > playerList.size()) {
-            return "";
-        }
-        DungeonCraftPlayer player = playerList.get(playerNumber - 1);
-        if (!player.isOnline()) {
-            return player.getName();
-        }
-        return player.getPlayer().getDisplayName();
-    }
-
-    public void setPlayerSpawn(int playerNumber, OrientationVector pos) {
-        List<DungeonCraftPlayer> playerList = dungeon.getPlayerList();
-        if (playerNumber < 1 || playerNumber > playerList.size()) {
-            return;
-        }
-        DungeonCraftPlayer player = dungeon.getPlayerList().get(playerNumber - 1);
+    public void setPlayerSpawn(String playerName, OrientationVector pos) {
+        DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(playerName);
         dungeon.setPlayerSpawn(player, pos);
     }
 
-    public void setPlayerSpawn(int playerNumber, int x, int y, int z, double yaw, double pitch) {
-        setPlayerSpawn(playerNumber, new OrientationVector(x, y, z, yaw, pitch));
+    public void setPlayerSpawn(String playerName, int x, int y, int z, double yaw, double pitch) {
+        setPlayerSpawn(playerName, new OrientationVector(x, y, z, yaw, pitch));
     }
 
-    public OrientationVector getPlayerSpawn(int playerNumber) {
-        List<DungeonCraftPlayer> playerList = dungeon.getPlayerList();
-        if (playerNumber < 1 || playerNumber > playerList.size()) {
-            return dungeon.getDungeonBase().getSpawn();
-        }
-        DungeonCraftPlayer player = dungeon.getPlayerList().get(playerNumber - 1);
+    public OrientationVector getPlayerSpawn(String playerName) {
+        DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(playerName);
         return dungeon.getPlayerSpawn(player);
     }
 
-    public void sendMessage(int playerNumber, String message) {
-        List<DungeonCraftPlayer> playerList = dungeon.getPlayerList();
-        if (playerNumber < 1 || playerNumber > playerList.size() || message == null) {
-            return;
+    public void sendMessageToAllPlayers(String message) {
+        for (DungeonCraftPlayer player : dungeon.getPlayerList()) {
+            if (player.isOnline()) {
+                player.getPlayer().sendMessage(Colorizer.setColors(message));
+            }
         }
-        DungeonCraftPlayer player = playerList.get(playerNumber - 1);
+    }
+
+    public void sendMessage(String playerName, String message) {
+        DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(playerName);
         if (player.isOnline()) {
             player.getPlayer().sendMessage(Colorizer.setColors(message));
         }
     }
 
-    public void sendMessageRaw(int playerNumber, String message) {
-        List<DungeonCraftPlayer> playerList = dungeon.getPlayerList();
-        if (playerNumber < 1 || playerNumber > playerList.size()) {
-            return;
-        }
-        DungeonCraftPlayer player = playerList.get(playerNumber - 1);
+    public void sendMessageRaw(String playerName, String message) {
+        DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(playerName);
         if (player.isOnline()) {
             BukkitUtil.sendMessageRaw(player.getPlayer(), message);
         }

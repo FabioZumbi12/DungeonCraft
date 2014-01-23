@@ -21,9 +21,7 @@
 package de.keyle.dungeoncraft.listeners;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
-import de.keyle.dungeoncraft.api.events.PlayerEnterRegionEvent;
-import de.keyle.dungeoncraft.api.events.PlayerLeaveRegionEvent;
-import de.keyle.dungeoncraft.api.events.PlayerMoveBlockEvent;
+import de.keyle.dungeoncraft.api.events.*;
 import de.keyle.dungeoncraft.dungeon.*;
 import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntrance;
 import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntranceRegistry;
@@ -287,6 +285,22 @@ public class PlayerListener implements Listener {
             if (player.getDungeon() == null) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerLeaveDungeonEvent(final PlayerLeaveDungeonEvent event) {
+        List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerLeaveDungeonEvent.class);
+        for (Trigger trigger : triggers) {
+            trigger.execute(event.getPlayer().getName());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerEnterDungeonEvent(final PlayerEnterDungeonEvent event) {
+        List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerEnterDungeonEvent.class);
+        for (Trigger trigger : triggers) {
+            trigger.execute(event.getPlayer().getName());
         }
     }
 }

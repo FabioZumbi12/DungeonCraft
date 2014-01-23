@@ -21,9 +21,7 @@
 package de.keyle.dungeoncraft.dungeon.scripting;
 
 import com.google.common.collect.ArrayListMultimap;
-import de.keyle.dungeoncraft.api.events.DungeonStartEvent;
-import de.keyle.dungeoncraft.api.events.PlayerEnterRegionEvent;
-import de.keyle.dungeoncraft.api.events.PlayerLeaveRegionEvent;
+import de.keyle.dungeoncraft.api.events.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -44,6 +42,8 @@ public class TriggerRegistry {
     public static final int PLAYER_RIGHTCLICK_BLOCK = 24;
     public static final int PLAYER_ENTER_REGION_EVENT = 25;
     public static final int PLAYER_LEAVE_REGION_EVENT = 26;
+    public static final int PLAYER_ENTER_DUNGEON_EVENT = 27;
+    public static final int PLAYER_LEAVE_DUNGEON_EVENT = 28;
 
     private ArrayListMultimap<Class<? extends Event>, Trigger> triggers = ArrayListMultimap.create();
 
@@ -71,6 +71,10 @@ public class TriggerRegistry {
                 return PlayerEnterRegionEvent.class;
             case PLAYER_LEAVE_REGION_EVENT:
                 return PlayerLeaveRegionEvent.class;
+            case PLAYER_ENTER_DUNGEON_EVENT:
+                return PlayerEnterDungeonEvent.class;
+            case PLAYER_LEAVE_DUNGEON_EVENT:
+                return PlayerLeaveDungeonEvent.class;
             default:
                 return Event.class;
         }

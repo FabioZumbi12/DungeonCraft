@@ -23,6 +23,8 @@ package de.keyle.dungeoncraft.dungeon;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.api.dungeon.Result;
 import de.keyle.dungeoncraft.api.events.DungeonStartEvent;
+import de.keyle.dungeoncraft.api.events.PlayerEnterDungeonEvent;
+import de.keyle.dungeoncraft.api.events.PlayerLeaveDungeonEvent;
 import de.keyle.dungeoncraft.api.util.Scheduler;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftChunkProvider;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
@@ -252,6 +254,8 @@ public class Dungeon implements Scheduler {
             updatePlayerWeather();
             // There must be another way to update the inventory properly
             p.getPlayer().updateInventory();
+
+            Bukkit.getPluginManager().callEvent(new PlayerEnterDungeonEvent(this, p));
         }
     }
 
@@ -265,6 +269,7 @@ public class Dungeon implements Scheduler {
                 updatePlayerTime();
                 updatePlayerWeather();
             }
+            Bukkit.getPluginManager().callEvent(new PlayerLeaveDungeonEvent(this, p));
         }
     }
 

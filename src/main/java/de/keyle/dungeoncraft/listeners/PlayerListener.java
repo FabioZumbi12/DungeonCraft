@@ -23,6 +23,7 @@ package de.keyle.dungeoncraft.listeners;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.api.events.PlayerEnterRegionEvent;
 import de.keyle.dungeoncraft.api.events.PlayerLeaveRegionEvent;
+import de.keyle.dungeoncraft.api.events.PlayerMoveBlockEvent;
 import de.keyle.dungeoncraft.dungeon.*;
 import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntrance;
 import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntranceRegistry;
@@ -130,10 +131,7 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMove(final PlayerMoveEvent event) {
-        if (event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ()) {
-            return;
-        }
+    public void onPlayerMoveBlock(final PlayerMoveBlockEvent event) {
         Location eventTo = event.getTo();
         if (eventTo.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
             DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
@@ -219,6 +217,15 @@ public class PlayerListener implements Listener {
                 event.setCancelled(true);
             }
         }
+    }
+
+
+    @EventHandler
+    public void onPlayerMove(final PlayerMoveEvent event) {
+        if (event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ()) {
+            return;
+        }
+        Bukkit.getPluginManager().callEvent(new PlayerMoveBlockEvent(event.getPlayer(), event.getFrom(), event.getTo()));
     }
 
     @EventHandler

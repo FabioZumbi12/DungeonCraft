@@ -40,8 +40,8 @@ public class TriggerRegistry {
     public static final int ENTITY_DAMAGE_BY_ENTITY = 13;
     public static final int PLAYER_DEATH = 20;
     public static final int PLAYER_DROP_ITEM = 21;
-    public static final int PLAYER_INTERACT_ENTITY = 22;
-    public static final int PLAYER_INTERACT = 24;
+    public static final int PLAYER_RIGHTCLICK_ENTITY = 22;
+    public static final int PLAYER_RIGHTCLICK_BLOCK = 24;
     public static final int PLAYER_ENTER_REGION_EVENT = 25;
     public static final int PLAYER_LEAVE_REGION_EVENT = 26;
 
@@ -63,9 +63,9 @@ public class TriggerRegistry {
                 return PlayerDeathEvent.class;
             case PLAYER_DROP_ITEM:
                 return PlayerDropItemEvent.class;
-            case PLAYER_INTERACT_ENTITY:
+            case PLAYER_RIGHTCLICK_ENTITY:
                 return PlayerInteractEntityEvent.class;
-            case PLAYER_INTERACT:
+            case PLAYER_RIGHTCLICK_BLOCK:
                 return PlayerInteractEvent.class;
             case PLAYER_ENTER_REGION_EVENT:
                 return PlayerEnterRegionEvent.class;

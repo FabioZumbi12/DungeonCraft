@@ -75,7 +75,7 @@ public class DungeonChunkGenerator extends Thread {
         byte[] blocks = schematic.getBlocks();
         byte[] data = schematic.getData();
 
-        ChunkSection newChunkSection = new ChunkSection(section, true); //ToDo Check 2nd parameter
+        ChunkSection newChunkSection = new ChunkSection(section, true); //ToDo Check 2nd parameter -> !world.worldProvider.g
         int yOffset = section * 16;
         int maxY = schematic.getHeight() > yOffset ? 16 : yOffset - schematic.getHeight();
 

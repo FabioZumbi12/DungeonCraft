@@ -110,7 +110,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerInteract(final PlayerInteractEvent event) {
         Location l = event.getPlayer().getLocation();
-        if (l.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
+        if (l.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME) && event.getClickedBlock() != null) {
             Location clickedBlockLocation = event.getClickedBlock().getLocation();
             DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
             DungeonField blockPosition = DungeonFieldManager.getDungeonFieldForChunk(clickedBlockLocation.getChunk().getX(), clickedBlockLocation.getChunk().getZ());

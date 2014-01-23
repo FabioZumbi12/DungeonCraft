@@ -94,6 +94,7 @@ public class DungeonCraftWorldServer extends WorldServer {
             dungeon.schedule();
             if (dungeon.isCompleted()) {
                 DungeonManager.removeDungeon(dungeon);
+                dungeon.cleanUp();
             }
         }
         dungeonCrafthunkProviderServer.schedule();

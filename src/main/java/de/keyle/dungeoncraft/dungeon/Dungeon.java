@@ -32,10 +32,9 @@ import de.keyle.dungeoncraft.group.Group;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.logger.DungeonLogger;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.WeatherType;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.*;
 
@@ -60,6 +59,7 @@ public class Dungeon implements Scheduler {
     protected final TriggerRegistry triggerRegistry;
     protected final RegionRegistry regionRegistry;
     protected final DungeonLogger dungeonLogger;
+    protected final Scoreboard scoreboard;
 
     public Dungeon(String dungeonName, DungeonBase dungeonTheme, Group group) {
         this.dungeonName = dungeonName;
@@ -72,6 +72,7 @@ public class Dungeon implements Scheduler {
         weather = dungeonBase.getWeather();
         dungeonLogger = new DungeonLogger(this);
         playerGroup = group;
+        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
     }
 
     public TriggerRegistry getTriggerRegistry() {
@@ -152,6 +153,10 @@ public class Dungeon implements Scheduler {
         this.exitLocation = exitLocation;
     }
 
+    public Scoreboard getScoreboard() {
+        return scoreboard;
+    }
+
     public void setTime(int time) {
         if (time < 0) {
             setTimeLock(true);
@@ -205,6 +210,18 @@ public class Dungeon implements Scheduler {
         return isCompleted;
     }
 
+    public void cleanUp() {
+        if (!isCompleted) {
+            return;
+        }
+        for (OfflinePlayer player : scoreboard.getPlayers()) {
+            scoreboard.resetScores(player);
+        }
+        for (Objective objective : scoreboard.getObjectives()) {
+            objective.unregister();
+        }
+    }
+
     public Result getResult() {
         return result;
     }
@@ -221,7 +238,6 @@ public class Dungeon implements Scheduler {
                 player.setDungenLockout(this.getDungeonName(), getDungeonBase().getPlayerLockoutTime());
             }
         }
-        unlockSchematic();
     }
 
     public void teleportIn(DungeonCraftPlayer p) {

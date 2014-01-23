@@ -56,7 +56,7 @@ public class PlayerListener implements Listener {
             if (d != null) {
                 List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerDeathEvent.class);
                 for (Trigger trigger : triggers) {
-                    trigger.execute(dungeonCraftPlayer);
+                    trigger.execute(dungeonCraftPlayer.getName());
                 }
 
                 // cancel respawn screen
@@ -83,7 +83,7 @@ public class PlayerListener implements Listener {
             if (d != null) {
                 List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerDropItemEvent.class);
                 for (Trigger trigger : triggers) {
-                    if (trigger.execute(dungeonCraftPlayer, event.getItemDrop())) {
+                    if (trigger.execute(dungeonCraftPlayer.getName(), event.getItemDrop())) {
                         event.setCancelled(true);
                     }
                 }
@@ -100,7 +100,7 @@ public class PlayerListener implements Listener {
             if (d != null) {
                 List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerInteractEntityEvent.class);
                 for (Trigger trigger : triggers) {
-                    if (trigger.execute(dungeonCraftPlayer, event.getRightClicked())) {
+                    if (trigger.execute(dungeonCraftPlayer.getName(), event.getRightClicked())) {
                         event.setCancelled(true);
                     }
                 }
@@ -121,7 +121,7 @@ public class PlayerListener implements Listener {
                 if (d != null) {
                     List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerInteractEvent.class);
                     for (Trigger trigger : triggers) {
-                        trigger.execute(dungeonCraftPlayer, event.getAction(), event.getClickedBlock(), event.getBlockFace());
+                        trigger.execute(dungeonCraftPlayer.getName(), event.getAction(), event.getClickedBlock(), event.getBlockFace());
                     }
                 }
             } else {
@@ -232,7 +232,7 @@ public class PlayerListener implements Listener {
     public void onPlayerEnterRegion(final PlayerEnterRegionEvent event) {
         List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerEnterRegionEvent.class);
         for (Trigger trigger : triggers) {
-            trigger.execute(event.getPlayer(), event.getDungeon(), event.getRegion());
+            trigger.execute(event.getPlayer().getName(), event.getDungeon(), event.getRegion());
         }
     }
 
@@ -240,7 +240,7 @@ public class PlayerListener implements Listener {
     public void onPlayerLeaveRegion(final PlayerLeaveRegionEvent event) {
         List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerLeaveRegionEvent.class);
         for (Trigger trigger : triggers) {
-            trigger.execute(event.getPlayer(), event.getDungeon(), event.getRegion());
+            trigger.execute(event.getPlayer().getName(), event.getDungeon(), event.getRegion());
         }
     }
 

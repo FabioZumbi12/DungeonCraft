@@ -24,14 +24,15 @@ import de.keyle.dungeoncraft.util.schematic.Schematic;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DungeonFieldManager {
     private final static Map<DungeonField, Schematic> fieldSchematicMap = new HashMap<DungeonField, Schematic>();
-    private static int fieldIndex = -1;
+    private static AtomicInteger fieldIndex = new AtomicInteger(-1);
 
     public static DungeonField getNewDungeonField() {
-        fieldIndex++;
-        switch (fieldIndex) {
+        fieldIndex.incrementAndGet();
+        switch (fieldIndex.get()) {
             case 0:
                 return new DungeonField(0, 0);
             case 1:
@@ -39,7 +40,7 @@ public class DungeonFieldManager {
             case 2:
                 return new DungeonField(1, 1);
             default:
-                int index = fieldIndex - 2;
+                int index = fieldIndex.get() - 2;
                 boolean first = true;
                 int length = 2;
                 int direction = 0;

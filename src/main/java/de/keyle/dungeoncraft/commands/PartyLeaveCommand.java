@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.commands;
 
 import de.keyle.command.framework.Command;
 import de.keyle.command.framework.CommandArgs;
-import de.keyle.dungeoncraft.api.events.PlayerPartyJoinEvent;
+import de.keyle.dungeoncraft.api.events.PlayerPartyLeaveEvent;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.PartyManager;
@@ -31,35 +31,32 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
-public class JoinPartyCommand {
-    @Command(name = "dcparty.join", aliases = {"dcjp", "party.join"})
+public class PartyLeaveCommand {
+    @Command(name = "dcparty.leave", aliases = {"dclp", "party.leave"})
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
-            if (args.getArgs().size() >= 1) {
-                UUID uuid = UUID.fromString(args.getArgs().get(0));
-                for (Party party : PartyManager.getParties()) {
-                    if (party instanceof DungeonCraftParty && party.getUuid().equals(uuid)) {
-                        DungeonCraftParty dungeonCraftParty = (DungeonCraftParty) party;
-                        DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
-                        if (!dungeonCraftParty.isPlayerInvited(dungeonCraftPlayer)) {
-                            continue;
+            DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
+            Party party = PartyManager.getPartyByPlayer(dungeonCraftPlayer);
+            if (party != null && party instanceof DungeonCraftParty) {
+                if (dungeonCraftPlayer.getDungeon() == null) {
+                    PlayerPartyLeaveEvent event = new PlayerPartyLeaveEvent(dungeonCraftPlayer, (DungeonCraftParty) party);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (!event.isCancelled()) {
+                        if (party.getPartyLeader().equals(dungeonCraftPlayer)) {
+                            party.disbandParty();
+                            player.sendMessage("You've got your party disbanded!");
+                        } else {
+                            party.removePlayer(dungeonCraftPlayer);
+                            player.sendMessage("You left " + party.getPartyLeader().getName() + "'s party!");
                         }
-                        PlayerPartyJoinEvent event = new PlayerPartyJoinEvent(dungeonCraftPlayer, (DungeonCraftParty) party);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            party.addPlayer(player);
-                            player.sendMessage("You are now in " + dungeonCraftParty.getPartyLeader().getName() + "' party!");
-                        }
-                        return;
                     }
+                    return;
                 }
-                player.sendMessage("Party not found!");
+                player.sendMessage("You can not leave this party when you are inside a dungeon!");
                 return;
             }
-            player.sendMessage("Playername required!");
+            player.sendMessage("You are not in a party!");
         }
     }
 }

@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.commands;
 
 import de.keyle.command.framework.Command;
 import de.keyle.command.framework.CommandArgs;
-import de.keyle.dungeoncraft.api.events.PlayerPartyLeaveEvent;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.PartyManager;
@@ -31,29 +30,39 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class LeavePartyCommand {
-    @Command(name = "dcparty.leave", aliases = {"dclp", "party.leave"})
+import java.util.List;
+
+public class PartyInviteCommand {
+    @Command(name = "dcparty.invite", aliases = {"dcip", "party.invite"})
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
             DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
             Party party = PartyManager.getPartyByPlayer(dungeonCraftPlayer);
-            if (party != null && party instanceof DungeonCraftParty) {
-                if (dungeonCraftPlayer.getDungeon() == null) {
-                    PlayerPartyLeaveEvent event = new PlayerPartyLeaveEvent(dungeonCraftPlayer, (DungeonCraftParty) party);
-                    Bukkit.getPluginManager().callEvent(event);
-                    if (!event.isCancelled()) {
-                        if (party.getPartyLeader().equals(dungeonCraftPlayer)) {
-                            party.disbandParty();
-                            player.sendMessage("You've got your party disbanded!");
-                        } else {
-                            party.removePlayer(dungeonCraftPlayer);
-                            player.sendMessage("You left " + party.getPartyLeader().getName() + "'s party!");
-                        }
+            if (party != null && party instanceof DungeonCraftParty && party.getPartyLeader().equals(dungeonCraftPlayer)) {
+                List<String> arguments = args.getArgs();
+                if (arguments.size() >= 1) {
+                    Player invitedPlayer = Bukkit.getPlayer(arguments.get(0));
+                    if (DungeonCraftPlayer.getPlayer(invitedPlayer).equals(dungeonCraftPlayer)) {
+                        player.sendMessage("You can't invite yourself!");
                     }
-                    return;
+                    if (invitedPlayer != null) {
+                        DungeonCraftPlayer invitedDungeonCraftPlayer = DungeonCraftPlayer.getPlayer(invitedPlayer);
+                        if (PartyManager.isInParty(invitedPlayer)) {
+                            player.sendMessage(invitedPlayer.getDisplayName() + " is already in a party!");
+                            return;
+                        }
+                        DungeonCraftParty dungeonCraftParty = ((DungeonCraftParty) party);
+                        if (!dungeonCraftParty.getPartyMembers().contains(invitedDungeonCraftPlayer)) {
+                            dungeonCraftParty.invitePlayer(invitedDungeonCraftPlayer);
+                            player.sendMessage(invitedPlayer.getDisplayName() + " has been successfully invited!");
+                        } else {
+                            player.sendMessage(invitedPlayer.getDisplayName() + " is already in your party!");
+                        }
+                        return;
+                    }
+                    player.sendMessage(arguments.get(0) + " is not online!");
                 }
-                player.sendMessage("You can not leave this party when you are inside a dungeon!");
                 return;
             }
             player.sendMessage("You are not in a party!");

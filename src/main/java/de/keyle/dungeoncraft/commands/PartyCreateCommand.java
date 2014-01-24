@@ -28,7 +28,7 @@ import de.keyle.dungeoncraft.party.PartyManager;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class CreatePartyCommand {
+public class PartyCreateCommand {
     @Command(name = "dcparty.create", aliases = {"dccp", "party.create"})
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {

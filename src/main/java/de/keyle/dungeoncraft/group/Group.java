@@ -46,6 +46,7 @@ public abstract class Group implements DungeonCraftGroup {
         if (!this.containsPlayer(player)) {
             members.add(player);
             player.setGroup(this);
+            sendMessage(player.getName() + " joined the group.");
         }
     }
 
@@ -58,6 +59,7 @@ public abstract class Group implements DungeonCraftGroup {
         if (this.containsPlayer(player)) {
             this.members.remove(player);
             player.setGroup(null);
+            sendMessage(player.getName() + " has left the group.");
         }
     }
 
@@ -67,6 +69,14 @@ public abstract class Group implements DungeonCraftGroup {
 
     public boolean containsPlayer(DungeonCraftPlayer player) {
         return members.contains(player);
+    }
+
+    public void sendMessage(String message) {
+        for (DungeonCraftPlayer player : members) {
+            if (player.isOnline()) {
+                player.getPlayer().sendMessage(message);
+            }
+        }
     }
 
     @Override

@@ -18,35 +18,34 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.group.systems;
+package de.keyle.dungeoncraft.party.systems;
 
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
-import de.keyle.dungeoncraft.group.Group;
-import de.keyle.dungeoncraft.group.GroupManager;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.Party;
+import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.DropoutStack;
 import de.keyle.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 
-public class DungeonCraftGroup extends Group {
-    private boolean open = false;
+public class DungeonCraftParty extends Party {
     private DropoutStack<DungeonCraftPlayer> invites = new DropoutStack<DungeonCraftPlayer>();
 
-    public DungeonCraftGroup(DungeonCraftPlayer leader) {
+    public DungeonCraftParty(DungeonCraftPlayer leader) {
         super(leader);
     }
 
     public void invitePlayer(DungeonCraftPlayer invitedPlayer) {
-        if (GroupManager.getGroupByPlayer(invitedPlayer) != null) {
+        if (PartyManager.getPartyByPlayer(invitedPlayer) != null) {
             return;
         }
         invites.add(invitedPlayer);
         FancyMessage message = new FancyMessage("You have been invited to ")
-                .then(getGroupLeader().getName())
+                .then(getPartyLeader().getName())
                 .color(ChatColor.AQUA)
-                .then("'s group. Join the group by clicking ")
+                .then("'s party. Join the party by clicking ")
                 .then("here")
-                .command("/dcjoingroup " + getUuid().toString())
+                .command("/dcjoinparty " + getUuid().toString())
                 .color(ChatColor.GOLD)
                 .style(ChatColor.UNDERLINE)
                 .then(".");
@@ -65,7 +64,7 @@ public class DungeonCraftGroup extends Group {
     }
 
     @Override
-    public GroupType getGroupType() {
-        return GroupType.DUNGEONCRAFT;
+    public PartyType getPartyType() {
+        return PartyType.DUNGEONCRAFT;
     }
 }

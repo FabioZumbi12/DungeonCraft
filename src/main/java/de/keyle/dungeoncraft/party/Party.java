@@ -18,21 +18,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.group;
+package de.keyle.dungeoncraft.party;
 
-import de.keyle.dungeoncraft.api.group.DungeonCraftGroup;
+import de.keyle.dungeoncraft.api.party.DungeonCraftParty;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class Group implements DungeonCraftGroup {
+public abstract class Party implements DungeonCraftParty {
     private UUID uuid;
     private List<DungeonCraftPlayer> members = new ArrayList<DungeonCraftPlayer>();
     private DungeonCraftPlayer leader;
 
-    public Group(DungeonCraftPlayer leader) {
+    public Party(DungeonCraftPlayer leader) {
         this.uuid = UUID.randomUUID();
         this.leader = leader;
         addPlayer(leader);
@@ -45,8 +45,8 @@ public abstract class Group implements DungeonCraftGroup {
     public void addPlayer(DungeonCraftPlayer player) {
         if (!this.containsPlayer(player)) {
             members.add(player);
-            player.setGroup(this);
-            sendMessage(player.getName() + " joined the group.");
+            player.setParty(this);
+            sendMessage(player.getName() + " joined the party.");
         }
     }
 
@@ -58,8 +58,8 @@ public abstract class Group implements DungeonCraftGroup {
     public void removePlayer(DungeonCraftPlayer player) {
         if (this.containsPlayer(player)) {
             this.members.remove(player);
-            player.setGroup(null);
-            sendMessage(player.getName() + " has left the group.");
+            player.setParty(null);
+            sendMessage(player.getName() + " has left the party.");
         }
     }
 
@@ -80,26 +80,26 @@ public abstract class Group implements DungeonCraftGroup {
     }
 
     @Override
-    public int getGroupStrength() {
+    public int getPartyStrength() {
         return members.size();
     }
 
     @Override
-    public List<DungeonCraftPlayer> getGroupMembers() {
+    public List<DungeonCraftPlayer> getPartyMembers() {
         return this.members;
     }
 
     @Override
-    public DungeonCraftPlayer getGroupLeader() {
+    public DungeonCraftPlayer getPartyLeader() {
         return leader;
     }
 
     @Override
-    public void disbandGroup() {
+    public void disbandParty() {
         for (DungeonCraftPlayer member : members) {
-            member.setGroup(null);
+            member.setParty(null);
             if (member.isOnline() && !member.equals(leader)) {
-                member.getPlayer().sendMessage("Your group has been disbanded.");
+                member.getPlayer().sendMessage("Your party has been disbanded.");
             }
         }
         members.clear();
@@ -110,7 +110,7 @@ public abstract class Group implements DungeonCraftGroup {
     }
 
     public String toString() {
-        String tmp = "Group ID: " + uuid.toString() + "\n";
+        String tmp = "Party ID: " + uuid.toString() + "\n";
         int i = 0;
         for (DungeonCraftPlayer player : members) {
             tmp += "Member " + ++i + ": " + player.toString() + "\n";
@@ -119,11 +119,11 @@ public abstract class Group implements DungeonCraftGroup {
     }
 
     public boolean equals(Object o) {
-        if (o instanceof Group) {
-            Group group = (Group) o;
-            if (group.getGroupMembers().size() != this.members.size()) {
+        if (o instanceof Party) {
+            Party party = (Party) o;
+            if (party.getPartyMembers().size() != this.members.size()) {
                 for (int i = 0; i < this.members.size(); i++) {
-                    if (!this.members.get(i).equals(group.getGroupMembers().get(i))) {
+                    if (!this.members.get(i).equals(party.getPartyMembers().get(i))) {
                         return false;
                     }
                 }

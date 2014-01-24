@@ -22,29 +22,29 @@ package de.keyle.dungeoncraft.commands;
 
 import de.keyle.command.framework.Command;
 import de.keyle.command.framework.CommandArgs;
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
-import de.keyle.dungeoncraft.group.Group;
-import de.keyle.dungeoncraft.group.GroupManager;
-import de.keyle.dungeoncraft.group.systems.DungeonCraftGroup;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.Party;
+import de.keyle.dungeoncraft.party.PartyManager;
+import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class InviteToGroupCommand {
-    @Command(name = "dcinvitegroup", aliases = {"dcig"})
+public class InviteToPartyCommand {
+    @Command(name = "dcinviteparty", aliases = {"dcip"})
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
             DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
-            Group group = GroupManager.getGroupByPlayer(dungeonCraftPlayer);
-            if (group != null && group instanceof DungeonCraftGroup && group.getGroupLeader().equals(dungeonCraftPlayer)) {
+            Party party = PartyManager.getPartyByPlayer(dungeonCraftPlayer);
+            if (party != null && party instanceof DungeonCraftParty && party.getPartyLeader().equals(dungeonCraftPlayer)) {
                 List<String> arguments = args.getArgs();
                 if (arguments.size() >= 1) {
                     Player invitedPlayer = Bukkit.getPlayer(arguments.get(0));
                     if (invitedPlayer != null) {
-                        ((DungeonCraftGroup) group).invitePlayer(DungeonCraftPlayer.getPlayer(invitedPlayer));
+                        ((DungeonCraftParty) party).invitePlayer(DungeonCraftPlayer.getPlayer(invitedPlayer));
                         player.sendMessage(player.getDisplayName() + " has been successfully invited!");
                         return;
                     }
@@ -52,7 +52,7 @@ public class InviteToGroupCommand {
                 }
                 return;
             }
-            player.sendMessage("You are not in a group!");
+            player.sendMessage("You are not in a party!");
         }
     }
 }

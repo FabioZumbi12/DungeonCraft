@@ -18,15 +18,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.group.systems;
+package de.keyle.dungeoncraft.party.systems;
 
 import com.ancientshores.AncientRPG.API.AncientRPGPartyJoinEvent;
 import com.ancientshores.AncientRPG.API.AncientRPGPartyLeaveEvent;
 import com.ancientshores.AncientRPG.API.ApiManager;
 import com.ancientshores.AncientRPG.Party.AncientRPGParty;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
-import de.keyle.dungeoncraft.group.Group;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.Party;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -34,13 +34,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
-public class AncientRpgGroup extends Group implements Listener {
+public class AncientRpgParty extends Party implements Listener {
     AncientRPGParty party;
 
-    public AncientRpgGroup(DungeonCraftPlayer leader) {
+    public AncientRpgParty(DungeonCraftPlayer leader) {
         super(leader);
         party = ApiManager.getApiManager().getPlayerParty(leader.getPlayer());
-        Validate.isTrue(leader.equals(party.mLeader), "Player is not leader of the group");
+        Validate.isTrue(leader.equals(party.mLeader), "Player is not leader of the party.");
         for (Player p : party.Member) {
             addPlayer(p);
         }
@@ -48,13 +48,13 @@ public class AncientRpgGroup extends Group implements Listener {
     }
 
     @Override
-    public GroupType getGroupType() {
-        return GroupType.ANCIENT;
+    public PartyType getPartyType() {
+        return PartyType.ANCIENT;
     }
 
     @Override
-    public void disbandGroup() {
-        super.disbandGroup();
+    public void disbandParty() {
+        super.disbandParty();
         HandlerList.unregisterAll(this);
     }
 
@@ -72,12 +72,12 @@ public class AncientRpgGroup extends Group implements Listener {
             if (player.getDungeon() == null) {
                 removePlayer(player);
             } else {
-                event.getPlayer().sendMessage("You can not leave this group when you are inside a dungeon!");
+                event.getPlayer().sendMessage("You can not leave this party when you are inside a dungeon!");
                 event.setCancelled(true);
             }
         }
-        if (getGroupStrength() == 0 || getGroupLeader().equals(event.getPlayer())) {
-            disbandGroup();
+        if (getPartyStrength() == 0 || getPartyLeader().equals(event.getPlayer())) {
+            disbandParty();
         }
     }
 }

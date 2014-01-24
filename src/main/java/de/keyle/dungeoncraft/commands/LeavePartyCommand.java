@@ -22,41 +22,41 @@ package de.keyle.dungeoncraft.commands;
 
 import de.keyle.command.framework.Command;
 import de.keyle.command.framework.CommandArgs;
-import de.keyle.dungeoncraft.api.events.PlayerLeaveGroupEvent;
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
-import de.keyle.dungeoncraft.group.Group;
-import de.keyle.dungeoncraft.group.GroupManager;
-import de.keyle.dungeoncraft.group.systems.DungeonCraftGroup;
+import de.keyle.dungeoncraft.api.events.PlayerLeavePartyEvent;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.Party;
+import de.keyle.dungeoncraft.party.PartyManager;
+import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class LeaveGroupCommand {
-    @Command(name = "dcleavegroup", aliases = {"dclg"})
+public class LeavePartyCommand {
+    @Command(name = "dcleaveparty", aliases = {"dclp"})
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
             DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
-            Group group = GroupManager.getGroupByPlayer(dungeonCraftPlayer);
-            if (group != null && group instanceof DungeonCraftGroup) {
+            Party party = PartyManager.getPartyByPlayer(dungeonCraftPlayer);
+            if (party != null && party instanceof DungeonCraftParty) {
                 if (dungeonCraftPlayer.getDungeon() == null) {
-                    PlayerLeaveGroupEvent event = new PlayerLeaveGroupEvent(dungeonCraftPlayer, (DungeonCraftGroup) group);
+                    PlayerLeavePartyEvent event = new PlayerLeavePartyEvent(dungeonCraftPlayer, (DungeonCraftParty) party);
                     Bukkit.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
-                        if (group.getGroupLeader().equals(dungeonCraftPlayer)) {
-                            group.disbandGroup();
-                            player.sendMessage("You've got your group disbanded!");
+                        if (party.getPartyLeader().equals(dungeonCraftPlayer)) {
+                            party.disbandParty();
+                            player.sendMessage("You've got your party disbanded!");
                         } else {
-                            group.removePlayer(dungeonCraftPlayer);
-                            player.sendMessage("You left " + group.getGroupLeader().getName() + "'s group!");
+                            party.removePlayer(dungeonCraftPlayer);
+                            player.sendMessage("You left " + party.getPartyLeader().getName() + "'s party!");
                         }
                     }
                     return;
                 }
-                player.sendMessage("You can not leave this group when you are inside a dungeon!");
+                player.sendMessage("You can not leave this party when you are inside a dungeon!");
                 return;
             }
-            player.sendMessage("You are not in a group!");
+            player.sendMessage("You are not in a party!");
         }
     }
 }

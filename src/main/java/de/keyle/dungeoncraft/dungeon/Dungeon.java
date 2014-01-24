@@ -30,8 +30,8 @@ import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftChunkProvider;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import de.keyle.dungeoncraft.dungeon.region.RegionRegistry;
 import de.keyle.dungeoncraft.dungeon.scripting.TriggerRegistry;
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
-import de.keyle.dungeoncraft.group.Group;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.logger.DungeonLogger;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
@@ -56,7 +56,7 @@ public class Dungeon implements Scheduler {
     protected Map<DungeonCraftPlayer, OrientationVector> playerSpawn = new HashMap<DungeonCraftPlayer, OrientationVector>();
     protected Set<DungeonCraftPlayer> playersInDungeon = new HashSet<DungeonCraftPlayer>();
     protected final String dungeonName;
-    protected final Group playerGroup;
+    protected final Party playerParty;
     protected final DungeonBase dungeonBase;
     protected final UUID uuid;
     protected final DungeonField position;
@@ -65,7 +65,7 @@ public class Dungeon implements Scheduler {
     protected final DungeonLogger dungeonLogger;
     protected final Scoreboard scoreboard;
 
-    public Dungeon(String dungeonName, DungeonBase dungeonTheme, Group group) {
+    public Dungeon(String dungeonName, DungeonBase dungeonTheme, Party party) {
         this.dungeonName = dungeonName;
         this.dungeonBase = dungeonTheme;
         uuid = UUID.randomUUID();
@@ -75,7 +75,7 @@ public class Dungeon implements Scheduler {
         localTime = dungeonBase.getStartTime();
         weather = dungeonBase.getWeather();
         dungeonLogger = new DungeonLogger(this);
-        playerGroup = group;
+        playerParty = party;
         scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
     }
 
@@ -121,11 +121,11 @@ public class Dungeon implements Scheduler {
     }
 
     public List<DungeonCraftPlayer> getPlayerList() {
-        return Collections.unmodifiableList(playerGroup.getGroupMembers());
+        return Collections.unmodifiableList(playerParty.getPartyMembers());
     }
 
-    public Group getPlayerGroup() {
-        return playerGroup;
+    public Party getPlayerParty() {
+        return playerParty;
     }
 
     public Location getPlayerSpawnLoacation(DungeonCraftPlayer player) {
@@ -246,7 +246,7 @@ public class Dungeon implements Scheduler {
     }
 
     public void teleportIn(DungeonCraftPlayer p) {
-        if (p.isOnline() && playerGroup.containsPlayer(p)) {
+        if (p.isOnline() && playerParty.containsPlayer(p)) {
             playersInDungeon.add(p);
             p.setDungeon(this);
             p.getPlayer().teleport(getPlayerSpawnLoacation(p));
@@ -290,9 +290,9 @@ public class Dungeon implements Scheduler {
 
                 Bukkit.getPluginManager().callEvent(new DungeonStartEvent(this));
 
-                teleportIn(playerGroup.getGroupLeader());
+                teleportIn(playerParty.getPartyLeader());
                 for (DungeonCraftPlayer player : getPlayerList()) {
-                    if (player.isOnline() && !player.equals(playerGroup.getGroupLeader())) {
+                    if (player.isOnline() && !player.equals(playerParty.getPartyLeader())) {
                         player.getPlayer().sendMessage("[DC] You can enter " + getDungeonName() + " now!");
                     }
                 }

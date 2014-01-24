@@ -21,7 +21,7 @@
 package de.keyle.dungeoncraft.api.events;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

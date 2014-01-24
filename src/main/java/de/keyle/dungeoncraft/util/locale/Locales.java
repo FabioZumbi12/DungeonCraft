@@ -21,7 +21,7 @@
 package de.keyle.dungeoncraft.util.locale;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.Colorizer;
 import de.keyle.dungeoncraft.util.Util;

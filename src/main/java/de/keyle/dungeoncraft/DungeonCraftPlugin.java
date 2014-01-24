@@ -53,11 +53,11 @@ import de.keyle.dungeoncraft.entity.types.witch.EntityDungeonCraftWitch;
 import de.keyle.dungeoncraft.entity.types.wither.EntityDungeonCraftWither;
 import de.keyle.dungeoncraft.entity.types.wolf.EntityDungeonCraftWolf;
 import de.keyle.dungeoncraft.entity.types.zombie.EntityDungeonCraftZombie;
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.listeners.DungeonListener;
 import de.keyle.dungeoncraft.listeners.EntityListener;
 import de.keyle.dungeoncraft.listeners.PlayerListener;
 import de.keyle.dungeoncraft.listeners.WorldListener;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.DungeonCraftVersion;
@@ -129,10 +129,10 @@ public class DungeonCraftPlugin extends JavaPlugin {
                 DungeonCraftLogger.write(message);
             }
         };
-        framework.registerCommands(new CreateGroupCommand());
-        framework.registerCommands(new InviteToGroupCommand());
-        framework.registerCommands(new JoinGroupCommand());
-        framework.registerCommands(new LeaveGroupCommand());
+        framework.registerCommands(new CreatePartyCommand());
+        framework.registerCommands(new InviteToPartyCommand());
+        framework.registerCommands(new JoinPartyCommand());
+        framework.registerCommands(new LeavePartyCommand());
         framework.registerCommands(new CreateDungeonEntranceCommand());
 
         framework.registerCommands(new TestCommand());

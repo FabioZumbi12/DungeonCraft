@@ -22,41 +22,41 @@ package de.keyle.dungeoncraft.commands;
 
 import de.keyle.command.framework.Command;
 import de.keyle.command.framework.CommandArgs;
-import de.keyle.dungeoncraft.api.events.PlayerJoinGroupEvent;
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
-import de.keyle.dungeoncraft.group.Group;
-import de.keyle.dungeoncraft.group.GroupManager;
-import de.keyle.dungeoncraft.group.systems.DungeonCraftGroup;
+import de.keyle.dungeoncraft.api.events.PlayerJoinPartyEvent;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.Party;
+import de.keyle.dungeoncraft.party.PartyManager;
+import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class JoinGroupCommand {
-    @Command(name = "dcjoingroup", aliases = {"dcjg"})
+public class JoinPartyCommand {
+    @Command(name = "dcjoinparty", aliases = {"dcjp"})
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
             if (args.getArgs().size() >= 1) {
                 UUID uuid = UUID.fromString(args.getArgs().get(0));
-                for (Group group : GroupManager.getGroups()) {
-                    if (group instanceof DungeonCraftGroup && group.getUuid().equals(uuid)) {
-                        DungeonCraftGroup dungeonCraftGroup = (DungeonCraftGroup) group;
+                for (Party party : PartyManager.getParties()) {
+                    if (party instanceof DungeonCraftParty && party.getUuid().equals(uuid)) {
+                        DungeonCraftParty dungeonCraftParty = (DungeonCraftParty) party;
                         DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
-                        if (!dungeonCraftGroup.isPlayerInvited(dungeonCraftPlayer)) {
+                        if (!dungeonCraftParty.isPlayerInvited(dungeonCraftPlayer)) {
                             continue;
                         }
-                        PlayerJoinGroupEvent event = new PlayerJoinGroupEvent(dungeonCraftPlayer, (DungeonCraftGroup) group);
+                        PlayerJoinPartyEvent event = new PlayerJoinPartyEvent(dungeonCraftPlayer, (DungeonCraftParty) party);
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
-                            group.addPlayer(player);
-                            player.sendMessage("You are now in " + dungeonCraftGroup.getGroupLeader().getName() + "' group!");
+                            party.addPlayer(player);
+                            player.sendMessage("You are now in " + dungeonCraftParty.getPartyLeader().getName() + "' party!");
                         }
                         return;
                     }
                 }
-                player.sendMessage("Group not found!");
+                player.sendMessage("Party not found!");
                 return;
             }
             player.sendMessage("Playername required!");

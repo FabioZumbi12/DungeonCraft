@@ -21,7 +21,7 @@
 package de.keyle.dungeoncraft.dungeon.region;
 
 import com.google.common.collect.ArrayListMultimap;
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.vector.Region;
 import de.keyle.dungeoncraft.util.vector.Vector;
 

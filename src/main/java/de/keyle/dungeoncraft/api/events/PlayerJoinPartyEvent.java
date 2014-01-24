@@ -20,30 +20,30 @@
 
 package de.keyle.dungeoncraft.api.events;
 
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
-import de.keyle.dungeoncraft.group.systems.DungeonCraftGroup;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerJoinGroupEvent extends Event implements Cancellable {
+public class PlayerJoinPartyEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final DungeonCraftPlayer player;
-    private final DungeonCraftGroup group;
+    private final DungeonCraftParty party;
     private boolean isCancelled = false;
 
-    public PlayerJoinGroupEvent(DungeonCraftPlayer player, DungeonCraftGroup group) {
+    public PlayerJoinPartyEvent(DungeonCraftPlayer player, DungeonCraftParty party) {
         this.player = player;
-        this.group = group;
+        this.party = party;
     }
 
     public DungeonCraftPlayer getPlayer() {
         return player;
     }
 
-    public DungeonCraftGroup getGroup() {
-        return group;
+    public DungeonCraftParty getParty() {
+        return party;
     }
 
     @Override

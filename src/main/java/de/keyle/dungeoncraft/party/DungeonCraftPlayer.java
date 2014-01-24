@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.group;
+package de.keyle.dungeoncraft.party;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
 import de.keyle.dungeoncraft.util.BukkitUtil;
@@ -34,7 +34,7 @@ public class DungeonCraftPlayer {
     private static Map<String, DungeonCraftPlayer> playerList = new HashMap<String, DungeonCraftPlayer>();
     private Map<String, Long> dungeonLockout = new HashMap<String, Long>();
     private Dungeon dungeon = null;
-    private Group group = null;
+    private Party party = null;
 
     private final String playerName;
     private String lastLanguage = "en";
@@ -73,16 +73,16 @@ public class DungeonCraftPlayer {
         this.dungeon = dungeon;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setParty(Party party) {
+        this.party = party;
     }
 
     public Dungeon getDungeon() {
         return dungeon;
     }
 
-    public Group getGroup() {
-        return group;
+    public Party getParty() {
+        return party;
     }
 
     public boolean hasLockout(String instanceName) {

@@ -18,25 +18,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.api.group;
+package de.keyle.dungeoncraft.api.party;
 
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 
 import java.util.List;
 
-public interface DungeonCraftGroup {
+public interface DungeonCraftParty {
 
-    public int getGroupStrength();
+    public int getPartyStrength();
 
-    public List<DungeonCraftPlayer> getGroupMembers();
+    public List<DungeonCraftPlayer> getPartyMembers();
 
-    public DungeonCraftPlayer getGroupLeader();
+    public DungeonCraftPlayer getPartyLeader();
 
-    public GroupType getGroupType();
+    public PartyType getPartyType();
 
-    public void disbandGroup();
+    public void disbandParty();
 
-    public enum GroupType {
+    public enum PartyType {
         HEROES, ANCIENT, MCMMO, DUNGEONCRAFT, NONE
     }
 }

@@ -18,13 +18,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.group.systems;
+package de.keyle.dungeoncraft.party.systems;
 
 import com.gmail.nossr50.api.PartyAPI;
 import com.gmail.nossr50.events.party.McMMOPartyChangeEvent;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
-import de.keyle.dungeoncraft.group.Group;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.Party;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -33,13 +33,13 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class McMmoGroup extends Group implements Listener {
+public class McMmoParty extends Party implements Listener {
     String partyName;
 
-    public McMmoGroup(DungeonCraftPlayer leader) {
+    public McMmoParty(DungeonCraftPlayer leader) {
         super(leader);
         partyName = PartyAPI.getPartyName(leader.getPlayer());
-        Validate.isTrue(leader.getName().equals(PartyAPI.getPartyLeader(partyName)), "Player is not leader of the group.");
+        Validate.isTrue(leader.getName().equals(PartyAPI.getPartyLeader(partyName)), "Player is not leader of the party.");
         for (Player member : PartyAPI.getOnlineMembers(partyName)) {
             addPlayer(member);
         }
@@ -47,13 +47,13 @@ public class McMmoGroup extends Group implements Listener {
     }
 
     @Override
-    public GroupType getGroupType() {
-        return GroupType.MCMMO;
+    public PartyType getPartyType() {
+        return PartyType.MCMMO;
     }
 
     @Override
-    public void disbandGroup() {
-        super.disbandGroup();
+    public void disbandParty() {
+        super.disbandParty();
         HandlerList.unregisterAll(this);
     }
 
@@ -66,7 +66,7 @@ public class McMmoGroup extends Group implements Listener {
             if (player.getDungeon() == null) {
                 removePlayer(player);
             } else {
-                event.getPlayer().getPlayer().sendMessage("You can not leave this group while inside a dungeon!");
+                event.getPlayer().getPlayer().sendMessage("You can not leave this party while inside a dungeon!");
                 event.setCancelled(true);
             }
         }
@@ -76,7 +76,7 @@ public class McMmoGroup extends Group implements Listener {
     public void onPlayerJoin(final PlayerJoinEvent event) {
         if (PartyAPI.getPartyName(event.getPlayer()).equals(partyName)) {
             DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(event.getPlayer());
-            if (!this.getGroupMembers().contains(player)) {
+            if (!this.getPartyMembers().contains(player)) {
                 addPlayer(player);
             }
         }

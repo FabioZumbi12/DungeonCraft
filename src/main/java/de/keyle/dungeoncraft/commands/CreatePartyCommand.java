@@ -22,24 +22,23 @@ package de.keyle.dungeoncraft.commands;
 
 import de.keyle.command.framework.Command;
 import de.keyle.command.framework.CommandArgs;
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
-import de.keyle.dungeoncraft.group.GroupManager;
+import de.keyle.dungeoncraft.api.party.DungeonCraftParty;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.PartyManager;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import static de.keyle.dungeoncraft.api.group.DungeonCraftGroup.GroupType;
-
-public class CreateGroupCommand {
-    @Command(name = "dccg")
+public class CreatePartyCommand {
+    @Command(name = "dccp")
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
-            if (GroupManager.isInGroupEnum(player) == GroupType.NONE) {
-                GroupManager.newGroup(DungeonCraftPlayer.getPlayer(player));
-                player.sendMessage("Group successfully created!");
+            if (PartyManager.isInPartyEnum(player) == DungeonCraftParty.PartyType.NONE) {
+                PartyManager.newParty(DungeonCraftPlayer.getPlayer(player));
+                player.sendMessage("Party successfully created!");
                 return;
             }
-            player.sendMessage("You are already in a Group!");
+            player.sendMessage("You are already in a party!");
         }
     }
 }

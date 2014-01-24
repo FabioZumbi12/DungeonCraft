@@ -18,17 +18,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.group;
+package de.keyle.dungeoncraft.party;
 
 import com.ancientshores.AncientRPG.API.ApiManager;
 import com.ancientshores.AncientRPG.Party.AncientRPGParty;
 import com.gmail.nossr50.api.PartyAPI;
 import com.herocraftonline.heroes.Heroes;
 import com.herocraftonline.heroes.characters.Hero;
-import de.keyle.dungeoncraft.group.systems.AncientRpgGroup;
-import de.keyle.dungeoncraft.group.systems.DungeonCraftGroup;
-import de.keyle.dungeoncraft.group.systems.HeroesGroup;
-import de.keyle.dungeoncraft.group.systems.McMmoGroup;
+import de.keyle.dungeoncraft.api.party.DungeonCraftParty;
+import de.keyle.dungeoncraft.party.systems.AncientRpgParty;
+import de.keyle.dungeoncraft.party.systems.HeroesParty;
+import de.keyle.dungeoncraft.party.systems.McMmoParty;
 import de.keyle.dungeoncraft.util.PluginSupportManager;
 import org.bukkit.entity.Player;
 
@@ -36,41 +36,48 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static de.keyle.dungeoncraft.api.group.DungeonCraftGroup.GroupType;
+public class PartyManager {
 
-public class GroupManager {
+    private static List<Party> parties = new ArrayList<Party>();
 
-    private static List<Group> groups = new ArrayList<Group>();
-
-    public static Group newGroup(DungeonCraftPlayer player) {
-        Group newGroup;
-        switch (isInGroupEnum(player.getPlayer())) {
+    public static Party newParty(DungeonCraftPlayer player) {
+        Party newParty;
+        switch (isInPartyEnum(player.getPlayer())) {
             case ANCIENT:
-                newGroup = new AncientRpgGroup(player);
-                groups.add(newGroup);
+                newParty = new AncientRpgParty(player);
+                parties.add(newParty);
                 break;
             case HEROES:
-                newGroup = new HeroesGroup(player);
-                groups.add(newGroup);
+                newParty = new HeroesParty(player);
+                parties.add(newParty);
                 break;
             case MCMMO:
-                newGroup = new McMmoGroup(player);
-                groups.add(newGroup);
+                newParty = new McMmoParty(player);
+                parties.add(newParty);
                 break;
             default:
-                newGroup = new DungeonCraftGroup(player);
-                groups.add(newGroup);
+                newParty = new de.keyle.dungeoncraft.party.systems.DungeonCraftParty(player);
+                parties.add(newParty);
                 break;
         }
-        return newGroup;
+        return newParty;
     }
 
-    public static List<Group> getGroups() {
-        return Collections.unmodifiableList(groups);
+    public static List<Party> getParties() {
+        return Collections.unmodifiableList(parties);
     }
 
-    public static Group getGroupByPlayer(DungeonCraftPlayer player) {
-        for (Group g : groups) {
+    public static Party getPartyByPlayer(DungeonCraftPlayer player) {
+        for (Party party : parties) {
+            if (party.containsPlayer(player)) {
+                return party;
+            }
+        }
+        return null;
+    }
+
+    public static Party getPartyByPlayer(Player player) {
+        for (Party g : parties) {
             if (g.containsPlayer(player)) {
                 return g;
             }
@@ -78,33 +85,24 @@ public class GroupManager {
         return null;
     }
 
-    public static Group getGroupByPlayer(Player player) {
-        for (Group g : groups) {
-            if (g.containsPlayer(player)) {
-                return g;
-            }
-        }
-        return null;
+    public static boolean isInParty(Player player) {
+        return isInPartyEnum(player) != DungeonCraftParty.PartyType.NONE;
     }
 
-    public static boolean isInGroup(Player player) {
-        return isInGroupEnum(player) != GroupType.NONE;
-    }
-
-    public static GroupType isInGroupEnum(Player player) {
+    public static DungeonCraftParty.PartyType isInPartyEnum(Player player) {
         if (PluginSupportManager.isPluginUsable("Heroes")) {
             try {
                 Heroes heroes = PluginSupportManager.getPluginInstance(Heroes.class);
                 Hero heroPlayer = heroes.getCharacterManager().getHero(player);
                 if (heroPlayer.getParty() != null && heroPlayer.getParty().getMembers().size() > 1) {
-                    return GroupType.HEROES;
+                    return DungeonCraftParty.PartyType.HEROES;
                 }
             } catch (Exception ignored) {
             }
         } else if (PluginSupportManager.isPluginUsable("mcMMO")) {
             try {
                 if (PartyAPI.getMembers(player) != null && PartyAPI.getMembers(player).size() > 1) {
-                    return GroupType.MCMMO;
+                    return DungeonCraftParty.PartyType.MCMMO;
                 }
             } catch (Exception ignored) {
             }
@@ -113,23 +111,23 @@ public class GroupManager {
                 ApiManager api = ApiManager.getApiManager();
                 AncientRPGParty party = api.getPlayerParty(player);
                 if (party != null && party.getMemberNumber() > 1) {
-                    return GroupType.ANCIENT;
+                    return DungeonCraftParty.PartyType.ANCIENT;
                 }
 
             } catch (Exception ignored) {
             }
         } else {
-            if (getGroupByPlayer(player) != null && getGroupByPlayer(player).getGroupStrength() > 1) {
-                return GroupType.DUNGEONCRAFT;
+            if (getPartyByPlayer(player) != null && getPartyByPlayer(player).getPartyStrength() > 1) {
+                return DungeonCraftParty.PartyType.DUNGEONCRAFT;
             }
         }
-        return GroupType.NONE;
+        return DungeonCraftParty.PartyType.NONE;
     }
 
-    //Returns complete group or null if player is not in group
-    public static List<DungeonCraftPlayer> getGroup(Player player) {
+    //Returns complete party or null if player is not in party
+    public static List<DungeonCraftPlayer> getParty(Player player) {
         List<DungeonCraftPlayer> ret = new ArrayList<DungeonCraftPlayer>();
-        switch (isInGroupEnum(player)) {
+        switch (isInPartyEnum(player)) {
             case HEROES:
                 Heroes heroes = PluginSupportManager.getPluginInstance(Heroes.class);
                 Hero heroPlayer = heroes.getCharacterManager().getHero(player);
@@ -153,17 +151,12 @@ public class GroupManager {
                 return ret;
 
             case DUNGEONCRAFT:
-                return getGroupByPlayer(player).getGroupMembers();
+                return getPartyByPlayer(player).getPartyMembers();
 
             case NONE:
                 return null;
 
         }
         return null;
-    }
-
-    public static int getGroupStrength(Player player) {
-        List<DungeonCraftPlayer> tmp = getGroup(player);
-        return tmp == null ? -1 : tmp.size();
     }
 }

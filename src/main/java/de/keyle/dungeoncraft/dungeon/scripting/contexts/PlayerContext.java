@@ -21,7 +21,7 @@
 package de.keyle.dungeoncraft.dungeon.scripting.contexts;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
-import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.Colorizer;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;

@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.dungeon;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import de.keyle.dungeoncraft.group.Group;
+import de.keyle.dungeoncraft.party.Party;
 
 import java.util.Collections;
 import java.util.Set;
@@ -31,8 +31,8 @@ public class DungeonManager {
     private static BiMap<Dungeon, DungeonField> dungeon2Field = HashBiMap.create();
     private static BiMap<DungeonField, Dungeon> field2dungeon = dungeon2Field.inverse();
 
-    private static BiMap<Dungeon, Group> dungeon2group = HashBiMap.create();
-    private static BiMap<Group, Dungeon> group2dungeon = dungeon2group.inverse();
+    private static BiMap<Dungeon, Party> dungeon2party = HashBiMap.create();
+    private static BiMap<Party, Dungeon> party2dungeon = dungeon2party.inverse();
 
     public static void addDungeon(Dungeon dungeon) {
         if (dungeon2Field.containsKey(dungeon)) {
@@ -41,22 +41,22 @@ public class DungeonManager {
         if (field2dungeon.containsKey(dungeon.getPosition())) {
             return;
         }
-        if (dungeon2group.containsKey(dungeon)) {
+        if (dungeon2party.containsKey(dungeon)) {
             return;
         }
-        if (group2dungeon.containsKey(dungeon.getPlayerGroup())) {
+        if (party2dungeon.containsKey(dungeon.getPlayerParty())) {
             return;
         }
         dungeon2Field.put(dungeon, dungeon.getPosition());
-        dungeon2group.put(dungeon, dungeon.getPlayerGroup());
+        dungeon2party.put(dungeon, dungeon.getPlayerParty());
     }
 
     public static Dungeon getDungeonAt(DungeonField position) {
         return field2dungeon.get(position);
     }
 
-    public static Dungeon getDungeonFor(Group playerGroup) {
-        return group2dungeon.get(playerGroup);
+    public static Dungeon getDungeonFor(Party party) {
+        return party2dungeon.get(party);
     }
 
     public static Set<Dungeon> getDungeons() {
@@ -64,21 +64,21 @@ public class DungeonManager {
     }
 
     public static boolean removeDungeon(Dungeon dungeon) {
-        dungeon2group.remove(dungeon);
+        dungeon2party.remove(dungeon);
         return dungeon2Field.remove(dungeon) != null;
     }
 
     public static boolean removeDungeon(DungeonField field) {
         Dungeon dungeon = field2dungeon.remove(field);
         if (dungeon != null) {
-            dungeon2group.remove(dungeon);
+            dungeon2party.remove(dungeon);
             return true;
         }
         return false;
     }
 
-    public static boolean removeDungeon(Group playerGroup) {
-        Dungeon dungeon = group2dungeon.remove(playerGroup);
+    public static boolean removeDungeon(Party party) {
+        Dungeon dungeon = party2dungeon.remove(party);
         if (dungeon != null) {
             dungeon2Field.remove(dungeon);
             return true;

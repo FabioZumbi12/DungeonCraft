@@ -33,7 +33,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class InviteToPartyCommand {
-    @Command(name = "dcinviteparty", aliases = {"dcip"})
+    @Command(name = "dcparty.invite", aliases = {"dcip", "party.invite"})
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
@@ -43,9 +43,22 @@ public class InviteToPartyCommand {
                 List<String> arguments = args.getArgs();
                 if (arguments.size() >= 1) {
                     Player invitedPlayer = Bukkit.getPlayer(arguments.get(0));
+                    if (DungeonCraftPlayer.getPlayer(invitedPlayer).equals(dungeonCraftPlayer)) {
+                        player.sendMessage("You can't invite yourself!");
+                    }
                     if (invitedPlayer != null) {
-                        ((DungeonCraftParty) party).invitePlayer(DungeonCraftPlayer.getPlayer(invitedPlayer));
-                        player.sendMessage(player.getDisplayName() + " has been successfully invited!");
+                        DungeonCraftPlayer invitedDungeonCraftPlayer = DungeonCraftPlayer.getPlayer(invitedPlayer);
+                        if (PartyManager.isInParty(invitedPlayer)) {
+                            player.sendMessage(invitedPlayer.getDisplayName() + " is already in a party!");
+                            return;
+                        }
+                        DungeonCraftParty dungeonCraftParty = ((DungeonCraftParty) party);
+                        if (!dungeonCraftParty.getPartyMembers().contains(invitedDungeonCraftPlayer)) {
+                            dungeonCraftParty.invitePlayer(invitedDungeonCraftPlayer);
+                            player.sendMessage(invitedPlayer.getDisplayName() + " has been successfully invited!");
+                        } else {
+                            player.sendMessage(invitedPlayer.getDisplayName() + " is already in your party!");
+                        }
                         return;
                     }
                     player.sendMessage(arguments.get(0) + " is not online!");

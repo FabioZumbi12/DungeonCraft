@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class JoinPartyCommand {
-    @Command(name = "dcjoinparty", aliases = {"dcjp"})
+    @Command(name = "dcparty.join", aliases = {"dcjp", "party.join"})
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();

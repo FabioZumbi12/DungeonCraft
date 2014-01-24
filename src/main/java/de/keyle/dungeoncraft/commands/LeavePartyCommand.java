@@ -32,7 +32,7 @@ import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class LeavePartyCommand {
-    @Command(name = "dcleaveparty", aliases = {"dclp"})
+    @Command(name = "dcparty.leave", aliases = {"dclp", "party.leave"})
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();

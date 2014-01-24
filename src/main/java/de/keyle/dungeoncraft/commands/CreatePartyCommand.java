@@ -29,7 +29,7 @@ import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class CreatePartyCommand {
-    @Command(name = "dccp")
+    @Command(name = "dcparty.create", aliases = {"dccp", "party.create"})
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();

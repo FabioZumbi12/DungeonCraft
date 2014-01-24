@@ -45,7 +45,7 @@ public class DungeonCraftParty extends Party {
                 .color(ChatColor.AQUA)
                 .then("'s party. Join the party by clicking ")
                 .then("here")
-                .command("/dcjoinparty " + getUuid().toString())
+                .command("/dcparty join " + getUuid().toString())
                 .color(ChatColor.GOLD)
                 .style(ChatColor.UNDERLINE)
                 .then(".");

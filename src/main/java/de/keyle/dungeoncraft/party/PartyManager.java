@@ -77,9 +77,9 @@ public class PartyManager {
     }
 
     public static Party getPartyByPlayer(Player player) {
-        for (Party g : parties) {
-            if (g.containsPlayer(player)) {
-                return g;
+        for (Party party : parties) {
+            if (party.containsPlayer(player)) {
+                return party;
             }
         }
         return null;

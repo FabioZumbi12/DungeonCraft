@@ -44,9 +44,9 @@ public abstract class Party implements DungeonCraftParty {
 
     public void addPlayer(DungeonCraftPlayer player) {
         if (!this.containsPlayer(player)) {
+            sendMessage(player.getName() + " joined the party.");
             members.add(player);
             player.setParty(this);
-            sendMessage(player.getName() + " joined the party.");
         }
     }
 

@@ -98,6 +98,9 @@ public abstract class Group implements DungeonCraftGroup {
     public void disbandGroup() {
         for (DungeonCraftPlayer member : members) {
             member.setGroup(null);
+            if (member.isOnline() && !member.equals(leader)) {
+                member.getPlayer().sendMessage("Your group has been disbanded.");
+            }
         }
         members.clear();
     }

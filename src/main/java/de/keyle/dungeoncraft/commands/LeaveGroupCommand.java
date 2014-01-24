@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.commands;
 
 import de.keyle.command.framework.Command;
 import de.keyle.command.framework.CommandArgs;
-import de.keyle.dungeoncraft.api.events.PlayerJoinGroupEvent;
+import de.keyle.dungeoncraft.api.events.PlayerLeaveGroupEvent;
 import de.keyle.dungeoncraft.group.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.group.Group;
 import de.keyle.dungeoncraft.group.GroupManager;
@@ -31,35 +31,32 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
-public class JoinGroupCommand {
-    @Command(name = "dcjoingroup", aliases = {"dcjg"})
+public class LeaveGroupCommand {
+    @Command(name = "dcleavegroup", aliases = {"dclg"})
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
-            if (args.getArgs().size() >= 1) {
-                UUID uuid = UUID.fromString(args.getArgs().get(0));
-                for (Group group : GroupManager.getGroups()) {
-                    if (group instanceof DungeonCraftGroup && group.getUuid().equals(uuid)) {
-                        DungeonCraftGroup dungeonCraftGroup = (DungeonCraftGroup) group;
-                        DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
-                        if (!dungeonCraftGroup.isPlayerInvited(dungeonCraftPlayer)) {
-                            continue;
+            DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
+            Group group = GroupManager.getGroupByPlayer(dungeonCraftPlayer);
+            if (group != null && group instanceof DungeonCraftGroup) {
+                if (dungeonCraftPlayer.getDungeon() == null) {
+                    PlayerLeaveGroupEvent event = new PlayerLeaveGroupEvent(dungeonCraftPlayer, (DungeonCraftGroup) group);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (!event.isCancelled()) {
+                        if (group.getGroupLeader().equals(dungeonCraftPlayer)) {
+                            group.disbandGroup();
+                            player.sendMessage("You've got your group disbanded!");
+                        } else {
+                            group.removePlayer(dungeonCraftPlayer);
+                            player.sendMessage("You left " + group.getGroupLeader().getName() + "'s group!");
                         }
-                        PlayerJoinGroupEvent event = new PlayerJoinGroupEvent(dungeonCraftPlayer, (DungeonCraftGroup) group);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            group.addPlayer(player);
-                            player.sendMessage("You are now in " + dungeonCraftGroup.getGroupLeader().getName() + "' group!");
-                        }
-                        return;
                     }
+                    return;
                 }
-                player.sendMessage("Group not found!");
+                player.sendMessage("You can not leave this group when you are inside a dungeon!");
                 return;
             }
-            player.sendMessage("Playername required!");
+            player.sendMessage("You are not in a group!");
         }
     }
 }

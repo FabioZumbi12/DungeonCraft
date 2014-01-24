@@ -132,6 +132,7 @@ public class DungeonCraftPlugin extends JavaPlugin {
         framework.registerCommands(new CreateGroupCommand());
         framework.registerCommands(new InviteToGroupCommand());
         framework.registerCommands(new JoinGroupCommand());
+        framework.registerCommands(new LeaveGroupCommand());
         framework.registerCommands(new CreateDungeonEntranceCommand());
 
         framework.registerCommands(new TestCommand());

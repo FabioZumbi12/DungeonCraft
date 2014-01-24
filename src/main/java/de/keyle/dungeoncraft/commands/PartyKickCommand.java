@@ -26,14 +26,13 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
-import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class PartyInviteCommand {
-    @Command(name = "dcparty.invite", aliases = {"dcip", "party.invite"})
+public class PartyKickCommand {
+    @Command(name = "dcparty.kick", aliases = {"dcpk", "party.kick"})
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
@@ -46,27 +45,20 @@ public class PartyInviteCommand {
                 }
                 List<String> arguments = args.getArgs();
                 if (arguments.size() >= 1) {
-                    Player invitedPlayer = Bukkit.getPlayer(arguments.get(0));
-                    if (dungeonCraftPlayer.equals(DungeonCraftPlayer.getPlayer(invitedPlayer))) {
-                        player.sendMessage("You can't invite yourself!");
-                        return;
-                    }
-                    if (invitedPlayer != null) {
-                        DungeonCraftPlayer invitedDungeonCraftPlayer = DungeonCraftPlayer.getPlayer(invitedPlayer);
-                        if (PartyManager.isInParty(invitedPlayer)) {
-                            player.sendMessage(invitedPlayer.getDisplayName() + " is already in a party!");
+                    String kickedPlayername = arguments.get(0);
+                    for (DungeonCraftPlayer partyMember : party.getPartyMembers()) {
+                        if (kickedPlayername.equalsIgnoreCase(partyMember.getName())) {
+                            if (dungeonCraftPlayer.equals(partyMember)) {
+                                player.sendMessage("You can't kick yourself!");
+                                return;
+                            }
+                            player.sendMessage(partyMember.getName() + " has been kicked from the party.");
+                            partyMember.sendMessage("You have been kicked from the party.");
+                            party.removePlayer(partyMember);
                             return;
                         }
-                        DungeonCraftParty dungeonCraftParty = ((DungeonCraftParty) party);
-                        if (!dungeonCraftParty.getPartyMembers().contains(invitedDungeonCraftPlayer)) {
-                            dungeonCraftParty.invitePlayer(invitedDungeonCraftPlayer);
-                            player.sendMessage(invitedPlayer.getDisplayName() + " has been successfully invited!");
-                        } else {
-                            player.sendMessage(invitedPlayer.getDisplayName() + " is already in your party!");
-                        }
-                        return;
                     }
-                    player.sendMessage(arguments.get(0) + " is not online!");
+                    player.sendMessage(kickedPlayername + " is not in your party!");
                 }
                 return;
             }

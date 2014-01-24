@@ -128,6 +128,12 @@ public class DungeonCraftPlayer {
         return getPlayer() != null && getPlayer().isOnline(); // This could cause lag on bigger servers.
     }
 
+    public void sendMessage(String message) {
+        if (isOnline()) {
+            getPlayer().sendMessage(message);
+        }
+    }
+
     public boolean equals(Object o) {
         if (o == null) {
             return false;

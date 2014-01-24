@@ -284,18 +284,18 @@ public class Dungeon implements Scheduler {
                 unlockSchematic();
                 first = false;
 
+                if (dungeonBase.hasTimeLimit()) {
+                    endTime = System.currentTimeMillis() + (dungeonBase.getTimeLimit() * 1000);
+                }
+
+                Bukkit.getPluginManager().callEvent(new DungeonStartEvent(this));
+
                 teleportIn(playerGroup.getGroupLeader());
                 for (DungeonCraftPlayer player : getPlayerList()) {
                     if (player.isOnline() && !player.equals(playerGroup.getGroupLeader())) {
                         player.getPlayer().sendMessage("[DC] You can enter " + getDungeonName() + " now!");
                     }
                 }
-
-                if (dungeonBase.hasTimeLimit()) {
-                    endTime = System.currentTimeMillis() + (dungeonBase.getTimeLimit() * 1000);
-                }
-
-                Bukkit.getPluginManager().callEvent(new DungeonStartEvent(this));
             }
             if (endTime > 0 && System.currentTimeMillis() >= endTime) {
                 for (DungeonCraftPlayer p : getPlayerList()) {

@@ -35,6 +35,7 @@ import de.keyle.dungeoncraft.group.Group;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.logger.DungeonLogger;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.*;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -256,6 +257,9 @@ public class Dungeon implements Scheduler {
             p.getPlayer().updateInventory();
 
             Bukkit.getPluginManager().callEvent(new PlayerEnterDungeonEvent(this, p));
+            if (endTime > 0) {
+                p.getPlayer().sendMessage("You have " + DurationFormatUtils.formatDurationWords(endTime - System.currentTimeMillis(), true, true) + " left to end this dungeon.");
+            }
         }
     }
 

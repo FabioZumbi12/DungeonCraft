@@ -97,7 +97,6 @@ public class DungeonCraftWorldServer extends WorldServer {
                 dungeon.cleanUp();
             }
         }
-        dungeonCrafthunkProviderServer.schedule();
 
         this.methodProfiler.c("chunkSource");
         this.chunkProvider.unloadChunks();

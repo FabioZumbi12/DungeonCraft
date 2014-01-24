@@ -56,7 +56,6 @@ import de.keyle.dungeoncraft.entity.types.zombie.EntityDungeonCraftZombie;
 import de.keyle.dungeoncraft.listeners.DungeonListener;
 import de.keyle.dungeoncraft.listeners.EntityListener;
 import de.keyle.dungeoncraft.listeners.PlayerListener;
-import de.keyle.dungeoncraft.listeners.WorldListener;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.Configuration;
@@ -114,8 +113,6 @@ public class DungeonCraftPlugin extends JavaPlugin {
         new DungeonBaseLoader();
         DungeonEntranceRegistry.loadEntrances();
 
-        WorldListener worldListener = new WorldListener();
-        getServer().getPluginManager().registerEvents(worldListener, this);
         EntityListener entityListener = new EntityListener();
         getServer().getPluginManager().registerEvents(entityListener, this);
         PlayerListener playerListener = new PlayerListener();

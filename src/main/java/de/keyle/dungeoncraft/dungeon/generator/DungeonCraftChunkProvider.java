@@ -21,22 +21,18 @@
 package de.keyle.dungeoncraft.dungeon.generator;
 
 import com.google.common.collect.ArrayListMultimap;
-import de.keyle.dungeoncraft.api.events.DungeonChunkLoadedEvent;
-import de.keyle.dungeoncraft.api.util.Scheduler;
 import de.keyle.dungeoncraft.dungeon.DungeonField;
 import de.keyle.dungeoncraft.dungeon.DungeonFieldManager;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import net.minecraft.server.v1_7_R1.*;
-import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.util.LongHash;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DungeonCraftChunkProvider extends ChunkProviderServer implements Scheduler {
+public class DungeonCraftChunkProvider extends ChunkProviderServer {
     public static DungeonCraftChunkProvider chunkloader;
 
-    private final List<DungeonChunkLoadedEvent> events = new ArrayList<DungeonChunkLoadedEvent>();
     private final ArrayListMultimap<Long, Runnable> callbacks = ArrayListMultimap.create();
 
     public DungeonCraftChunkProvider(WorldServer worldserver, IChunkLoader ichunkloader, DungeonCraftChunkGenerator chunkProvider) {
@@ -176,22 +172,6 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer implements Sc
                     runnable.run();
                 }
                 callbacks.removeAll(LongHash.toLong(chunk.locX, chunk.locZ));
-            }
-        }
-        synchronized (events) {
-            DungeonChunkLoadedEvent event = new DungeonChunkLoadedEvent(chunk.locX, chunk.locZ);
-            events.add(event);
-        }
-    }
-
-    @Override
-    public void schedule() {
-        synchronized (events) {
-            if (!events.isEmpty()) {
-                for (DungeonChunkLoadedEvent event : events) {
-                    Bukkit.getPluginManager().callEvent(event);
-                }
-                events.clear();
             }
         }
     }

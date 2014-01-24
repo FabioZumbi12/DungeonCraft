@@ -30,7 +30,7 @@ import java.util.UUID;
 public abstract class Party implements DungeonCraftParty {
     private UUID uuid;
     private List<DungeonCraftPlayer> members = new ArrayList<DungeonCraftPlayer>();
-    private DungeonCraftPlayer leader;
+    protected DungeonCraftPlayer leader;
 
     public Party(DungeonCraftPlayer leader) {
         this.uuid = UUID.randomUUID();

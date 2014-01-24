@@ -56,6 +56,14 @@ public class DungeonCraftParty extends Party {
         return invites != null && invites.contains(player);
     }
 
+    public void setLeader(DungeonCraftPlayer player) {
+        if (!getPartyMembers().contains(player)) {
+            return;
+        }
+        leader = player;
+        sendMessage(player.getName() + " is now leader of this party.");
+    }
+
     public void addPlayer(DungeonCraftPlayer player) {
         super.addPlayer(player);
         if (isPlayerInvited(player)) {

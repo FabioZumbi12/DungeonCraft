@@ -20,37 +20,30 @@
 
 package de.keyle.dungeoncraft.api.events;
 
-import de.keyle.dungeoncraft.dungeon.Dungeon;
-import de.keyle.dungeoncraft.dungeon.region.DungeonRegion;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerLeaveRegionEvent extends Event implements Cancellable {
+public class PlayerPartyLeaveEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
-    private final Dungeon dungeon;
     private final DungeonCraftPlayer player;
-    private final DungeonRegion region;
+    private final DungeonCraftParty party;
     private boolean isCancelled = false;
 
-    public PlayerLeaveRegionEvent(Dungeon dungeon, DungeonCraftPlayer player, DungeonRegion region) {
-        this.dungeon = dungeon;
+    public PlayerPartyLeaveEvent(DungeonCraftPlayer player, DungeonCraftParty party) {
         this.player = player;
-        this.region = region;
-    }
-
-    public Dungeon getDungeon() {
-        return dungeon;
+        this.party = party;
     }
 
     public DungeonCraftPlayer getPlayer() {
         return player;
     }
 
-    public DungeonRegion getRegion() {
-        return region;
+    public DungeonCraftParty getParty() {
+        return party;
     }
 
     @Override

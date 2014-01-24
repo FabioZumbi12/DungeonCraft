@@ -68,13 +68,13 @@ public class TriggerRegistry {
             case PLAYER_RIGHTCLICK_BLOCK:
                 return PlayerInteractEvent.class;
             case PLAYER_ENTER_REGION_EVENT:
-                return PlayerEnterRegionEvent.class;
+                return PlayerRegionEnterEvent.class;
             case PLAYER_LEAVE_REGION_EVENT:
-                return PlayerLeaveRegionEvent.class;
+                return PlayerRegionLeaveEvent.class;
             case PLAYER_ENTER_DUNGEON_EVENT:
-                return PlayerEnterDungeonEvent.class;
+                return PlayerDungeonEnterEvent.class;
             case PLAYER_LEAVE_DUNGEON_EVENT:
-                return PlayerLeaveDungeonEvent.class;
+                return PlayerDungeonLeaveEvent.class;
             default:
                 return Event.class;
         }

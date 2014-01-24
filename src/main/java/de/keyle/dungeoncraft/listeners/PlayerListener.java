@@ -139,7 +139,7 @@ public class PlayerListener implements Listener {
                 List<DungeonRegion> regionsAt = d.getRegionRegistry().getRegionsAt(playerPoint);
                 for (DungeonRegion region : DungeonRegion.getPlayerRegions(dungeonCraftPlayer)) {
                     if (!region.isVectorInside(playerPoint)) {
-                        PlayerLeaveRegionEvent regionEvent = new PlayerLeaveRegionEvent(d, dungeonCraftPlayer, region);
+                        PlayerRegionLeaveEvent regionEvent = new PlayerRegionLeaveEvent(d, dungeonCraftPlayer, region);
                         Bukkit.getPluginManager().callEvent(regionEvent);
                         if (regionEvent.isCancelled()) {
                             event.setCancelled(true);
@@ -150,7 +150,7 @@ public class PlayerListener implements Listener {
                 }
                 for (DungeonRegion region : regionsAt) {
                     if (!region.getPlayers().contains(dungeonCraftPlayer)) {
-                        PlayerEnterRegionEvent regionEvent = new PlayerEnterRegionEvent(d, dungeonCraftPlayer, region);
+                        PlayerRegionEnterEvent regionEvent = new PlayerRegionEnterEvent(d, dungeonCraftPlayer, region);
                         Bukkit.getPluginManager().callEvent(regionEvent);
                         if (regionEvent.isCancelled()) {
                             event.setCancelled(true);
@@ -227,16 +227,16 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerEnterRegion(final PlayerEnterRegionEvent event) {
-        List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerEnterRegionEvent.class);
+    public void onPlayerEnterRegion(final PlayerRegionEnterEvent event) {
+        List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerRegionEnterEvent.class);
         for (Trigger trigger : triggers) {
             trigger.execute(event.getPlayer().getName(), event.getDungeon(), event.getRegion());
         }
     }
 
     @EventHandler
-    public void onPlayerLeaveRegion(final PlayerLeaveRegionEvent event) {
-        List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerLeaveRegionEvent.class);
+    public void onPlayerLeaveRegion(final PlayerRegionLeaveEvent event) {
+        List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerRegionLeaveEvent.class);
         for (Trigger trigger : triggers) {
             trigger.execute(event.getPlayer().getName(), event.getDungeon(), event.getRegion());
         }
@@ -289,16 +289,16 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerLeaveDungeonEvent(final PlayerLeaveDungeonEvent event) {
-        List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerLeaveDungeonEvent.class);
+    public void onPlayerLeaveDungeonEvent(final PlayerDungeonLeaveEvent event) {
+        List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerDungeonLeaveEvent.class);
         for (Trigger trigger : triggers) {
             trigger.execute(event.getPlayer().getName());
         }
     }
 
     @EventHandler
-    public void onPlayerEnterDungeonEvent(final PlayerEnterDungeonEvent event) {
-        List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerEnterDungeonEvent.class);
+    public void onPlayerEnterDungeonEvent(final PlayerDungeonEnterEvent event) {
+        List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerDungeonEnterEvent.class);
         for (Trigger trigger : triggers) {
             trigger.execute(event.getPlayer().getName());
         }

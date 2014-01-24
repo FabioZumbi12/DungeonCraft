@@ -23,8 +23,8 @@ package de.keyle.dungeoncraft.dungeon;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.api.dungeon.Result;
 import de.keyle.dungeoncraft.api.events.DungeonStartEvent;
-import de.keyle.dungeoncraft.api.events.PlayerEnterDungeonEvent;
-import de.keyle.dungeoncraft.api.events.PlayerLeaveDungeonEvent;
+import de.keyle.dungeoncraft.api.events.PlayerDungeonEnterEvent;
+import de.keyle.dungeoncraft.api.events.PlayerDungeonLeaveEvent;
 import de.keyle.dungeoncraft.api.util.Scheduler;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftChunkProvider;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
@@ -256,7 +256,7 @@ public class Dungeon implements Scheduler {
             // There must be another way to update the inventory properly
             p.getPlayer().updateInventory();
 
-            Bukkit.getPluginManager().callEvent(new PlayerEnterDungeonEvent(this, p));
+            Bukkit.getPluginManager().callEvent(new PlayerDungeonEnterEvent(this, p));
             if (endTime > 0) {
                 p.getPlayer().sendMessage("You have " + DurationFormatUtils.formatDurationWords(endTime - System.currentTimeMillis(), true, true) + " left to end this dungeon.");
             }
@@ -273,7 +273,7 @@ public class Dungeon implements Scheduler {
                 updatePlayerTime();
                 updatePlayerWeather();
             }
-            Bukkit.getPluginManager().callEvent(new PlayerLeaveDungeonEvent(this, p));
+            Bukkit.getPluginManager().callEvent(new PlayerDungeonLeaveEvent(this, p));
         }
     }
 

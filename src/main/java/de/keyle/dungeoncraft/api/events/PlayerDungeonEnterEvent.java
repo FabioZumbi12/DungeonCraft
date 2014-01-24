@@ -21,24 +21,19 @@
 package de.keyle.dungeoncraft.api.events;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
-import de.keyle.dungeoncraft.dungeon.region.DungeonRegion;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerEnterRegionEvent extends Event implements Cancellable {
+public class PlayerDungeonEnterEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Dungeon dungeon;
     private final DungeonCraftPlayer player;
-    private final DungeonRegion region;
-    private boolean isCancelled = false;
 
-    public PlayerEnterRegionEvent(Dungeon dungeon, DungeonCraftPlayer player, DungeonRegion region) {
+    public PlayerDungeonEnterEvent(Dungeon dungeon, DungeonCraftPlayer player) {
         this.dungeon = dungeon;
         this.player = player;
-        this.region = region;
     }
 
     public Dungeon getDungeon() {
@@ -47,20 +42,6 @@ public class PlayerEnterRegionEvent extends Event implements Cancellable {
 
     public DungeonCraftPlayer getPlayer() {
         return player;
-    }
-
-    public DungeonRegion getRegion() {
-        return region;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return isCancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        isCancelled = cancel;
     }
 
     @Override

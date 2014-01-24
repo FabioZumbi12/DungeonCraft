@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.commands;
 
 import de.keyle.command.framework.Command;
 import de.keyle.command.framework.CommandArgs;
-import de.keyle.dungeoncraft.api.events.PlayerLeavePartyEvent;
+import de.keyle.dungeoncraft.api.events.PlayerPartyLeaveEvent;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.PartyManager;
@@ -40,7 +40,7 @@ public class LeavePartyCommand {
             Party party = PartyManager.getPartyByPlayer(dungeonCraftPlayer);
             if (party != null && party instanceof DungeonCraftParty) {
                 if (dungeonCraftPlayer.getDungeon() == null) {
-                    PlayerLeavePartyEvent event = new PlayerLeavePartyEvent(dungeonCraftPlayer, (DungeonCraftParty) party);
+                    PlayerPartyLeaveEvent event = new PlayerPartyLeaveEvent(dungeonCraftPlayer, (DungeonCraftParty) party);
                     Bukkit.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         if (party.getPartyLeader().equals(dungeonCraftPlayer)) {

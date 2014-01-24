@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.commands;
 
 import de.keyle.command.framework.Command;
 import de.keyle.command.framework.CommandArgs;
-import de.keyle.dungeoncraft.api.events.PlayerJoinPartyEvent;
+import de.keyle.dungeoncraft.api.events.PlayerPartyJoinEvent;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.PartyManager;
@@ -47,7 +47,7 @@ public class JoinPartyCommand {
                         if (!dungeonCraftParty.isPlayerInvited(dungeonCraftPlayer)) {
                             continue;
                         }
-                        PlayerJoinPartyEvent event = new PlayerJoinPartyEvent(dungeonCraftPlayer, (DungeonCraftParty) party);
+                        PlayerPartyJoinEvent event = new PlayerPartyJoinEvent(dungeonCraftPlayer, (DungeonCraftParty) party);
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             party.addPlayer(player);

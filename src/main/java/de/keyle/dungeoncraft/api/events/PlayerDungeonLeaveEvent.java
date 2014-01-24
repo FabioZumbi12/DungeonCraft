@@ -25,13 +25,13 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerLeaveDungeonEvent extends Event {
+public class PlayerDungeonLeaveEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Dungeon dungeon;
     private final DungeonCraftPlayer player;
 
-    public PlayerLeaveDungeonEvent(Dungeon dungeon, DungeonCraftPlayer player) {
+    public PlayerDungeonLeaveEvent(Dungeon dungeon, DungeonCraftPlayer player) {
         this.dungeon = dungeon;
         this.player = player;
     }

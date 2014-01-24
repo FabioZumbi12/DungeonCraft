@@ -96,6 +96,9 @@ public abstract class Group implements DungeonCraftGroup {
 
     @Override
     public void disbandGroup() {
+        for (DungeonCraftPlayer member : members) {
+            member.setGroup(null);
+        }
         members.clear();
     }
 

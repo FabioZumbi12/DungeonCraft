@@ -25,6 +25,7 @@ import de.keyle.dungeoncraft.util.logger.DebugLogger;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class EntityTemplateRegistry {
     Map<String, EntityTemplate> registeredTemplates = new HashMap<String, EntityTemplate>();
@@ -70,5 +71,9 @@ public class EntityTemplateRegistry {
 
     public EntityTemplate getTemplate(String templateId) {
         return registeredTemplates.get(templateId);
+    }
+
+    public Set<String> getTemplateNames() {
+        return registeredTemplates.keySet();
     }
 }

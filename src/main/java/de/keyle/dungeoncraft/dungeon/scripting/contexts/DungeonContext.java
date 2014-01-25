@@ -22,7 +22,11 @@ package de.keyle.dungeoncraft.dungeon.scripting.contexts;
 
 import de.keyle.dungeoncraft.api.dungeon.Result;
 import de.keyle.dungeoncraft.dungeon.Dungeon;
+import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings("unused")
 public class DungeonContext {
@@ -40,6 +44,14 @@ public class DungeonContext {
         return dungeon.getEndTime();
     }
 
+    public long getRemainingTime() {
+        return dungeon.getEndTime() == 0 ? 0 : dungeon.getEndTime() - System.currentTimeMillis();
+    }
+
+    public boolean isTimeLocked() {
+        return dungeon.isTimeLocked();
+    }
+
     public void completeDungeonSuccess() {
         dungeon.completeDungeon(Result.Success);
     }
@@ -50,5 +62,25 @@ public class DungeonContext {
 
     public int getPlayerCount() {
         return dungeon.getPlayerList().size();
+    }
+
+    public int getMinPlayerCount() {
+        return dungeon.getDungeonBase().getMinPlayerCount();
+    }
+
+    public String getEnvironmentName() {
+        return dungeon.getDungeonBase().getEnvironment().name();
+    }
+
+    public String[] getEntityTemplateNames() {
+        Set<String> names = dungeon.getDungeonBase().getEntityTemplateRegistry().getTemplateNames();
+        return names.toArray(new String[names.size()]);
+    }
+
+    public String[] getAllowedCommand() {
+        Set<String> commands = new HashSet<String>();
+        commands.addAll(dungeon.getDungeonBase().getAllowedCommands());
+        commands.addAll(Configuration.ALLOWED_COMMANDS);
+        return commands.toArray(new String[commands.size()]);
     }
 }

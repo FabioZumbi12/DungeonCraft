@@ -120,8 +120,8 @@ public class Dungeon implements Scheduler {
         return isReady;
     }
 
-    public List<DungeonCraftPlayer> getPlayerList() {
-        return Collections.unmodifiableList(playerParty.getPartyMembers());
+    public Set<DungeonCraftPlayer> getPlayerList() {
+        return Collections.unmodifiableSet(playersInDungeon);
     }
 
     public Party getPlayerParty() {

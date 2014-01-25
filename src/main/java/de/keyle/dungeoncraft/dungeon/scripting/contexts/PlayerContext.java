@@ -26,7 +26,7 @@ import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.Colorizer;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 
-import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("unused")
 public class PlayerContext {
@@ -41,11 +41,11 @@ public class PlayerContext {
     }
 
     public String[] getPlayerNames() {
-        List<DungeonCraftPlayer> players = dungeon.getPlayerList();
+        Set<DungeonCraftPlayer> players = dungeon.getPlayerList();
         String[] playerNames = new String[players.size()];
-        for (int i = 0; i < players.size(); i++) {
-            DungeonCraftPlayer player = players.get(i);
-            playerNames[i] = player.getName();
+        int i = 0;
+        for (DungeonCraftPlayer player : players) {
+            playerNames[i++] = player.getName();
         }
         return playerNames;
     }

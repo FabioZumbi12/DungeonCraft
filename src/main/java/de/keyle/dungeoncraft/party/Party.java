@@ -42,6 +42,9 @@ public abstract class Party implements de.keyle.dungeoncraft.api.party.Party {
     }
 
     public void addPlayer(DungeonCraftPlayer player) {
+        if (player.getParty() != null) {
+            return;
+        }
         if (!this.containsPlayer(player)) {
             sendMessage(player.getName() + " joined the party.");
             members.add(player);

@@ -24,7 +24,7 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 
 import java.util.List;
 
-public interface DungeonCraftParty {
+public interface Party {
 
     public int getPartyStrength();
 

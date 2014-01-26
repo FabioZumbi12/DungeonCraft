@@ -38,7 +38,7 @@ public class PartyInviteCommand {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
             DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
-            Party party = PartyManager.getPartyByPlayer(dungeonCraftPlayer);
+            Party party = dungeonCraftPlayer.getParty();
             if (party != null && party instanceof DungeonCraftParty) {
                 if (!party.getPartyLeader().equals(dungeonCraftPlayer)) {
                     player.sendMessage("You are not the leader of this party!");

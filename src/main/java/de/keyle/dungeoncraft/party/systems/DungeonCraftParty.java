@@ -21,14 +21,13 @@
 package de.keyle.dungeoncraft.party.systems;
 
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
-import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.DropoutStack;
 import de.keyle.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 
-public class DungeonCraftParty extends Party {
+public class DungeonCraftParty extends de.keyle.dungeoncraft.party.Party {
     private DropoutStack<DungeonCraftPlayer> invites = new DropoutStack<DungeonCraftPlayer>();
 
     public DungeonCraftParty(DungeonCraftPlayer leader) {
@@ -36,7 +35,10 @@ public class DungeonCraftParty extends Party {
     }
 
     public void invitePlayer(DungeonCraftPlayer invitedPlayer) {
-        if (PartyManager.getPartyByPlayer(invitedPlayer) != null) {
+        if (!invitedPlayer.isOnline()) {
+            return;
+        }
+        if (PartyManager.isInParty(invitedPlayer.getPlayer())) {
             return;
         }
         invites.add(invitedPlayer);
@@ -45,7 +47,7 @@ public class DungeonCraftParty extends Party {
                 .color(ChatColor.AQUA)
                 .then("'s party. Join the party by clicking ")
                 .then("here")
-                .command("/dcparty join " + getUuid().toString())
+                .command("/dcparty join " + leader.getName() + " " + getUuid().toString())
                 .color(ChatColor.GOLD)
                 .style(ChatColor.UNDERLINE)
                 .then(".");

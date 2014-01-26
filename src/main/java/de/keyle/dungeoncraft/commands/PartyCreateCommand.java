@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.commands;
 
 import de.keyle.command.framework.Command;
 import de.keyle.command.framework.CommandArgs;
-import de.keyle.dungeoncraft.api.party.DungeonCraftParty;
+import de.keyle.dungeoncraft.api.party.Party;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.PartyManager;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
@@ -33,7 +33,7 @@ public class PartyCreateCommand {
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
-            if (PartyManager.isInPartyEnum(player) == DungeonCraftParty.PartyType.NONE) {
+            if (PartyManager.getPartyType(player) == Party.PartyType.NONE) {
                 PartyManager.newParty(DungeonCraftPlayer.getPlayer(player));
                 player.sendMessage("Party successfully created!");
                 return;

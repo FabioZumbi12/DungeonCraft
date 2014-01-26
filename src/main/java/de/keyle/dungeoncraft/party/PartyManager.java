@@ -25,84 +25,45 @@ import com.ancientshores.AncientRPG.Party.AncientRPGParty;
 import com.gmail.nossr50.api.PartyAPI;
 import com.herocraftonline.heroes.Heroes;
 import com.herocraftonline.heroes.characters.Hero;
-import de.keyle.dungeoncraft.api.party.DungeonCraftParty;
 import de.keyle.dungeoncraft.party.systems.AncientRpgParty;
+import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import de.keyle.dungeoncraft.party.systems.HeroesParty;
 import de.keyle.dungeoncraft.party.systems.McMmoParty;
 import de.keyle.dungeoncraft.util.PluginSupportManager;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class PartyManager {
-
-    private static List<Party> parties = new ArrayList<Party>();
-
-    public static Party newParty(DungeonCraftPlayer player) {
-        Party newParty;
-        switch (isInPartyEnum(player.getPlayer())) {
+    public static Party newParty(DungeonCraftPlayer player) throws IllegalArgumentException {
+        switch (getPartyType(player.getPlayer())) {
             case ANCIENT:
-                newParty = new AncientRpgParty(player);
-                parties.add(newParty);
-                break;
+                return new AncientRpgParty(player);
             case HEROES:
-                newParty = new HeroesParty(player);
-                parties.add(newParty);
-                break;
+                return new HeroesParty(player);
             case MCMMO:
-                newParty = new McMmoParty(player);
-                parties.add(newParty);
-                break;
+                return new McMmoParty(player);
             default:
-                newParty = new de.keyle.dungeoncraft.party.systems.DungeonCraftParty(player);
-                parties.add(newParty);
-                break;
+                return new DungeonCraftParty(player);
         }
-        return newParty;
-    }
-
-    public static List<Party> getParties() {
-        return Collections.unmodifiableList(parties);
-    }
-
-    public static Party getPartyByPlayer(DungeonCraftPlayer player) {
-        for (Party party : parties) {
-            if (party.containsPlayer(player)) {
-                return party;
-            }
-        }
-        return null;
-    }
-
-    public static Party getPartyByPlayer(Player player) {
-        for (Party party : parties) {
-            if (party.containsPlayer(player)) {
-                return party;
-            }
-        }
-        return null;
     }
 
     public static boolean isInParty(Player player) {
-        return isInPartyEnum(player) != DungeonCraftParty.PartyType.NONE;
+        return getPartyType(player) != Party.PartyType.NONE;
     }
 
-    public static DungeonCraftParty.PartyType isInPartyEnum(Player player) {
+    public static Party.PartyType getPartyType(Player player) {
         if (PluginSupportManager.isPluginUsable("Heroes")) {
             try {
                 Heroes heroes = PluginSupportManager.getPluginInstance(Heroes.class);
                 Hero heroPlayer = heroes.getCharacterManager().getHero(player);
-                if (heroPlayer.getParty() != null && heroPlayer.getParty().getMembers().size() > 1) {
-                    return DungeonCraftParty.PartyType.HEROES;
+                if (heroPlayer.getParty() != null) {
+                    return Party.PartyType.HEROES;
                 }
             } catch (Exception ignored) {
             }
         } else if (PluginSupportManager.isPluginUsable("mcMMO")) {
             try {
-                if (PartyAPI.getMembers(player) != null && PartyAPI.getMembers(player).size() > 1) {
-                    return DungeonCraftParty.PartyType.MCMMO;
+                if (PartyAPI.inParty(player)) {
+                    return Party.PartyType.MCMMO;
                 }
             } catch (Exception ignored) {
             }
@@ -110,53 +71,20 @@ public class PartyManager {
             try {
                 ApiManager api = ApiManager.getApiManager();
                 AncientRPGParty party = api.getPlayerParty(player);
-                if (party != null && party.getMemberNumber() > 1) {
-                    return DungeonCraftParty.PartyType.ANCIENT;
+                if (party != null) {
+                    return Party.PartyType.ANCIENT;
                 }
 
             } catch (Exception ignored) {
             }
         } else {
-            if (getPartyByPlayer(player) != null && getPartyByPlayer(player).getPartyStrength() > 1) {
-                return DungeonCraftParty.PartyType.DUNGEONCRAFT;
+            if (DungeonCraftPlayer.isDungeonCraftPlayer(player)) {
+                DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
+                if (dungeonCraftPlayer.getParty() != null && dungeonCraftPlayer.getParty() instanceof DungeonCraftParty) {
+                    return Party.PartyType.DUNGEONCRAFT;
+                }
             }
         }
-        return DungeonCraftParty.PartyType.NONE;
-    }
-
-    //Returns complete party or null if player is not in party
-    public static List<DungeonCraftPlayer> getParty(Player player) {
-        List<DungeonCraftPlayer> ret = new ArrayList<DungeonCraftPlayer>();
-        switch (isInPartyEnum(player)) {
-            case HEROES:
-                Heroes heroes = PluginSupportManager.getPluginInstance(Heroes.class);
-                Hero heroPlayer = heroes.getCharacterManager().getHero(player);
-                for (Hero h : heroPlayer.getParty().getMembers()) {
-                    ret.add(DungeonCraftPlayer.getPlayer(h.getPlayer()));
-                }
-                return ret;
-
-            case ANCIENT:
-                ApiManager api = ApiManager.getApiManager();
-                AncientRPGParty party = api.getPlayerParty(player);
-                for (Player p : party.Member) {
-                    ret.add(DungeonCraftPlayer.getPlayer(p));
-                }
-                return ret;
-
-            case MCMMO:
-                for (String s : PartyAPI.getMembers(player)) {
-                    ret.add(DungeonCraftPlayer.getPlayer(s));
-                }
-                return ret;
-
-            case DUNGEONCRAFT:
-                return getPartyByPlayer(player).getPartyMembers();
-
-            case NONE:
-                return null;
-
-        }
-        return null;
+        return Party.PartyType.NONE;
     }
 }

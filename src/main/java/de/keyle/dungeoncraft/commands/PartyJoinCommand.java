@@ -25,7 +25,6 @@ import de.keyle.command.framework.CommandArgs;
 import de.keyle.dungeoncraft.api.events.PlayerPartyJoinEvent;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
-import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
@@ -39,22 +38,22 @@ public class PartyJoinCommand {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
             if (args.getArgs().size() >= 1) {
-                UUID uuid = UUID.fromString(args.getArgs().get(0));
-                for (Party party : PartyManager.getParties()) {
-                    if (party instanceof DungeonCraftParty && party.getUuid().equals(uuid)) {
-                        DungeonCraftParty dungeonCraftParty = (DungeonCraftParty) party;
-                        DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
-                        if (!dungeonCraftParty.isPlayerInvited(dungeonCraftPlayer)) {
-                            continue;
-                        }
-                        PlayerPartyJoinEvent event = new PlayerPartyJoinEvent(dungeonCraftPlayer, (DungeonCraftParty) party);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            party.addPlayer(player);
-                            player.sendMessage("You are now in " + dungeonCraftParty.getPartyLeader().getName() + "' party!");
-                        }
+                DungeonCraftPlayer leader = DungeonCraftPlayer.getPlayer(args.getArgs().get(0));
+                UUID uuid = UUID.fromString(args.getArgs().get(1));
+                Party party = leader.getParty();
+                if (party != null && party instanceof DungeonCraftParty && party.getUuid().equals(uuid)) {
+                    DungeonCraftParty dungeonCraftParty = (DungeonCraftParty) party;
+                    DungeonCraftPlayer invitedPlayer = DungeonCraftPlayer.getPlayer(player);
+                    if (!dungeonCraftParty.isPlayerInvited(invitedPlayer)) {
                         return;
                     }
+                    PlayerPartyJoinEvent event = new PlayerPartyJoinEvent(invitedPlayer, dungeonCraftParty);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (!event.isCancelled()) {
+                        party.addPlayer(player);
+                        player.sendMessage("You are now in " + dungeonCraftParty.getPartyLeader().getName() + "' party!");
+                    }
+                    return;
                 }
                 player.sendMessage("Party not found!");
                 return;

@@ -43,7 +43,7 @@ public class HeroesParty extends Party implements Listener {
         Heroes heroes = PluginSupportManager.getPluginInstance(Heroes.class);
         Hero heroPlayer = heroes.getCharacterManager().getHero(Bukkit.getPlayerExact(leader.getName()));
         party = heroPlayer.getParty();
-        Validate.isTrue(party.getLeader() != heroPlayer, "Player is not leader of the party");
+        Validate.isTrue(party.getLeader() != heroPlayer, "player.not.leader");
         for (Hero h : heroPlayer.getParty().getMembers()) {
             addPlayer(h.getPlayer());
         }

@@ -25,7 +25,6 @@ import de.keyle.command.framework.CommandArgs;
 import de.keyle.dungeoncraft.api.events.PlayerPartyLeaveEvent;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
-import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
@@ -37,7 +36,7 @@ public class PartyLeaveCommand {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
             DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
-            Party party = PartyManager.getPartyByPlayer(dungeonCraftPlayer);
+            Party party = dungeonCraftPlayer.getParty();
             if (party != null && party instanceof DungeonCraftParty) {
                 if (dungeonCraftPlayer.getDungeon() == null) {
                     PlayerPartyLeaveEvent event = new PlayerPartyLeaveEvent(dungeonCraftPlayer, (DungeonCraftParty) party);

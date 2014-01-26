@@ -20,14 +20,13 @@
 
 package de.keyle.dungeoncraft.party;
 
-import de.keyle.dungeoncraft.api.party.DungeonCraftParty;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class Party implements DungeonCraftParty {
+public abstract class Party implements de.keyle.dungeoncraft.api.party.Party {
     private UUID uuid;
     private List<DungeonCraftPlayer> members = new ArrayList<DungeonCraftPlayer>();
     protected DungeonCraftPlayer leader;

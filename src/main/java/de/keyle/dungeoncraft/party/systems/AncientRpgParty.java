@@ -40,7 +40,7 @@ public class AncientRpgParty extends Party implements Listener {
     public AncientRpgParty(DungeonCraftPlayer leader) {
         super(leader);
         party = ApiManager.getApiManager().getPlayerParty(leader.getPlayer());
-        Validate.isTrue(leader.equals(party.mLeader), "Player is not leader of the party.");
+        Validate.isTrue(leader.equals(party.mLeader), "player.not.leader");
         for (Player p : party.Member) {
             addPlayer(p);
         }

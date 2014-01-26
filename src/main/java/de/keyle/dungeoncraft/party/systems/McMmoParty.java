@@ -39,7 +39,7 @@ public class McMmoParty extends Party implements Listener {
     public McMmoParty(DungeonCraftPlayer leader) {
         super(leader);
         partyName = PartyAPI.getPartyName(leader.getPlayer());
-        Validate.isTrue(leader.getName().equals(PartyAPI.getPartyLeader(partyName)), "Player is not leader of the party.");
+        Validate.isTrue(leader.getName().equals(PartyAPI.getPartyLeader(partyName)), "player.not.leader");
         for (Player member : PartyAPI.getOnlineMembers(partyName)) {
             addPlayer(member);
         }

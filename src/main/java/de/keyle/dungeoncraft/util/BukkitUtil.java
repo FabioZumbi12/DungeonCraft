@@ -27,6 +27,7 @@ import net.minecraft.server.v1_7_R1.*;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -162,6 +163,29 @@ public class BukkitUtil {
             DebugLogger.severe("error while registering " + dungeonCraftEntityClass.getCanonicalName());
             DebugLogger.severe(e.getMessage());
             return false;
+        }
+    }
+
+    public static void setTileEntity(Location location, String data) {
+        Validate.notNull(data, "Data can not be null");
+        NBTBase localNBTBase = MojangsonParser.a(data);
+        Validate.isTrue(localNBTBase instanceof NBTTagCompound, "Data has to be a valid tag");
+        if (localNBTBase instanceof NBTTagCompound) {
+            setTileEntity(location, (NBTTagCompound) localNBTBase);
+        }
+    }
+
+    public static void setTileEntity(Location location, NBTTagCompound data) {
+        Validate.notNull(location, "Location can not be null");
+        Validate.notNull(data, "Data can not be null");
+        World world = ((CraftWorld) location.getWorld()).getHandle();
+        TileEntity tileEntity = world.getTileEntity(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        if (tileEntity != null) {
+            data.setInt("x", location.getBlockX());
+            data.setInt("y", location.getBlockY());
+            data.setInt("z", location.getBlockZ());
+
+            tileEntity.a(data);
         }
     }
 }

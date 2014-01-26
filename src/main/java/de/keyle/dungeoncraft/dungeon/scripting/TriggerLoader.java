@@ -47,6 +47,7 @@ public class TriggerLoader {
         PlayerContext playerContext = new PlayerContext(dungeon);
         EnvironmentContext environmentContext = new EnvironmentContext(dungeon);
         VariablesContext variablesContext = new VariablesContext(dungeon);
+        BlockContext blockContext = new BlockContext(dungeon);
         ScoreboardContext scoreboardContext = new ScoreboardContext(dungeon.getScoreboard());
 
         for (File f : dungeon.getDungeonBase().getTriggerFiles()) {
@@ -64,6 +65,7 @@ public class TriggerLoader {
                 ScriptableObject.putConstProperty(scope, "Effect", effectContext);
                 ScriptableObject.putConstProperty(scope, "Environment", environmentContext);
                 ScriptableObject.putConstProperty(scope, "Player", playerContext);
+                ScriptableObject.putConstProperty(scope, "Block", blockContext);
                 ScriptableObject.putConstProperty(scope, "Scoreboard", scoreboardContext);
 
                 cx.evaluateReader(scope, new FileReader(f), fileName, 0, null);

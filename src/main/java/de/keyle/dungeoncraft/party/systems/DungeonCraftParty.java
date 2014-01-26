@@ -63,6 +63,7 @@ public class DungeonCraftParty extends de.keyle.dungeoncraft.party.Party {
             return;
         }
         leader = player;
+        invites.clear();
         sendMessage(player.getName() + " is now leader of this party.");
     }
 

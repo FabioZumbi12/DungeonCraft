@@ -32,6 +32,7 @@ import de.keyle.dungeoncraft.dungeon.region.RegionRegistry;
 import de.keyle.dungeoncraft.dungeon.scripting.TriggerRegistry;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
+import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.Schedule;
 import de.keyle.dungeoncraft.util.logger.DungeonLogger;
@@ -249,6 +250,9 @@ public class Dungeon implements Scheduler {
                 }
                 player.setDungenLockout(this.getDungeonName(), getDungeonBase().getPlayerLockoutTime());
             }
+        }
+        if (!(playerParty instanceof DungeonCraftParty)) {
+            playerParty.disbandParty();
         }
         schedule.cancelAllTasks();
     }

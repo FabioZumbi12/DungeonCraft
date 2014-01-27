@@ -64,7 +64,7 @@ public class EntityDungeonCraftPigZombie extends EntityDungeonCraft {
         getDataWatcher().watch(12, (byte) (flag ? 1 : 0));
     }
 
-    public void setPetEquipment(int slot, ItemStack itemStack) {
+    public void setEntityEquipment(int slot, ItemStack itemStack) {
         ((WorldServer) this.world).getTracker().a(this, new PacketPlayOutEntityEquipment(getId(), slot, itemStack));
     }
 }

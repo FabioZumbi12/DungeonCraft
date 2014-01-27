@@ -18,30 +18,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.entity.template;
+package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
-import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
+import de.keyle.dungeoncraft.api.entity.components.Parameter;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
+import de.keyle.dungeoncraft.entity.types.sheep.EntityDungeonCraftSheep;
+import de.keyle.dungeoncraft.entity.types.wolf.EntityDungeonCraftWolf;
 
-public class EntityFactory {
-    public static EntityDungeonCraft createEntityByTemplate(EntityTemplate template) {
-        net.minecraft.server.v1_7_R1.World mcWorld = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
-        EntityDungeonCraft entity = template.getType().getNewEntityInstance(mcWorld);
+public class ColorComponent extends EntityTemplateComponent {
+    byte color = 0;
 
-        entity.getBukkitEntity().setMaxHealth(template.getMaxHealth());
+    public ColorComponent(@Parameter(type = Parameter.Type.Number, name = "color") byte color) {
+        this.color = color;
+    }
 
-        if (!template.getDisplayName().equals("")) {
-            entity.setCustomName(template.getDisplayName());
-            entity.setCustomNameVisible(true);
+    public byte getColor() {
+        return color;
+    }
+
+    @Override
+    public void applyComponent(EntityDungeonCraft entity) {
+        if (entity instanceof EntityDungeonCraftWolf) {
+            ((EntityDungeonCraftWolf) entity).setCollarColor(color);
+        } else if (entity instanceof EntityDungeonCraftSheep) {
+            ((EntityDungeonCraftSheep) entity).setColor(color);
         }
-
-        for (EntityTemplateComponent comonent : template.getComponents()) {
-            comonent.applyComponent(entity);
-        }
-
-        return entity;
     }
 }

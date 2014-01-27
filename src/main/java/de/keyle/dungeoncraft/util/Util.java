@@ -72,4 +72,22 @@ public class Util {
             return false;
         }
     }
+
+    public static boolean isByte(String number) {
+        try {
+            Byte.parseByte(number);
+            return true;
+        } catch (NumberFormatException nFE) {
+            return false;
+        }
+    }
+
+    public static boolean isInt(String number) {
+        try {
+            Integer.parseInt(number);
+            return true;
+        } catch (NumberFormatException nFE) {
+            return false;
+        }
+    }
 }

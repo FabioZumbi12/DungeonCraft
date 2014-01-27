@@ -188,4 +188,15 @@ public class BukkitUtil {
             tileEntity.a(data);
         }
     }
+
+    public static Item getItem(String itemString) {
+        Item localItem = (Item) Item.REGISTRY.a(itemString);
+        if (localItem == null) {
+            try {
+                localItem = Item.d(Integer.parseInt(itemString));
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return localItem;
+    }
 }

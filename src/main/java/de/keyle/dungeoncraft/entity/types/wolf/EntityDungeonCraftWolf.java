@@ -35,6 +35,7 @@ public class EntityDungeonCraftWolf extends EntityDungeonCraft {
 
     public EntityDungeonCraftWolf(World world) {
         super(world);
+        sitPathfinder = new Sit(this);
     }
 
     public void applySitting(boolean sitting) {

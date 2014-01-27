@@ -58,7 +58,7 @@ public class EntityDungeonCraftSkeleton extends EntityDungeonCraft {
         makeSound("mob.skeleton.step", 0.15F, 1.0F);
     }
 
-    public void setPetEquipment(int slot, ItemStack itemStack) {
+    public void setEntityEquipment(int slot, ItemStack itemStack) {
         ((WorldServer) this.world).getTracker().a(this, new PacketPlayOutEntityEquipment(getId(), slot, itemStack));
     }
 }

@@ -18,30 +18,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.entity.template;
+package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
-import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
+import de.keyle.dungeoncraft.api.entity.components.Parameter;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
+import de.keyle.dungeoncraft.entity.types.horse.EntityDungeonCraftHorse;
+import de.keyle.dungeoncraft.entity.types.pig.EntityDungeonCraftPig;
 
-public class EntityFactory {
-    public static EntityDungeonCraft createEntityByTemplate(EntityTemplate template) {
-        net.minecraft.server.v1_7_R1.World mcWorld = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
-        EntityDungeonCraft entity = template.getType().getNewEntityInstance(mcWorld);
+public class SaddleComponent extends EntityTemplateComponent {
+    boolean saddle = false;
 
-        entity.getBukkitEntity().setMaxHealth(template.getMaxHealth());
+    public SaddleComponent(@Parameter(type = Parameter.Type.Boolean, name = "saddle") boolean saddle) {
+        this.saddle = saddle;
+    }
 
-        if (!template.getDisplayName().equals("")) {
-            entity.setCustomName(template.getDisplayName());
-            entity.setCustomNameVisible(true);
+    public boolean hasSaddle() {
+        return saddle;
+    }
+
+    @Override
+    public void applyComponent(EntityDungeonCraft entity) {
+        if (entity instanceof EntityDungeonCraftHorse) {
+            ((EntityDungeonCraftHorse) entity).setSaddle(saddle);
+        } else if (entity instanceof EntityDungeonCraftPig) {
+            ((EntityDungeonCraftPig) entity).setSaddle(saddle);
         }
-
-        for (EntityTemplateComponent comonent : template.getComponents()) {
-            comonent.applyComponent(entity);
-        }
-
-        return entity;
     }
 }

@@ -33,6 +33,7 @@ import de.keyle.dungeoncraft.dungeon.scripting.TriggerRegistry;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.util.BukkitUtil;
+import de.keyle.dungeoncraft.util.Schedule;
 import de.keyle.dungeoncraft.util.logger.DungeonLogger;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -64,12 +65,14 @@ public class Dungeon implements Scheduler {
     protected final RegionRegistry regionRegistry;
     protected final DungeonLogger dungeonLogger;
     protected final Scoreboard scoreboard;
+    protected final Schedule schedule;
 
     public Dungeon(String dungeonName, DungeonBase dungeonTheme, Party party) {
         this.dungeonName = dungeonName;
         this.dungeonBase = dungeonTheme;
         uuid = UUID.randomUUID();
         position = DungeonFieldManager.getNewDungeonField();
+        schedule = new Schedule();
         triggerRegistry = new TriggerRegistry();
         regionRegistry = new RegionRegistry();
         localTime = dungeonBase.getStartTime();
@@ -89,6 +92,10 @@ public class Dungeon implements Scheduler {
 
     public DungeonLogger getDungeonLogger() {
         return dungeonLogger;
+    }
+
+    public Schedule getSchedule() {
+        return schedule;
     }
 
     public boolean isLoading() {
@@ -243,6 +250,7 @@ public class Dungeon implements Scheduler {
                 player.setDungenLockout(this.getDungeonName(), getDungeonBase().getPlayerLockoutTime());
             }
         }
+        schedule.cancelAllTasks();
     }
 
     public void teleportIn(DungeonCraftPlayer p) {

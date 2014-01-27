@@ -45,6 +45,7 @@ public class TriggerLoader {
         RegionContext regionContext = new RegionContext(dungeon);
         EffectContext effectContext = new EffectContext(dungeon);
         PlayerContext playerContext = new PlayerContext(dungeon);
+        ScheduleContext scheduleContext = new ScheduleContext(dungeon);
         EnvironmentContext environmentContext = new EnvironmentContext(dungeon);
         VariablesContext variablesContext = new VariablesContext(dungeon);
         BlockContext blockContext = new BlockContext(dungeon);
@@ -59,6 +60,7 @@ public class TriggerLoader {
                 ScriptableObject.putConstProperty(scope, "Dungeon", dungeonContext);
                 ScriptableObject.putConstProperty(scope, "Entity", entityContext);
                 ScriptableObject.putConstProperty(scope, "Trigger", new TriggerContext(dungeon, fileName));
+                ScriptableObject.putConstProperty(scope, "Timer", scheduleContext);
                 ScriptableObject.putConstProperty(scope, "Logger", loggerContext);
                 ScriptableObject.putConstProperty(scope, "Variables", variablesContext);
                 ScriptableObject.putConstProperty(scope, "Region", regionContext);

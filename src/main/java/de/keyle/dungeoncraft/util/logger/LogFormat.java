@@ -31,15 +31,15 @@ import java.util.logging.LogRecord;
 public class LogFormat extends Formatter {
     @Override
     public String format(LogRecord record) {
-        String text = new SimpleDateFormat("MM-dd-yyyy HH:mm").format(new Date(record.getMillis()));
+        String text = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(new Date(record.getMillis()));
         Level level = record.getLevel();
 
         if (level == Level.WARNING) {
-            text += " [WARNING]";
+            text += " [W]";
         } else if (level == Level.SEVERE) {
-            text += " [SEVERE]";
+            text += " [S]";
         } else {
-            text += " [INFO]";
+            text += " [I]";
         }
 
         text += " " + record.getMessage();

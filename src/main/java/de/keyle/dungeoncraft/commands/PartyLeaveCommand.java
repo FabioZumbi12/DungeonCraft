@@ -26,6 +26,8 @@ import de.keyle.dungeoncraft.api.events.PlayerPartyLeaveEvent;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
+import de.keyle.dungeoncraft.util.Util;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -44,18 +46,18 @@ public class PartyLeaveCommand {
                     if (!event.isCancelled()) {
                         if (party.getPartyLeader().equals(dungeonCraftPlayer)) {
                             party.disbandParty();
-                            player.sendMessage("You've got your party disbanded!");
+                            player.sendMessage(Locales.getString("Message.Party.Disband.Leader", player));
                         } else {
                             party.removePlayer(dungeonCraftPlayer);
-                            player.sendMessage("You left " + party.getPartyLeader().getName() + "'s party!");
+                            player.sendMessage(Util.formatText(Locales.getString("Message.Party.Leave", player),party.getPartyLeader().getName()));
                         }
                     }
                     return;
                 }
-                player.sendMessage("You can not leave this party when you are inside a dungeon!");
+                player.sendMessage(Locales.getString("Error.Cant.Leave.Party.Dungon", player));
                 return;
             }
-            player.sendMessage("You are not in a party!");
+            player.sendMessage(Locales.getString("Error.Not.In.Party", player));
         }
     }
 }

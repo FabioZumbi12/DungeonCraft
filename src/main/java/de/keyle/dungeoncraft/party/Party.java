@@ -20,6 +20,8 @@
 
 package de.keyle.dungeoncraft.party;
 
+import de.keyle.dungeoncraft.util.Util;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -46,7 +48,7 @@ public abstract class Party implements de.keyle.dungeoncraft.api.party.Party {
             return;
         }
         if (!this.containsPlayer(player)) {
-            sendMessage(player.getName() + " joined the party.");
+            sendMessage("Message.Player.Join",player.getName());
             members.add(player);
             player.setParty(this);
         }
@@ -61,7 +63,7 @@ public abstract class Party implements de.keyle.dungeoncraft.api.party.Party {
         if (this.containsPlayer(player)) {
             this.members.remove(player);
             player.setParty(null);
-            sendMessage(player.getName() + " has left the party.");
+            sendMessage("Message.Player.Leave",player.getName());
         }
     }
 
@@ -73,10 +75,10 @@ public abstract class Party implements de.keyle.dungeoncraft.api.party.Party {
         return members.contains(player);
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(String message, String... args) {
         for (DungeonCraftPlayer player : members) {
             if (player.isOnline()) {
-                player.getPlayer().sendMessage(message);
+                player.getPlayer().sendMessage(Util.formatText(Locales.getString(message,player),args));
             }
         }
     }
@@ -101,7 +103,7 @@ public abstract class Party implements de.keyle.dungeoncraft.api.party.Party {
         for (DungeonCraftPlayer member : members) {
             member.setParty(null);
             if (member.isOnline() && !member.equals(leader)) {
-                member.getPlayer().sendMessage("Your party has been disbanded.");
+                member.getPlayer().sendMessage(Locales.getString("Message.Party.Disband",member));
             }
         }
         members.clear();

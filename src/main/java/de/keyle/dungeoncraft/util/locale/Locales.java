@@ -27,6 +27,7 @@ import de.keyle.dungeoncraft.util.Colorizer;
 import de.keyle.dungeoncraft.util.Util;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import org.apache.commons.lang.LocaleUtils;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.*;
@@ -77,6 +78,14 @@ public class Locales {
             return key;
         }
         return latestLocales.getText(key, localeString);
+    }
+
+    public static String getString(String key, CommandSender commandSender) {
+        if(commandSender instanceof Player) {
+            return getString(key,BukkitUtil.getPlayerLanguage((Player) commandSender));
+        }
+
+        return getString(key,"en");
     }
 
     public String getText(String key, String localeString) {

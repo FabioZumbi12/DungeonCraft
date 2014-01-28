@@ -26,6 +26,8 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
+import de.keyle.dungeoncraft.util.Util;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -41,36 +43,36 @@ public class PartyInviteCommand {
             Party party = dungeonCraftPlayer.getParty();
             if (party != null && party instanceof DungeonCraftParty) {
                 if (!party.getPartyLeader().equals(dungeonCraftPlayer)) {
-                    player.sendMessage("You are not the leader of this party!");
+                    player.sendMessage(Locales.getString("Error.Not.Leader",player));
                     return;
                 }
                 List<String> arguments = args.getArgs();
                 if (arguments.size() >= 1) {
                     Player invitedPlayer = Bukkit.getPlayer(arguments.get(0));
                     if (dungeonCraftPlayer.equals(DungeonCraftPlayer.getPlayer(invitedPlayer))) {
-                        player.sendMessage("You can't invite yourself!");
+                        player.sendMessage(Locales.getString("Error.Selfinvite",player));
                         return;
                     }
                     if (invitedPlayer != null) {
                         DungeonCraftPlayer invitedDungeonCraftPlayer = DungeonCraftPlayer.getPlayer(invitedPlayer);
                         if (PartyManager.isInParty(invitedPlayer)) {
-                            player.sendMessage(invitedPlayer.getDisplayName() + " is already in a party!");
+                            player.sendMessage(Util.formatText(Locales.getString("Error.Already.In.Party",player),invitedPlayer.getDisplayName()));
                             return;
                         }
                         DungeonCraftParty dungeonCraftParty = ((DungeonCraftParty) party);
                         if (!dungeonCraftParty.getPartyMembers().contains(invitedDungeonCraftPlayer)) {
                             dungeonCraftParty.invitePlayer(invitedDungeonCraftPlayer);
-                            player.sendMessage(invitedPlayer.getDisplayName() + " has been successfully invited!");
+                            player.sendMessage(Util.formatText(Locales.getString("Message.Invite.Successful",player),invitedPlayer.getDisplayName()));
                         } else {
-                            player.sendMessage(invitedPlayer.getDisplayName() + " is already in your party!");
+                            player.sendMessage(Util.formatText(Locales.getString("Error.Already.In.This.Party",player),invitedPlayer.getDisplayName()));
                         }
                         return;
                     }
-                    player.sendMessage(arguments.get(0) + " is not online!");
+                    player.sendMessage(Util.formatText(Locales.getString("Error.Not.Online",player),arguments.get(0)));
                 }
                 return;
             }
-            player.sendMessage("You are not in a party!");
+            player.sendMessage(Locales.getString("Error.Not.In.Party",player));
         }
     }
 }

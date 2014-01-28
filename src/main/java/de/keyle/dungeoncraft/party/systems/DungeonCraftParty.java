@@ -24,6 +24,8 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.DropoutStack;
+import de.keyle.dungeoncraft.util.Util;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 
@@ -64,7 +66,7 @@ public class DungeonCraftParty extends de.keyle.dungeoncraft.party.Party {
         }
         leader = player;
         invites.clear();
-        sendMessage(player.getName() + " is now leader of this party.");
+        sendMessage("Message.Leader.Change",player.getName());
     }
 
     public void addPlayer(DungeonCraftPlayer player) {

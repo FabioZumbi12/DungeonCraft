@@ -30,6 +30,7 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.util.MessageException;
 import de.keyle.dungeoncraft.util.PluginSupportManager;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -77,7 +78,7 @@ public class HeroesParty extends Party implements Listener {
             if (player.getDungeon() == null) {
                 removePlayer(player);
             } else {
-                event.getHero().getPlayer().sendMessage("You can not leave this party when you are inside a dungeon!");
+                event.getHero().getPlayer().sendMessage(Locales.getString("Error.Cant.Leave.Party.Dungon", event.getHero().getPlayer()));
                 event.setCancelled(true);
             }
             removePlayer(event.getHero().getPlayer());

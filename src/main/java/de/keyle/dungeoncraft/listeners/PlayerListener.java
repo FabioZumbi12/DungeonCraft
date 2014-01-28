@@ -33,6 +33,8 @@ import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.MessageException;
+import de.keyle.dungeoncraft.util.Util;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
@@ -178,7 +180,7 @@ public class PlayerListener implements Listener {
                             party = PartyManager.newParty(dungeonCraftPlayer);
                         } catch (MessageException e) {
                             if (e.getMessageKey().equals("player.not.leader")) {
-                                event.getPlayer().sendMessage("The leader of your party must enter this dungeon first!");
+                                event.getPlayer().sendMessage(Locales.getString("Error.Leader.First",event.getPlayer()));
                                 event.setCancelled(true);
                                 return;
                             }
@@ -191,51 +193,51 @@ public class PlayerListener implements Listener {
                             Dungeon dungeon = DungeonManager.getDungeonFor(party);
                             if (dungeon != null) {
                                 if (dungeon.isCompleted()) {
-                                    event.getPlayer().sendMessage("The Dungeon is already completed!");
+                                    event.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Complete",event.getPlayer()));
                                 } else if (dungeon.isReady() && !dungeon.isLoading()) {
                                     long lockout = dungeonCraftPlayer.getRemainingLockout(dungeon.getDungeonName());
                                     if (lockout > 0) {
-                                        event.getPlayer().sendMessage("You have to wait " + DurationFormatUtils.formatDurationWords(lockout, true, true) + " before you can enter this dungeon again!");
+                                        event.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Remaining.Dungeon.Cooldown",event.getPlayer()),DurationFormatUtils.formatDurationWords(lockout, true, true)));
                                     } else {
                                         event.setCancelled(true);
                                         dungeon.teleportIn(dungeonCraftPlayer);
                                         return;
                                     }
                                 } else {
-                                    event.getPlayer().sendMessage("The Dungeon isn't ready yet!");
+                                    event.getPlayer().sendMessage(Locales.getString("Error.Dungeon.Not.Ready",event.getPlayer()));
                                 }
                             } else {
-                                event.getPlayer().sendMessage("The leader of your party must enter this dungeon first!");
+                                event.getPlayer().sendMessage(Locales.getString("Error.Leader.First",event.getPlayer()));
                             }
                         } else {
                             if (party.getPartyLeader().equals(dungeonCraftPlayer)) {
                                 DungeonBase base = entrance.getDungeonBase();
                                 long lockout = dungeonCraftPlayer.getRemainingLockout(entrance.getDungeonName());
                                 if (lockout > 0) {
-                                    event.getPlayer().sendMessage("You have to wait " + DurationFormatUtils.formatDurationWords(lockout, true, true) + " before you can enter this dungeon again!");
+                                    event.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Remaining.Dungeon.Cooldown",event.getPlayer()),DurationFormatUtils.formatDurationWords(lockout, true, true)));
                                 } else {
                                     if (party.getPartyStrength() >= base.getMinPlayerCount()) {
                                         if (party.getPartyStrength() >= base.getMinPlayerCount()) {
                                             Dungeon d = new Dungeon(entrance.getDungeonName(), entrance.getDungeonBase(), party);
                                             d.setExitLocation(entrance.getExitLocation());
                                             DungeonManager.addDungeon(d);
-                                            event.getPlayer().sendMessage("Dungeon loading . . .");
+                                            event.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Loading",event.getPlayer()));
                                         } else {
-                                            event.getPlayer().sendMessage("Your party is to small!");
+                                            event.getPlayer().sendMessage(Locales.getString("Error.Party.To.Small",event.getPlayer()));
                                         }
                                     } else {
-                                        event.getPlayer().sendMessage("Your party is to small! You need at least " + base.getMinPlayerCount() + " players.");
+                                        event.getPlayer().sendMessage(Util.formatText("Error.Party.To.Small.Extended",event.getPlayer(),base.getMinPlayerCount()));
                                     }
                                 }
                             } else {
-                                event.getPlayer().sendMessage("The leader of your party must enter this Dungeon first!");
+                                event.getPlayer().sendMessage(Locales.getString("Error.Leader.First",event.getPlayer()));
                             }
                         }
                     } else {
-                        event.getPlayer().sendMessage("You can not enter a dungeon without a party!");
+                        event.getPlayer().sendMessage(Locales.getString("Error.No.Entry.Without.Party",event.getPlayer()));
                     }
                 } else {
-                    event.getPlayer().sendMessage("You can not enter a dungeon without a party!");
+                    event.getPlayer().sendMessage(Locales.getString("Error.No.Entry.Without.Party",event.getPlayer()));
                 }
                 event.setCancelled(true);
             }
@@ -287,7 +289,7 @@ public class PlayerListener implements Listener {
                         return;
                     }
                     event.setCancelled(true);
-                    event.getPlayer().sendMessage("You are not allowed to use /" + cmd + " here!");
+                    event.getPlayer().sendMessage(Util.formatText(Locales.getString("Error.Commaned.Not.Allowed",event.getPlayer()),cmd));
                 }
             }
         }

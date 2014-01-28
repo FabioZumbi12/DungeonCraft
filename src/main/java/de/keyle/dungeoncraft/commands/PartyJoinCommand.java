@@ -26,6 +26,8 @@ import de.keyle.dungeoncraft.api.events.PlayerPartyJoinEvent;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
+import de.keyle.dungeoncraft.util.Util;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -51,14 +53,14 @@ public class PartyJoinCommand {
                     Bukkit.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         party.addPlayer(player);
-                        player.sendMessage("You are now in " + dungeonCraftParty.getPartyLeader().getName() + "' party!");
+                        player.sendMessage(Util.formatText(Locales.getString("Message.Party.Joined",player),dungeonCraftParty.getPartyLeader().getName()));
                     }
                     return;
                 }
-                player.sendMessage("Party not found!");
+                player.sendMessage(Locales.getString("Error.Player.Not.Found",player));
                 return;
             }
-            player.sendMessage("Playername required!");
+            player.sendMessage(Locales.getString("Error.Player.Name.Required",player));
         }
     }
 }

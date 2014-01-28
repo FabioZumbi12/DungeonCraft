@@ -26,6 +26,7 @@ import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.util.MessageException;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -68,7 +69,7 @@ public class McMmoParty extends Party implements Listener {
             if (player.getDungeon() == null) {
                 removePlayer(player);
             } else {
-                event.getPlayer().getPlayer().sendMessage("You can not leave this party while inside a dungeon!");
+                event.getPlayer().getPlayer().sendMessage(Locales.getString("Error.Cant.Leave.Party.Dungon", event.getPlayer()));
                 event.setCancelled(true);
             }
         }

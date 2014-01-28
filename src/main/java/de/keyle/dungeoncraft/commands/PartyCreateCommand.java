@@ -25,6 +25,7 @@ import de.keyle.command.framework.CommandArgs;
 import de.keyle.dungeoncraft.api.party.Party;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.PartyManager;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -35,10 +36,10 @@ public class PartyCreateCommand {
             Player player = (Player) args.getSender();
             if (PartyManager.getPartyType(player) == Party.PartyType.NONE) {
                 PartyManager.newParty(DungeonCraftPlayer.getPlayer(player));
-                player.sendMessage("Party successfully created!");
+                player.sendMessage(Locales.getString("Message.Party.Created",player));
                 return;
             }
-            player.sendMessage("You are already in a party!");
+            player.sendMessage(Locales.getString("Error.Already.In.Party",player));
         }
     }
 }

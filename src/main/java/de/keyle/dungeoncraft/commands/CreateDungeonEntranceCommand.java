@@ -26,11 +26,14 @@ import de.keyle.dungeoncraft.dungeon.DungeonBase;
 import de.keyle.dungeoncraft.dungeon.DungeonBaseRegistry;
 import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntrance;
 import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntranceRegistry;
+import de.keyle.dungeoncraft.util.Util;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.vector.Region;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import net.minecraft.util.org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -45,6 +48,8 @@ public class CreateDungeonEntranceCommand {
             DungeonBase base = null;
             String dungeonName = null;
             Location exitLocation = null;
+
+            CommandSender commanedSender = args.getSender();
 
             if (arguments.size() > 0) {
                 int minX = Integer.MIN_VALUE;
@@ -69,7 +74,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(x)) {
                             minX = Integer.parseInt(x);
                         } else {
-                            args.getSender().sendMessage(x + " is not a number!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), x));
                             return;
                         }
                     } else if (arg.startsWith("y=")) {
@@ -77,7 +82,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(y)) {
                             minY = Integer.parseInt(y);
                         } else {
-                            args.getSender().sendMessage(y + " is not a number!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), y));
                             return;
                         }
                     } else if (arg.startsWith("z=")) {
@@ -85,7 +90,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(z)) {
                             minZ = Integer.parseInt(z);
                         } else {
-                            args.getSender().sendMessage(z + " is not a number!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), z));
                             return;
                         }
                     } else if (arg.startsWith("dx=")) {
@@ -93,7 +98,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(x)) {
                             maxX = Integer.parseInt(x);
                         } else {
-                            args.getSender().sendMessage(x + " is not a number!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), x));
                             return;
                         }
                     } else if (arg.startsWith("dy=")) {
@@ -101,7 +106,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(y)) {
                             maxY = Integer.parseInt(y);
                         } else {
-                            args.getSender().sendMessage(y + " is not a number!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), y));
                             return;
                         }
                     } else if (arg.startsWith("dz=")) {
@@ -109,7 +114,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(z)) {
                             maxZ = Integer.parseInt(z);
                         } else {
-                            args.getSender().sendMessage(z + " is not a number!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), z));
                             return;
                         }
                     } else if (arg.startsWith("ex=")) {
@@ -117,7 +122,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(x)) {
                             exitX = Integer.parseInt(x);
                         } else {
-                            args.getSender().sendMessage(x + " is not a number!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), x));
                             return;
                         }
                     } else if (arg.startsWith("ey=")) {
@@ -125,7 +130,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(y)) {
                             exitY = Integer.parseInt(y);
                         } else {
-                            args.getSender().sendMessage(y + " is not a number!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), y));
                             return;
                         }
                     } else if (arg.startsWith("ez=")) {
@@ -133,7 +138,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(z)) {
                             exitZ = Integer.parseInt(z);
                         } else {
-                            args.getSender().sendMessage(z + " is not a number!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), z));
                             return;
                         }
                     } else if (arg.startsWith("eyaw=")) {
@@ -141,7 +146,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(yaw)) {
                             exitYaw = Float.parseFloat(yaw);
                         } else {
-                            args.getSender().sendMessage(yaw + " is not a number!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), yaw));
                             return;
                         }
                     } else if (arg.startsWith("epitch=")) {
@@ -149,7 +154,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(pitch)) {
                             exitPitch = Float.parseFloat(pitch);
                         } else {
-                            args.getSender().sendMessage(pitch + " is not a number!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), pitch));
                             return;
                         }
                     } else if (arg.startsWith("w=")) {
@@ -157,7 +162,7 @@ public class CreateDungeonEntranceCommand {
                         if (Bukkit.getWorld(w) != null) {
                             world = w;
                         } else {
-                            args.getSender().sendMessage(w + " world not found!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.World.Not.Found", commanedSender), w));
                             return;
                         }
                     } else if (arg.startsWith("ew=")) {
@@ -165,7 +170,7 @@ public class CreateDungeonEntranceCommand {
                         if (Bukkit.getWorld(w) != null) {
                             exitWorld = w;
                         } else {
-                            args.getSender().sendMessage(w + " world not found!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.World.Not.Found", commanedSender), w));
                             return;
                         }
                     } else if (arg.startsWith("b=")) {
@@ -173,7 +178,7 @@ public class CreateDungeonEntranceCommand {
                         if (DungeonBaseRegistry.hasDungeonBase(b)) {
                             baseName = b;
                         } else {
-                            args.getSender().sendMessage(b + " DungeonBase not found!");
+                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.DungeonBase.Not.Found", commanedSender), b));
                             return;
                         }
                     } else if (arg.startsWith("n=")) {
@@ -214,12 +219,12 @@ public class CreateDungeonEntranceCommand {
                         exitLocation.setPitch(exitPitch);
                     }
                 } else {
-                    args.getSender().sendMessage("Parameters missing!");
+                    commanedSender.sendMessage(Locales.getString("Error.Missing.Parameters", commanedSender));
                 }
             }
 
             if (region != null && worldName != null && base != null && dungeonName != null && exitLocation != null) {
-                args.getSender().sendMessage("Dungeon entrance created");
+                commanedSender.sendMessage(Locales.getString("Message.Entrance.Created", commanedSender));
                 DungeonEntrance entrance = new DungeonEntrance(dungeonName, worldName, region, base, exitLocation);
                 DungeonEntranceRegistry.registerEntrance(entrance);
                 DungeonEntranceRegistry.saveEntrances();

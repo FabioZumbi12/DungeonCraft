@@ -27,6 +27,7 @@ import com.ancientshores.AncientRPG.Party.AncientRPGParty;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.MessageException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -74,7 +75,7 @@ public class AncientRpgParty extends Party implements Listener {
             if (player.getDungeon() == null) {
                 removePlayer(player);
             } else {
-                event.getPlayer().sendMessage("You can not leave this party when you are inside a dungeon!");
+                event.getPlayer().sendMessage(Locales.getString("Error.Cant.Leave.Party.Dungon",event.getPlayer()));
                 event.setCancelled(true);
             }
         }

@@ -25,6 +25,8 @@ import de.keyle.command.framework.CommandArgs;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
+import de.keyle.dungeoncraft.util.Util;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -39,7 +41,7 @@ public class PartyKickCommand {
             Party party = dungeonCraftPlayer.getParty();
             if (party != null && party instanceof DungeonCraftParty) {
                 if (!party.getPartyLeader().equals(dungeonCraftPlayer)) {
-                    player.sendMessage("You are not the leader of this party!");
+                    player.sendMessage(Locales.getString("Error.Not.Leader",player));
                     return;
                 }
                 List<String> arguments = args.getArgs();
@@ -48,20 +50,20 @@ public class PartyKickCommand {
                     for (DungeonCraftPlayer partyMember : party.getPartyMembers()) {
                         if (kickedPlayername.equalsIgnoreCase(partyMember.getName())) {
                             if (dungeonCraftPlayer.equals(partyMember)) {
-                                player.sendMessage("You can't kick yourself!");
+                                player.sendMessage(Locales.getString("Error.Selfkick",player));
                                 return;
                             }
-                            player.sendMessage(partyMember.getName() + " has been kicked from the party.");
-                            partyMember.sendMessage("You have been kicked from the party.");
+                            player.sendMessage(Util.formatText(Locales.getString("Message.Player.Kicked",player),partyMember.getName()));
+                            partyMember.sendMessage(Locales.getString("Message.Player.Got.Kicked",partyMember));
                             party.removePlayer(partyMember);
                             return;
                         }
                     }
-                    player.sendMessage(kickedPlayername + " is not in your party!");
+                    player.sendMessage(Util.formatText(Locales.getString("Error.No.Party.Member",player),kickedPlayername));
                 }
                 return;
             }
-            player.sendMessage("You are not in a party!");
+            player.sendMessage(Locales.getString("Error.Not.In.Party",player));
         }
     }
 }

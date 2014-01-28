@@ -25,6 +25,8 @@ import de.keyle.command.framework.CommandArgs;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
+import de.keyle.dungeoncraft.util.Util;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -39,7 +41,7 @@ public class PartyLeaderCommand {
             Party party = dungeonCraftPlayer.getParty();
             if (party != null && party instanceof DungeonCraftParty) {
                 if (!party.getPartyLeader().equals(dungeonCraftPlayer)) {
-                    player.sendMessage("You are not the leader of this party!");
+                    player.sendMessage(Locales.getString("Error.Not.Leader",player));
                     return;
                 }
                 List<String> arguments = args.getArgs();
@@ -48,18 +50,18 @@ public class PartyLeaderCommand {
                     for (DungeonCraftPlayer partyMember : party.getPartyMembers()) {
                         if (newLeaderName.equalsIgnoreCase(partyMember.getName())) {
                             if (dungeonCraftPlayer.equals(partyMember)) {
-                                player.sendMessage("You are already the leader of this party!");
+                                player.sendMessage(Locales.getString("Error.Already.Leader",player));
                                 return;
                             }
                             ((DungeonCraftParty) party).setLeader(partyMember);
                             return;
                         }
                     }
-                    player.sendMessage(newLeaderName + " is not in your party!");
+                    player.sendMessage(Util.formatText(Locales.getString("Error.No.Party.Member",player),newLeaderName));
                 }
                 return;
             }
-            player.sendMessage("You are not in a party!");
+            player.sendMessage(Locales.getString("Error.Not.In.Party", player));
         }
     }
 }

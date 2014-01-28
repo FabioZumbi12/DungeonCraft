@@ -35,6 +35,8 @@ import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.Schedule;
+import de.keyle.dungeoncraft.util.Util;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.logger.DungeonLogger;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -270,7 +272,7 @@ public class Dungeon implements Scheduler {
 
             Bukkit.getPluginManager().callEvent(new PlayerDungeonEnterEvent(this, p));
             if (endTime > 0) {
-                p.getPlayer().sendMessage("You have " + DurationFormatUtils.formatDurationWords(endTime - System.currentTimeMillis(), true, true) + " left to end this dungeon.");
+                p.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Remaining.Dungeon.Time",p),DurationFormatUtils.formatDurationWords(endTime - System.currentTimeMillis(), true, true)));
             }
         }
     }
@@ -305,14 +307,14 @@ public class Dungeon implements Scheduler {
                 teleportIn(playerParty.getPartyLeader());
                 for (DungeonCraftPlayer player : getPlayerList()) {
                     if (player.isOnline() && !player.equals(playerParty.getPartyLeader())) {
-                        player.getPlayer().sendMessage("[DC] You can enter " + getDungeonName() + " now!");
+                        player.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Lockout.Reset",player),getDungeonName()));
                     }
                 }
             }
             if (endTime > 0 && System.currentTimeMillis() >= endTime) {
                 for (DungeonCraftPlayer p : getPlayerList()) {
                     if (p.isOnline()) {
-                        p.getPlayer().sendMessage("Time is over!");
+                        p.getPlayer().sendMessage(Locales.getString("Error.Time.Over",p));
                     }
                 }
                 completeDungeon(Result.Failure);

@@ -46,6 +46,8 @@
         <metrics.version>R7</metrics.version>
         <knbt.version>0.0.1-SNAPSHOT</knbt.version>
         <rhino.version>1.7R2</rhino.version>
+
+        <download.translations>prepare-package</download.translations>
     </properties>
 
     <repositories>
@@ -310,6 +312,23 @@
                             <original>${basedir}/target/unmapped-${project.name}-${project.version}.jar</original>
                             <missing>FAIL</missing>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>1.8.1</version>
+                <executions>
+                    <execution>
+                        <phase>${download.translations}</phase>
+                        <configuration>
+                            <connectionUrl>scm:git:https://github.com/xXKeyleXx/DungeonCraft-Translations.git</connectionUrl>
+                            <checkoutDirectory>target/classes/locale</checkoutDirectory>
+                            <excludes>exclude,.git,.gitignore</excludes>
+                        </configuration>
+                        <goals>
+                            <goal>checkout</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

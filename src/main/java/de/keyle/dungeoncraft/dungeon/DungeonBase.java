@@ -24,7 +24,11 @@ import com.google.common.io.PatternFilenameFilter;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.entity.template.EntityTemplateLoader;
 import de.keyle.dungeoncraft.entity.template.EntityTemplateRegistry;
+import de.keyle.dungeoncraft.util.Colorizer;
+import de.keyle.dungeoncraft.util.Util;
 import de.keyle.dungeoncraft.util.config.ConfigurationYaml;
+import de.keyle.dungeoncraft.util.locale.Locales;
+import de.keyle.dungeoncraft.util.locale.ResourceBundle;
 import de.keyle.dungeoncraft.util.schematic.ISchematicReveiver;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import de.keyle.dungeoncraft.util.schematic.SchematicLoader;
@@ -34,10 +38,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static org.bukkit.World.Environment;
@@ -54,6 +59,7 @@ public class DungeonBase implements ISchematicReveiver {
     Environment environment = Environment.NORMAL;
     boolean weather = false;
     Set<String> allowedCommands;
+    Map<String, ResourceBundle> locale = new HashMap<String, ResourceBundle>();
 
     boolean isLoading = false;
     ConfigurationSection customConfigOptions;
@@ -128,6 +134,29 @@ public class DungeonBase implements ISchematicReveiver {
         return weather;
     }
 
+    public String getTranslation(String key, String langcode) {
+        langcode = Util.cutString(langcode, 2).toLowerCase();
+        ResourceBundle bundle = locale.get(langcode);
+        if (bundle == null) {
+            String globalTranslation = Locales.getString(key, langcode);
+            if (!globalTranslation.equals(key)) {
+                return globalTranslation;
+            }
+            bundle = locale.get("en");
+        }
+        if (bundle == null) {
+            String globalTranslation = Locales.getString(key, langcode);
+            if (!globalTranslation.equals(key)) {
+                return globalTranslation;
+            }
+            return key;
+        }
+        if (bundle.containsKey(key)) {
+            return Colorizer.setColors(bundle.getString(key));
+        }
+        return key;
+    }
+
     public boolean isSchematicLoaded() {
         return schematic != null && schematic.get() != null;
     }
@@ -167,6 +196,19 @@ public class DungeonBase implements ISchematicReveiver {
 
     public File getFolder() {
         return new File(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "dungeons" + File.separator + name);
+    }
+
+    public File getLocaleFolder() {
+        return new File(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "dungeons" + File.separator + name + File.separator + "locale");
+    }
+
+    public File[] getLocaleFiles() {
+        // full langcode support later -> DungeonCraft_[a-z][a-z](_[a-z][a-z])?\.properties
+        File[] localeFiles = getLocaleFolder().listFiles(new PatternFilenameFilter(Pattern.compile(getName() + "_[a-z][a-z]\\.properties")));
+        if (localeFiles == null) {
+            localeFiles = new File[0];
+        }
+        return localeFiles;
     }
 
     public File getTriggerFolder() {
@@ -219,6 +261,20 @@ public class DungeonBase implements ISchematicReveiver {
 
             customConfigOptions = config.getConfigurationSection("options");
         }
+
+        for (File f : getLocaleFiles()) {
+            String langcode = f.getName().replace(getName() + "_", "").replace(".properties", "").toLowerCase();
+            try {
+                java.util.ResourceBundle bundle = new PropertyResourceBundle(new FileInputStream(f));
+                ResourceBundle newLocale = new ResourceBundle(bundle);
+                locale.put(langcode, newLocale);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
 
         new EntityTemplateLoader(this);
     }

@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.dungeon.scripting.contexts;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
-import de.keyle.dungeoncraft.util.locale.Locales;
 
 @SuppressWarnings("unused")
 public class TranslationContext {
@@ -33,11 +32,11 @@ public class TranslationContext {
     }
 
     public String get(String playername, String node) {
-        String locale = "en";
+        String langcode = "en";
         if (DungeonCraftPlayer.isDungeonCraftPlayer(playername)) {
             DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(playername);
-            locale = player.getLanguage();
+            langcode = player.getLanguage();
         }
-        return Locales.getString(node, locale);
+        return dungeon.getDungeonBase().getTranslation(node, langcode);
     }
 }

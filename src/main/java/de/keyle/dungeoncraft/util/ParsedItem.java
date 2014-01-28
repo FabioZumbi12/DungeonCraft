@@ -99,11 +99,15 @@ public class ParsedItem {
             String material = jsonData.get("material").toString();
             Item item = BukkitUtil.getItem(material);
             byte data = 0;
+            int amount = 1;
             if (item != null) {
                 if (jsonData.containsKey("data") && Util.isByte(jsonData.get("data").toString())) {
                     data = Byte.parseByte(jsonData.get("data").toString());
                 }
-                net.minecraft.server.v1_7_R1.ItemStack itemStack = new net.minecraft.server.v1_7_R1.ItemStack(item, 1, data);
+                if (jsonData.containsKey("count") && Util.isInt(jsonData.get("count").toString())) {
+                    amount = Integer.parseInt(jsonData.get("count").toString());
+                }
+                net.minecraft.server.v1_7_R1.ItemStack itemStack = new net.minecraft.server.v1_7_R1.ItemStack(item, amount, data);
                 if (jsonData.containsKey("tag")) {
                     String tagString = jsonData.get("tag").toString();
                     NBTBase localNBTBase = MojangsonParser.a(tagString);

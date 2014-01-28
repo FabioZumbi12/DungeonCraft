@@ -24,8 +24,7 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.DropoutStack;
-import de.keyle.fanciful.FancyMessage;
-import org.bukkit.ChatColor;
+import de.keyle.dungeoncraft.util.locale.Locales;
 
 public class DungeonCraftParty extends de.keyle.dungeoncraft.party.Party {
     private DropoutStack<DungeonCraftPlayer> invites = new DropoutStack<DungeonCraftPlayer>();
@@ -46,16 +45,10 @@ public class DungeonCraftParty extends de.keyle.dungeoncraft.party.Party {
             return;
         }
         invites.add(invitedPlayer);
-        FancyMessage message = new FancyMessage("You have been invited to ")
-                .then(getPartyLeader().getName())
-                .color(ChatColor.AQUA)
-                .then("'s party. Join the party by clicking ")
-                .then("here")
-                .command("/dcparty join " + leader.getName() + " " + getUuid().toString())
-                .color(ChatColor.GOLD)
-                .style(ChatColor.UNDERLINE)
-                .then(".");
-        BukkitUtil.sendMessageRaw(invitedPlayer.getPlayer(), message.toJSONString());
+        String inviteMessage = Locales.getString("Message.Party.Invite", invitedPlayer.getPlayer());
+        inviteMessage = inviteMessage.replace("{0}", getPartyLeader().getName());
+        inviteMessage = inviteMessage.replace("{1}", "/dcparty join " + leader.getName() + " " + getUuid().toString());
+        BukkitUtil.sendMessageRaw(invitedPlayer.getPlayer(), inviteMessage);
     }
 
     public boolean isPlayerInvited(DungeonCraftPlayer player) {

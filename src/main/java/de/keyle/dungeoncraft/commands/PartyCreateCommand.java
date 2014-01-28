@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.commands;
 
 import de.keyle.command.framework.Command;
 import de.keyle.command.framework.CommandArgs;
-import de.keyle.dungeoncraft.api.party.Party;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.util.locale.Locales;
@@ -34,7 +33,7 @@ public class PartyCreateCommand {
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof CraftPlayer) {
             Player player = (Player) args.getSender();
-            if (PartyManager.getPartyType(player) == Party.PartyType.NONE) {
+            if (!PartyManager.isInParty(player)) {
                 PartyManager.newParty(DungeonCraftPlayer.getPlayer(player));
                 player.sendMessage(Locales.getString("Message.Party.Created",player));
                 return;

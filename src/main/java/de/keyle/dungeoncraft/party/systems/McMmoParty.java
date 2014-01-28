@@ -25,7 +25,7 @@ import com.gmail.nossr50.events.party.McMMOPartyChangeEvent;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
-import org.apache.commons.lang.Validate;
+import de.keyle.dungeoncraft.util.MessageException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,7 +39,9 @@ public class McMmoParty extends Party implements Listener {
     public McMmoParty(DungeonCraftPlayer leader) {
         super(leader);
         partyName = PartyAPI.getPartyName(leader.getPlayer());
-        Validate.isTrue(leader.getName().equals(PartyAPI.getPartyLeader(partyName)), "player.not.leader");
+        if (!leader.getName().equals(PartyAPI.getPartyLeader(partyName))) {
+            throw new MessageException("player.not.leader");
+        }
         for (Player member : PartyAPI.getOnlineMembers(partyName)) {
             addPlayer(member);
         }

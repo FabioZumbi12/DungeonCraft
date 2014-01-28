@@ -27,7 +27,7 @@ import com.ancientshores.AncientRPG.Party.AncientRPGParty;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
-import org.apache.commons.lang.Validate;
+import de.keyle.dungeoncraft.util.MessageException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,7 +40,9 @@ public class AncientRpgParty extends Party implements Listener {
     public AncientRpgParty(DungeonCraftPlayer leader) {
         super(leader);
         party = ApiManager.getApiManager().getPlayerParty(leader.getPlayer());
-        Validate.isTrue(leader.equals(party.mLeader), "player.not.leader");
+        if (!leader.equals(party.mLeader)) {
+            throw new MessageException("player.not.leader");
+        }
         for (Player p : party.Member) {
             addPlayer(p);
         }

@@ -32,6 +32,7 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.util.Configuration;
+import de.keyle.dungeoncraft.util.MessageException;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
@@ -175,8 +176,8 @@ public class PlayerListener implements Listener {
                     } else {
                         try {
                             party = PartyManager.newParty(dungeonCraftPlayer);
-                        } catch (IllegalArgumentException e) {
-                            if (e.getMessage().equals("player.not.leader")) {
+                        } catch (MessageException e) {
+                            if (e.getMessageKey().equals("player.not.leader")) {
                                 event.getPlayer().sendMessage("The leader of your party must enter this dungeon first!");
                                 event.setCancelled(true);
                                 return;

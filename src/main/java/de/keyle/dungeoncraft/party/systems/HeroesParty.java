@@ -28,8 +28,8 @@ import com.herocraftonline.heroes.characters.party.HeroParty;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
+import de.keyle.dungeoncraft.util.MessageException;
 import de.keyle.dungeoncraft.util.PluginSupportManager;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -43,7 +43,9 @@ public class HeroesParty extends Party implements Listener {
         Heroes heroes = PluginSupportManager.getPluginInstance(Heroes.class);
         Hero heroPlayer = heroes.getCharacterManager().getHero(Bukkit.getPlayerExact(leader.getName()));
         party = heroPlayer.getParty();
-        Validate.isTrue(party.getLeader() != heroPlayer, "player.not.leader");
+        if (party.getLeader() != heroPlayer) {
+            throw new MessageException("player.not.leader");
+        }
         for (Hero h : heroPlayer.getParty().getMembers()) {
             addPlayer(h.getPlayer());
         }

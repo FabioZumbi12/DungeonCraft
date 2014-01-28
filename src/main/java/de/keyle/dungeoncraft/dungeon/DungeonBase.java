@@ -20,6 +20,7 @@
 
 package de.keyle.dungeoncraft.dungeon;
 
+import com.google.common.io.PatternFilenameFilter;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.entity.template.EntityTemplateLoader;
 import de.keyle.dungeoncraft.entity.template.EntityTemplateRegistry;
@@ -37,6 +38,7 @@ import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import static org.bukkit.World.Environment;
 
@@ -172,7 +174,7 @@ public class DungeonBase implements ISchematicReveiver {
     }
 
     public File[] getTriggerFiles() {
-        File[] triggerFiles = getTriggerFolder().listFiles();
+        File[] triggerFiles = getTriggerFolder().listFiles(new PatternFilenameFilter(Pattern.compile("[.-_a-z0-9]+\\.js", Pattern.CASE_INSENSITIVE)));
         if (triggerFiles == null) {
             triggerFiles = new File[0];
         }

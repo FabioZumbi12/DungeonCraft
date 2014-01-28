@@ -42,6 +42,9 @@ public class DungeonCraftParty extends de.keyle.dungeoncraft.party.Party {
         if (PartyManager.isInParty(invitedPlayer.getPlayer())) {
             return;
         }
+        if (isPlayerInvited(invitedPlayer)) {
+            return;
+        }
         invites.add(invitedPlayer);
         FancyMessage message = new FancyMessage("You have been invited to ")
                 .then(getPartyLeader().getName())

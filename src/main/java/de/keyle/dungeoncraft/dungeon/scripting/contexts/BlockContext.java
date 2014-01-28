@@ -45,6 +45,22 @@ public class BlockContext {
         setBlock(x, y, z, materialName, data, "");
     }
 
+    public Block getBlockAt(int x, int y, int z) {
+        if (x < 0 || x >= 1600 || y < 0 || y >= 256 || z < 0 || z >= 1600) {
+            return null;
+        }
+
+        x += dungeon.getPosition().getBlockX();
+        z += dungeon.getPosition().getBlockZ();
+
+        World world = Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME);
+        return world.getBlockAt(x,y,z);
+    }
+
+    public boolean testForBlock(int x, int y, int z, Block b) {
+        return getBlockAt(x,y,z).equals(b);
+    }
+
     public void setBlock(int x, int y, int z, String materialName, byte data, String jsonTag) {
         if (x < 0 || x >= 1600 || y < 0 || y >= 256 || z < 0 || z >= 1600) {
             return;

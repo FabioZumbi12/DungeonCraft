@@ -22,6 +22,7 @@ package de.keyle.dungeoncraft.listeners;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.api.events.*;
+import de.keyle.dungeoncraft.api.util.MessageException;
 import de.keyle.dungeoncraft.dungeon.*;
 import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntrance;
 import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntranceRegistry;
@@ -33,7 +34,6 @@ import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import de.keyle.dungeoncraft.util.Configuration;
-import de.keyle.dungeoncraft.util.MessageException;
 import de.keyle.dungeoncraft.util.Util;
 import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.vector.Vector;

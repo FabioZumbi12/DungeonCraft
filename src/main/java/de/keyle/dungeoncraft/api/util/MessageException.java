@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.util;
+package de.keyle.dungeoncraft.api.util;
 
 public class MessageException extends RuntimeException {
     final String messageKey;

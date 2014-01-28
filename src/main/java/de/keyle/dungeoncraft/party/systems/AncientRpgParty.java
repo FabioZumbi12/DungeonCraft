@@ -25,10 +25,10 @@ import com.ancientshores.AncientRPG.API.AncientRPGPartyLeaveEvent;
 import com.ancientshores.AncientRPG.API.ApiManager;
 import com.ancientshores.AncientRPG.Party.AncientRPGParty;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
+import de.keyle.dungeoncraft.api.util.MessageException;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.util.locale.Locales;
-import de.keyle.dungeoncraft.util.MessageException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -75,7 +75,7 @@ public class AncientRpgParty extends Party implements Listener {
             if (player.getDungeon() == null) {
                 removePlayer(player);
             } else {
-                event.getPlayer().sendMessage(Locales.getString("Error.Cant.Leave.Party.Dungeon",event.getPlayer()));
+                event.getPlayer().sendMessage(Locales.getString("Error.Cant.Leave.Party.Dungeon", event.getPlayer()));
                 event.setCancelled(true);
             }
         }

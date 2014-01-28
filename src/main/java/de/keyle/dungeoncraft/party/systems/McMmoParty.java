@@ -69,7 +69,7 @@ public class McMmoParty extends Party implements Listener {
             if (player.getDungeon() == null) {
                 removePlayer(player);
             } else {
-                event.getPlayer().getPlayer().sendMessage(Locales.getString("Error.Cant.Leave.Party.Dungon", event.getPlayer()));
+                event.getPlayer().getPlayer().sendMessage(Locales.getString("Error.Cant.Leave.Party.Dungeon", event.getPlayer()));
                 event.setCancelled(true);
             }
         }

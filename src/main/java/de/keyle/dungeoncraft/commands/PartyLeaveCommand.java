@@ -54,7 +54,7 @@ public class PartyLeaveCommand {
                     }
                     return;
                 }
-                player.sendMessage(Locales.getString("Error.Cant.Leave.Party.Dungon", player));
+                player.sendMessage(Locales.getString("Error.Cant.Leave.Party.Dungeon", player));
                 return;
             }
             player.sendMessage(Locales.getString("Error.Not.In.Party", player));

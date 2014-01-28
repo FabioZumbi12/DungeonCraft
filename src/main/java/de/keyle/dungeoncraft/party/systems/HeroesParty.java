@@ -78,7 +78,7 @@ public class HeroesParty extends Party implements Listener {
             if (player.getDungeon() == null) {
                 removePlayer(player);
             } else {
-                event.getHero().getPlayer().sendMessage(Locales.getString("Error.Cant.Leave.Party.Dungon", event.getHero().getPlayer()));
+                event.getHero().getPlayer().sendMessage(Locales.getString("Error.Cant.Leave.Party.Dungeon", event.getHero().getPlayer()));
                 event.setCancelled(true);
             }
             removePlayer(event.getHero().getPlayer());

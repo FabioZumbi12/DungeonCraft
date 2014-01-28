@@ -31,6 +31,7 @@ import de.keyle.dungeoncraft.dungeon.scripting.Trigger;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.PartyManager;
+import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.MessageException;
 import de.keyle.dungeoncraft.util.Util;
@@ -43,6 +44,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 
@@ -328,6 +330,28 @@ public class PlayerListener implements Listener {
         List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerDungeonEnterEvent.class);
         for (Trigger trigger : triggers) {
             trigger.execute(event.getPlayer().getName());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDamageByPlayer(final EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player) || !(event.getDamager() instanceof Player)) {
+            return;
+        }
+        Player damager = (Player) event.getDamager();
+        Player victim = (Player) event.getEntity();
+        if (!DungeonCraftPlayer.isDungeonCraftPlayer(damager) || !DungeonCraftPlayer.isDungeonCraftPlayer(victim)) {
+            return;
+        }
+        DungeonCraftPlayer dungeonDamager = DungeonCraftPlayer.getPlayer(damager);
+        DungeonCraftPlayer dungeonVictim = DungeonCraftPlayer.getPlayer(victim);
+
+        Party p = dungeonVictim.getParty();
+        if (p != null && p instanceof DungeonCraftParty) {
+            DungeonCraftParty party = (DungeonCraftParty) p;
+            if (!party.isFriendlyFireEnabled() && dungeonDamager.getParty().equals(party)) {
+                event.setCancelled(true);
+            }
         }
     }
 }

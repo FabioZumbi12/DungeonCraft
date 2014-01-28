@@ -24,13 +24,12 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.DropoutStack;
-import de.keyle.dungeoncraft.util.Util;
-import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 
 public class DungeonCraftParty extends de.keyle.dungeoncraft.party.Party {
     private DropoutStack<DungeonCraftPlayer> invites = new DropoutStack<DungeonCraftPlayer>();
+    private boolean friendlyFire = false;
 
     public DungeonCraftParty(DungeonCraftPlayer leader) {
         super(leader);
@@ -66,7 +65,7 @@ public class DungeonCraftParty extends de.keyle.dungeoncraft.party.Party {
         }
         leader = player;
         invites.clear();
-        sendMessage("Message.Leader.Change",player.getName());
+        sendMessage("Message.Leader.Change", player.getName());
     }
 
     public void addPlayer(DungeonCraftPlayer player) {
@@ -74,6 +73,14 @@ public class DungeonCraftParty extends de.keyle.dungeoncraft.party.Party {
         if (isPlayerInvited(player)) {
             invites.remove(player);
         }
+    }
+
+    public void setFriendlyFire(boolean friendlyFire) {
+        this.friendlyFire = friendlyFire;
+    }
+
+    public boolean isFriendlyFireEnabled() {
+        return friendlyFire;
     }
 
     @Override

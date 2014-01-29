@@ -25,6 +25,7 @@ import com.ancientshores.AncientRPG.Party.AncientRPGParty;
 import com.gmail.nossr50.api.PartyAPI;
 import com.herocraftonline.heroes.Heroes;
 import com.herocraftonline.heroes.characters.Hero;
+import de.keyle.dungeoncraft.api.util.MessageException;
 import de.keyle.dungeoncraft.party.systems.AncientRpgParty;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import de.keyle.dungeoncraft.party.systems.HeroesParty;
@@ -33,7 +34,7 @@ import de.keyle.dungeoncraft.util.PluginSupportManager;
 import org.bukkit.entity.Player;
 
 public class PartyManager {
-    public static Party newParty(DungeonCraftPlayer player) throws IllegalArgumentException {
+    public static Party newParty(DungeonCraftPlayer player) throws MessageException {
         switch (getPartyType(player.getPlayer())) {
             case ANCIENT:
                 return new AncientRpgParty(player);

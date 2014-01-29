@@ -60,29 +60,29 @@ public class PartyManager {
                 }
             } catch (Exception ignored) {
             }
-        } else if (PluginSupportManager.isPluginUsable("mcMMO")) {
+        }
+        if (PluginSupportManager.isPluginUsable("mcMMO")) {
             try {
                 if (PartyAPI.inParty(player)) {
                     return Party.PartyType.MCMMO;
                 }
             } catch (Exception ignored) {
             }
-        } else if (PluginSupportManager.isPluginUsable("AncientRPG")) {
+        }
+        if (PluginSupportManager.isPluginUsable("AncientRPG")) {
             try {
                 ApiManager api = ApiManager.getApiManager();
                 AncientRPGParty party = api.getPlayerParty(player);
                 if (party != null) {
                     return Party.PartyType.ANCIENT;
                 }
-
             } catch (Exception ignored) {
             }
-        } else {
-            if (DungeonCraftPlayer.isDungeonCraftPlayer(player)) {
-                DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
-                if (dungeonCraftPlayer.getParty() != null && dungeonCraftPlayer.getParty() instanceof DungeonCraftParty) {
-                    return Party.PartyType.DUNGEONCRAFT;
-                }
+        }
+        if (DungeonCraftPlayer.isDungeonCraftPlayer(player)) {
+            DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
+            if (dungeonCraftPlayer.getParty() != null && dungeonCraftPlayer.getParty() instanceof DungeonCraftParty) {
+                return Party.PartyType.DUNGEONCRAFT;
             }
         }
         return Party.PartyType.NONE;

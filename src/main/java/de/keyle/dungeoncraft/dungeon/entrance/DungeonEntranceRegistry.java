@@ -63,6 +63,5 @@ public class DungeonEntranceRegistry {
         if (entranceLoader == null) {
             entranceLoader = new DungeonEntranceLoader();
         }
-        entranceLoader.loadEntrances();
     }
 }

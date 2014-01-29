@@ -219,14 +219,10 @@ public class PlayerListener implements Listener {
                                     event.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Dungeon.Cooldown.Remaining", event.getPlayer()), DurationFormatUtils.formatDurationWords(lockout, true, true)));
                                 } else {
                                     if (party.getPartyStrength() >= base.getMinPlayerCount()) {
-                                        if (party.getPartyStrength() >= base.getMinPlayerCount()) {
-                                            Dungeon d = new Dungeon(entrance.getDungeonName(), entrance.getDungeonBase(), party);
-                                            d.setExitLocation(entrance.getExitLocation());
-                                            DungeonManager.addDungeon(d);
-                                            event.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Loading", event.getPlayer()));
-                                        } else {
-                                            event.getPlayer().sendMessage(Locales.getString("Error.Party.To.Small", event.getPlayer()));
-                                        }
+                                        Dungeon d = new Dungeon(entrance.getDungeonName(), entrance.getDungeonBase(), party);
+                                        d.setExitLocation(entrance.getExitLocation());
+                                        DungeonManager.addDungeon(d);
+                                        event.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Loading", event.getPlayer()));
                                     } else {
                                         event.getPlayer().sendMessage(Util.formatText("Error.Party.To.Small.Extended", event.getPlayer(), base.getMinPlayerCount()));
                                     }

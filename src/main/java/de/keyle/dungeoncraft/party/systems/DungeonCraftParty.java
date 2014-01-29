@@ -61,7 +61,7 @@ public class DungeonCraftParty extends de.keyle.dungeoncraft.party.Party {
         }
         leader = player;
         invites.clear();
-        sendMessage("Message.Leader.Change", player.getName());
+        sendMessage("Message.Party.Leader.Change", player.getName());
     }
 
     public void addPlayer(DungeonCraftPlayer player) {

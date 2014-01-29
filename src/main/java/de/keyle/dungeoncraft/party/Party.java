@@ -48,7 +48,7 @@ public abstract class Party implements de.keyle.dungeoncraft.api.party.Party {
             return;
         }
         if (!this.containsPlayer(player)) {
-            sendMessage("Message.Player.Join",player.getName());
+            sendMessage("Message.Party.Player.Join", player.getName());
             members.add(player);
             player.setParty(this);
         }
@@ -63,7 +63,7 @@ public abstract class Party implements de.keyle.dungeoncraft.api.party.Party {
         if (this.containsPlayer(player)) {
             this.members.remove(player);
             player.setParty(null);
-            sendMessage("Message.Player.Leave",player.getName());
+            sendMessage("Message.Party.Player.Leave", player.getName());
         }
     }
 

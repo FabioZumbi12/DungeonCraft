@@ -66,7 +66,7 @@ public class PartyInviteCommand {
                         }
                         if (!dungeonCraftParty.getPartyMembers().contains(invitedDungeonCraftPlayer)) {
                             dungeonCraftParty.invitePlayer(invitedDungeonCraftPlayer);
-                            player.sendMessage(Util.formatText(Locales.getString("Message.Invite.Successful",player),invitedPlayer.getDisplayName()));
+                            player.sendMessage(Util.formatText(Locales.getString("Message.Party.Invite.Successful", player), invitedPlayer.getDisplayName()));
                         } else {
                             player.sendMessage(Util.formatText(Locales.getString("Error.Already.In.This.Party",player),invitedPlayer.getDisplayName()));
                         }

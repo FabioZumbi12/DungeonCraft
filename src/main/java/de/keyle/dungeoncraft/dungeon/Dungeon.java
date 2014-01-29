@@ -272,7 +272,7 @@ public class Dungeon implements Scheduler {
 
             Bukkit.getPluginManager().callEvent(new PlayerDungeonEnterEvent(this, p));
             if (endTime > 0) {
-                p.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Remaining.Dungeon.Time",p),DurationFormatUtils.formatDurationWords(endTime - System.currentTimeMillis(), true, true)));
+                p.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Dungeon.Time.Remaining", p), DurationFormatUtils.formatDurationWords(endTime - System.currentTimeMillis(), true, true)));
             }
         }
     }
@@ -307,14 +307,14 @@ public class Dungeon implements Scheduler {
                 teleportIn(playerParty.getPartyLeader());
                 for (DungeonCraftPlayer player : getPlayerList()) {
                     if (player.isOnline() && !player.equals(playerParty.getPartyLeader())) {
-                        player.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Lockout.Reset",player),getDungeonName()));
+                        player.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Dungeon.Ready", player), getDungeonName()));
                     }
                 }
             }
             if (endTime > 0 && System.currentTimeMillis() >= endTime) {
                 for (DungeonCraftPlayer p : getPlayerList()) {
                     if (p.isOnline()) {
-                        p.getPlayer().sendMessage(Locales.getString("Error.Time.Over",p));
+                        p.getPlayer().sendMessage(Locales.getString("Error.Time.Over", p));
                     }
                 }
                 completeDungeon(Result.Failure);

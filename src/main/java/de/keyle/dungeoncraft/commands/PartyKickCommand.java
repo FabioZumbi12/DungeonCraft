@@ -53,8 +53,8 @@ public class PartyKickCommand {
                                 player.sendMessage(Locales.getString("Error.Selfkick",player));
                                 return;
                             }
-                            player.sendMessage(Util.formatText(Locales.getString("Message.Player.Kicked",player),partyMember.getName()));
-                            partyMember.sendMessage(Locales.getString("Message.Player.Got.Kicked",partyMember));
+                            player.sendMessage(Util.formatText(Locales.getString("Message.Party.Player.Kick", player), partyMember.getName()));
+                            partyMember.sendMessage(Locales.getString("Message.Party.Player.Kick.You", partyMember));
                             party.removePlayer(partyMember);
                             return;
                         }

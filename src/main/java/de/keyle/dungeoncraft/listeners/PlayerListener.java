@@ -182,7 +182,7 @@ public class PlayerListener implements Listener {
                             party = PartyManager.newParty(dungeonCraftPlayer);
                         } catch (MessageException e) {
                             if (e.getMessageKey().equals("player.not.leader")) {
-                                event.getPlayer().sendMessage(Locales.getString("Error.Leader.First",event.getPlayer()));
+                                event.getPlayer().sendMessage(Locales.getString("Error.Leader.First", event.getPlayer()));
                                 event.setCancelled(true);
                                 return;
                             }
@@ -195,51 +195,51 @@ public class PlayerListener implements Listener {
                             Dungeon dungeon = DungeonManager.getDungeonFor(party);
                             if (dungeon != null) {
                                 if (dungeon.isCompleted()) {
-                                    event.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Complete",event.getPlayer()));
+                                    event.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Complete", event.getPlayer()));
                                 } else if (dungeon.isReady() && !dungeon.isLoading()) {
                                     long lockout = dungeonCraftPlayer.getRemainingLockout(dungeon.getDungeonName());
                                     if (lockout > 0) {
-                                        event.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Remaining.Dungeon.Cooldown",event.getPlayer()),DurationFormatUtils.formatDurationWords(lockout, true, true)));
+                                        event.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Dungeon.Cooldown.Remaining", event.getPlayer()), DurationFormatUtils.formatDurationWords(lockout, true, true)));
                                     } else {
                                         event.setCancelled(true);
                                         dungeon.teleportIn(dungeonCraftPlayer);
                                         return;
                                     }
                                 } else {
-                                    event.getPlayer().sendMessage(Locales.getString("Error.Dungeon.Not.Ready",event.getPlayer()));
+                                    event.getPlayer().sendMessage(Locales.getString("Error.Dungeon.Not.Ready", event.getPlayer()));
                                 }
                             } else {
-                                event.getPlayer().sendMessage(Locales.getString("Error.Leader.First",event.getPlayer()));
+                                event.getPlayer().sendMessage(Locales.getString("Error.Leader.First", event.getPlayer()));
                             }
                         } else {
                             if (party.getPartyLeader().equals(dungeonCraftPlayer)) {
                                 DungeonBase base = entrance.getDungeonBase();
                                 long lockout = dungeonCraftPlayer.getRemainingLockout(entrance.getDungeonName());
                                 if (lockout > 0) {
-                                    event.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Remaining.Dungeon.Cooldown",event.getPlayer()),DurationFormatUtils.formatDurationWords(lockout, true, true)));
+                                    event.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Dungeon.Cooldown.Remaining", event.getPlayer()), DurationFormatUtils.formatDurationWords(lockout, true, true)));
                                 } else {
                                     if (party.getPartyStrength() >= base.getMinPlayerCount()) {
                                         if (party.getPartyStrength() >= base.getMinPlayerCount()) {
                                             Dungeon d = new Dungeon(entrance.getDungeonName(), entrance.getDungeonBase(), party);
                                             d.setExitLocation(entrance.getExitLocation());
                                             DungeonManager.addDungeon(d);
-                                            event.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Loading",event.getPlayer()));
+                                            event.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Loading", event.getPlayer()));
                                         } else {
-                                            event.getPlayer().sendMessage(Locales.getString("Error.Party.To.Small",event.getPlayer()));
+                                            event.getPlayer().sendMessage(Locales.getString("Error.Party.To.Small", event.getPlayer()));
                                         }
                                     } else {
-                                        event.getPlayer().sendMessage(Util.formatText("Error.Party.To.Small.Extended",event.getPlayer(),base.getMinPlayerCount()));
+                                        event.getPlayer().sendMessage(Util.formatText("Error.Party.To.Small.Extended", event.getPlayer(), base.getMinPlayerCount()));
                                     }
                                 }
                             } else {
-                                event.getPlayer().sendMessage(Locales.getString("Error.Leader.First",event.getPlayer()));
+                                event.getPlayer().sendMessage(Locales.getString("Error.Leader.First", event.getPlayer()));
                             }
                         }
                     } else {
-                        event.getPlayer().sendMessage(Locales.getString("Error.No.Entry.Without.Party",event.getPlayer()));
+                        event.getPlayer().sendMessage(Locales.getString("Error.No.Entry.Without.Party", event.getPlayer()));
                     }
                 } else {
-                    event.getPlayer().sendMessage(Locales.getString("Error.No.Entry.Without.Party",event.getPlayer()));
+                    event.getPlayer().sendMessage(Locales.getString("Error.No.Entry.Without.Party", event.getPlayer()));
                 }
                 event.setCancelled(true);
             }
@@ -291,7 +291,7 @@ public class PlayerListener implements Listener {
                         return;
                     }
                     event.setCancelled(true);
-                    event.getPlayer().sendMessage(Util.formatText(Locales.getString("Error.Commaned.Not.Allowed",event.getPlayer()),cmd));
+                    event.getPlayer().sendMessage(Util.formatText(Locales.getString("Error.Commaned.Not.Allowed", event.getPlayer()), cmd));
                 }
             }
         }

@@ -252,7 +252,9 @@ public class PlayerListener implements Listener {
         if (event.getTo().getBlockX() == event.getFrom().getBlockX() && event.getTo().getBlockY() == event.getFrom().getBlockY() && event.getTo().getBlockZ() == event.getFrom().getBlockZ()) {
             return;
         }
-        Bukkit.getPluginManager().callEvent(new PlayerMoveBlockEvent(event.getPlayer(), event.getFrom(), event.getTo()));
+        PlayerMoveBlockEvent moveBlockEvent = new PlayerMoveBlockEvent(event.getPlayer(), event.getFrom(), event.getTo());
+        Bukkit.getPluginManager().callEvent(moveBlockEvent);
+        event.setCancelled(moveBlockEvent.isCancelled());
     }
 
     @EventHandler

@@ -206,4 +206,8 @@ public class BukkitUtil {
     public static org.bukkit.inventory.ItemStack getItemStackFromString(String itemName, int quantity) {
         return new ItemStack(CraftItemStack.asBukkitCopy(new net.minecraft.server.v1_7_R1.ItemStack(BukkitUtil.getItem(itemName))).getType(),quantity);
     }
+
+    public static boolean isRealPlayer(Player player) {
+        return player instanceof CraftPlayer;
+    }
 }

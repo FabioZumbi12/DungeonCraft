@@ -20,12 +20,16 @@
 
 package de.keyle.dungeoncraft.commands;
 
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.bukkit.selections.Selection;
 import de.keyle.command.framework.Command;
 import de.keyle.command.framework.CommandArgs;
 import de.keyle.dungeoncraft.dungeon.DungeonBase;
 import de.keyle.dungeoncraft.dungeon.DungeonBaseRegistry;
 import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntrance;
 import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntranceRegistry;
+import de.keyle.dungeoncraft.util.BukkitUtil;
+import de.keyle.dungeoncraft.util.PluginSupportManager;
 import de.keyle.dungeoncraft.util.Util;
 import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.vector.Region;
@@ -49,7 +53,7 @@ public class CreateDungeonEntranceCommand {
             String dungeonName = null;
             Location exitLocation = null;
 
-            CommandSender commanedSender = args.getSender();
+            CommandSender commandSender = args.getSender();
 
             if (arguments.size() > 0) {
                 int minX = Integer.MIN_VALUE;
@@ -68,13 +72,33 @@ public class CreateDungeonEntranceCommand {
                 String baseName = null;
                 String name = null;
 
+                if (commandSender instanceof Player && BukkitUtil.isRealPlayer((Player) commandSender) && PluginSupportManager.isPluginUsable("WorldEdit")) {
+                    Player player = (Player) commandSender;
+                    try {
+                        WorldEditPlugin worldEditPlugin = PluginSupportManager.getPluginInstance(WorldEditPlugin.class);
+                        Selection selection = worldEditPlugin.getSelection(player);
+                        if(selection != null) {
+                            Location minLoc =  selection.getMinimumPoint();
+                            Location maxLoc =  selection.getMaximumPoint();
+                            minX = minLoc.getBlockX();
+                            minY = minLoc.getBlockY();
+                            minZ = minLoc.getBlockZ();
+                            maxX = maxLoc.getBlockX();
+                            maxY = maxLoc.getBlockY();
+                            maxZ = maxLoc.getBlockZ();
+                        }
+                    } catch (Error ignored) {
+                    } catch (Exception ignored) {
+                    }
+                }
+
                 for (String arg : arguments) {
                     if (arg.startsWith("x=")) {
                         String x = arg.substring(2);
                         if (NumberUtils.isNumber(x)) {
                             minX = Integer.parseInt(x);
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), x));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commandSender), x));
                             return;
                         }
                     } else if (arg.startsWith("y=")) {
@@ -82,7 +106,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(y)) {
                             minY = Integer.parseInt(y);
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), y));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commandSender), y));
                             return;
                         }
                     } else if (arg.startsWith("z=")) {
@@ -90,7 +114,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(z)) {
                             minZ = Integer.parseInt(z);
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), z));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commandSender), z));
                             return;
                         }
                     } else if (arg.startsWith("dx=")) {
@@ -98,7 +122,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(x)) {
                             maxX = Integer.parseInt(x);
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), x));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commandSender), x));
                             return;
                         }
                     } else if (arg.startsWith("dy=")) {
@@ -106,7 +130,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(y)) {
                             maxY = Integer.parseInt(y);
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), y));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commandSender), y));
                             return;
                         }
                     } else if (arg.startsWith("dz=")) {
@@ -114,7 +138,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(z)) {
                             maxZ = Integer.parseInt(z);
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), z));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commandSender), z));
                             return;
                         }
                     } else if (arg.startsWith("ex=")) {
@@ -122,7 +146,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(x)) {
                             exitX = Integer.parseInt(x);
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), x));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commandSender), x));
                             return;
                         }
                     } else if (arg.startsWith("ey=")) {
@@ -130,7 +154,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(y)) {
                             exitY = Integer.parseInt(y);
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), y));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commandSender), y));
                             return;
                         }
                     } else if (arg.startsWith("ez=")) {
@@ -138,7 +162,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(z)) {
                             exitZ = Integer.parseInt(z);
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), z));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commandSender), z));
                             return;
                         }
                     } else if (arg.startsWith("eyaw=")) {
@@ -146,7 +170,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(yaw)) {
                             exitYaw = Float.parseFloat(yaw);
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), yaw));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commandSender), yaw));
                             return;
                         }
                     } else if (arg.startsWith("epitch=")) {
@@ -154,7 +178,7 @@ public class CreateDungeonEntranceCommand {
                         if (NumberUtils.isNumber(pitch)) {
                             exitPitch = Float.parseFloat(pitch);
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commanedSender), pitch));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.NAN", commandSender), pitch));
                             return;
                         }
                     } else if (arg.startsWith("w=")) {
@@ -162,7 +186,7 @@ public class CreateDungeonEntranceCommand {
                         if (Bukkit.getWorld(w) != null) {
                             world = w;
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.World.Not.Found", commanedSender), w));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.World.Not.Found", commandSender), w));
                             return;
                         }
                     } else if (arg.startsWith("ew=")) {
@@ -170,7 +194,7 @@ public class CreateDungeonEntranceCommand {
                         if (Bukkit.getWorld(w) != null) {
                             exitWorld = w;
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.World.Not.Found", commanedSender), w));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.World.Not.Found", commandSender), w));
                             return;
                         }
                     } else if (arg.startsWith("b=")) {
@@ -178,7 +202,7 @@ public class CreateDungeonEntranceCommand {
                         if (DungeonBaseRegistry.hasDungeonBase(b)) {
                             baseName = b;
                         } else {
-                            commanedSender.sendMessage(Util.formatText(Locales.getString("Error.DungeonBase.Not.Found", commanedSender), b));
+                            commandSender.sendMessage(Util.formatText(Locales.getString("Error.DungeonBase.Not.Found", commandSender), b));
                             return;
                         }
                     } else if (arg.startsWith("n=")) {
@@ -219,12 +243,12 @@ public class CreateDungeonEntranceCommand {
                         exitLocation.setPitch(exitPitch);
                     }
                 } else {
-                    commanedSender.sendMessage(Locales.getString("Error.Missing.Parameters", commanedSender));
+                    commandSender.sendMessage(Locales.getString("Error.Missing.Parameters", commandSender));
                 }
             }
 
             if (region != null && worldName != null && base != null && dungeonName != null && exitLocation != null) {
-                commanedSender.sendMessage(Locales.getString("Message.Entrance.Created", commanedSender));
+                commandSender.sendMessage(Locales.getString("Message.Entrance.Created", commandSender));
                 DungeonEntrance entrance = new DungeonEntrance(dungeonName, worldName, region, base, exitLocation);
                 DungeonEntranceRegistry.registerEntrance(entrance);
                 DungeonEntranceRegistry.saveEntrances();

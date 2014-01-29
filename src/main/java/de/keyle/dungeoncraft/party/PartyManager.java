@@ -51,6 +51,21 @@ public class PartyManager {
     }
 
     public static Party.PartyType getPartyType(Player player) {
+        if (DungeonCraftPlayer.isDungeonCraftPlayer(player)) {
+            DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
+            Party party = dungeonCraftPlayer.getParty();
+            if (party != null) {
+                if(party instanceof DungeonCraftParty) {
+                    return Party.PartyType.DUNGEONCRAFT;
+                } else if(party instanceof McMmoParty) {
+                    return Party.PartyType.MCMMO;
+                } else if(party instanceof HeroesParty) {
+                    return Party.PartyType.HEROES;
+                } else if(party instanceof AncientRpgParty) {
+                    return Party.PartyType.ANCIENT;
+                }
+            }
+        }
         if (PluginSupportManager.isPluginUsable("Heroes")) {
             try {
                 Heroes heroes = PluginSupportManager.getPluginInstance(Heroes.class);
@@ -77,12 +92,6 @@ public class PartyManager {
                     return Party.PartyType.ANCIENT;
                 }
             } catch (Exception ignored) {
-            }
-        }
-        if (DungeonCraftPlayer.isDungeonCraftPlayer(player)) {
-            DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
-            if (dungeonCraftPlayer.getParty() != null && dungeonCraftPlayer.getParty() instanceof DungeonCraftParty) {
-                return Party.PartyType.DUNGEONCRAFT;
             }
         }
         return Party.PartyType.NONE;

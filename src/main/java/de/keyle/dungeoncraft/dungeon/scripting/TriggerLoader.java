@@ -51,6 +51,7 @@ public class TriggerLoader {
         BlockContext blockContext = new BlockContext(dungeon);
         TranslationContext translationContext = new TranslationContext(dungeon);
         ScoreboardContext scoreboardContext = new ScoreboardContext(dungeon.getScoreboard());
+        ItemContext itemContext = new ItemContext(dungeon);
 
         for (File f : dungeon.getDungeonBase().getTriggerFiles()) {
             Context cx = Context.enter();
@@ -71,6 +72,7 @@ public class TriggerLoader {
                 ScriptableObject.putConstProperty(scope, "Block", blockContext);
                 ScriptableObject.putConstProperty(scope, "Translation", translationContext);
                 ScriptableObject.putConstProperty(scope, "Scoreboard", scoreboardContext);
+                ScriptableObject.putConstProperty(scope, "Item", itemContext);
 
                 cx.evaluateReader(scope, new FileReader(f), fileName, 0, null);
 

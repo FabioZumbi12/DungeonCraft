@@ -41,6 +41,9 @@ import de.keyle.dungeoncraft.util.logger.DungeonLogger;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -286,8 +289,49 @@ public class Dungeon implements Scheduler {
                 BukkitUtil.setPlayerEnvironment(p.getPlayer(), dungeonBase.getEnvironment());
                 updatePlayerTime();
                 updatePlayerWeather();
+                clearDungeonCraftItems(p.getPlayer().getInventory());
             }
             Bukkit.getPluginManager().callEvent(new PlayerDungeonLeaveEvent(this, p));
+        }
+    }
+
+    public static void clearDungeonCraftItems(Inventory inv) {
+        ItemStack[] content = inv.getContents();
+        ItemStack item;
+        for(int i = 0; i < content.length;i++) {
+            item = content[i];
+            if(item != null && isDungeonCraftItem(item)) {
+                inv.setItem(i,null);
+            }
+        }
+    }
+
+    public static boolean isDungeonCraftItem(ItemStack item) {
+        if(item != null && item.hasItemMeta()) {
+            ItemMeta meta = item.getItemMeta();
+            if(meta.hasLore()) {
+                List<String> lore = meta.getLore();
+                if(lore.size() > 0 && lore.get(lore.size()-1).equals(ChatColor.RESET + "❱❱❱ " + ChatColor.DARK_RED + "D" + ChatColor.DARK_GRAY + "ungeon" + ChatColor.DARK_RED + "C" + ChatColor.DARK_GRAY + "raft" + ChatColor.GRAY + " Item" + ChatColor.RESET + " ❰❰❰")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void markAsDungeonCraftItem(ItemStack item) {
+        if(item != null) {
+            ItemMeta meta = item.getItemMeta();
+            List<String> lore = meta.getLore();
+            if(lore == null) {
+                lore = new ArrayList<String>();
+            }
+            if(lore.size() > 0 && lore.get(lore.size()-1).equals(ChatColor.RESET + "❱❱❱ " + ChatColor.DARK_RED + "D" + ChatColor.DARK_GRAY + "ungeon" + ChatColor.DARK_RED + "C" + ChatColor.DARK_GRAY + "raft" + ChatColor.GRAY + " Item" + ChatColor.RESET + " ❰❰❰")) {
+                return;
+            }
+            lore.add(ChatColor.RESET + "❱❱❱ " + ChatColor.DARK_RED + "D" + ChatColor.DARK_GRAY + "ungeon" + ChatColor.DARK_RED + "C" + ChatColor.DARK_GRAY + "raft" + ChatColor.GRAY + " Item" + ChatColor.RESET + " ❰❰❰");
+            meta.setLore(lore);
+            item.setItemMeta(meta);
         }
     }
 

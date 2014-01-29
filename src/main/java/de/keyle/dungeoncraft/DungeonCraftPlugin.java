@@ -55,6 +55,7 @@ import de.keyle.dungeoncraft.entity.types.wolf.EntityDungeonCraftWolf;
 import de.keyle.dungeoncraft.entity.types.zombie.EntityDungeonCraftZombie;
 import de.keyle.dungeoncraft.listeners.DungeonListener;
 import de.keyle.dungeoncraft.listeners.EntityListener;
+import de.keyle.dungeoncraft.listeners.InventoryListener;
 import de.keyle.dungeoncraft.listeners.PlayerListener;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.BukkitUtil;
@@ -117,6 +118,8 @@ public class DungeonCraftPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(entityListener, this);
         PlayerListener playerListener = new PlayerListener();
         getServer().getPluginManager().registerEvents(playerListener, this);
+        InventoryListener inventoryListener = new InventoryListener();
+        getServer().getPluginManager().registerEvents(inventoryListener, this);
         DungeonListener dungeonListener = new DungeonListener();
         getServer().getPluginManager().registerEvents(dungeonListener, this);
 

@@ -306,6 +306,11 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
+    public void onPlayerJoin(final PlayerJoinEvent event) {
+        Dungeon.clearDungeonCraftItems(event.getPlayer().getInventory());
+    }
+
+    @EventHandler
     public void onPlayerTeleport(final PlayerTeleportEvent event) {
         if (event.getTo().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME) && !event.getFrom().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
             DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(event.getPlayer());

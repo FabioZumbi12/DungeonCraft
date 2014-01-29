@@ -90,7 +90,7 @@ public class DungeonEntranceLoader {
                             continue;
                         }
                         Vector maxVector;
-                        Object maxObject = entrance.get("min");
+                        Object maxObject = entrance.get("max");
                         if (maxObject instanceof JSONObject) {
                             JSONObject max = (JSONObject) maxObject;
                             if (!max.containsKey("x") || !max.containsKey("y") || !max.containsKey("z")) {

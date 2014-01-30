@@ -97,6 +97,8 @@ public class DungeonCraftPlugin extends JavaPlugin {
         new File(getPlugin().getDataFolder(), "logs").mkdirs();
         new File(getPlugin().getDataFolder().getAbsolutePath() + File.separator + "logs", "dungeon").mkdirs();
 
+        File rhino = new File(getPlugin().getDataFolder(),"js.jar");
+
         DungeonCraftVersion.reset();
         DungeonCraftLogger.setConsole(getServer().getConsoleSender());
         Configuration.config = this.getConfig();
@@ -172,7 +174,14 @@ public class DungeonCraftPlugin extends JavaPlugin {
 
         DungeonCraftWorld.createWorld();
 
-        DungeonCraftLogger.write("version " + DungeonCraftVersion.getVersion() + "-b" + DungeonCraftVersion.getBuild() + ChatColor.GREEN + " ENABLED");
+        if(rhino.exists()) {
+            DungeonCraftLogger.write("version " + DungeonCraftVersion.getVersion() + "-b" + DungeonCraftVersion.getBuild() + ChatColor.GREEN + " ENABLED");
+        } else {
+            DungeonCraftLogger.write(ChatColor.RED + "Missing js.jar");
+            DungeonCraftLogger.write(ChatColor.GREEN + "Please visit http://dev.bukkit.org/bukkit-plugins/dungeoncraft/ for more information on how to get it.");
+            DungeonCraftLogger.write("version " + DungeonCraftVersion.getVersion() + "-b" + DungeonCraftVersion.getBuild() + ChatColor.RED + " !NOT! ENABLED");
+            this.setEnabled(false);
+        }
     }
 
     public static DungeonCraftPlugin getPlugin() {

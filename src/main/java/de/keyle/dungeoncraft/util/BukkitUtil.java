@@ -20,18 +20,23 @@
 
 package de.keyle.dungeoncraft.util;
 
+import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import net.minecraft.server.v1_7_R1.*;
+import net.minecraft.server.v1_7_R1.Item;
+import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R1.WorldType;
 import org.apache.commons.lang.Validate;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_7_R1.entity.CraftItem;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_7_R1.inventory.CraftItemStack;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.*;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Field;
@@ -209,5 +214,17 @@ public class BukkitUtil {
 
     public static boolean isRealPlayer(Player player) {
         return player instanceof CraftPlayer;
+    }
+
+    public static void dropItem(String player, ItemStack itemStack) {
+        Location playerLocation = DungeonCraftPlayer.getPlayer(player).getPlayer().getLocation();
+        org.bukkit.World world = Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME);
+
+        world.dropItem(playerLocation,itemStack);
+    }
+
+    public static void makeItemUndespawnable(org.bukkit.entity.Item item) {
+        EntityItem nmsItem = (EntityItem) ((CraftItem)item).getHandle();
+        nmsItem.age = Integer.MIN_VALUE;
     }
 }

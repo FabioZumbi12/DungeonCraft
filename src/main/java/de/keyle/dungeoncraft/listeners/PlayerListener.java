@@ -33,6 +33,7 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
+import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.Util;
 import de.keyle.dungeoncraft.util.locale.Locales;
@@ -47,6 +48,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
@@ -93,6 +95,14 @@ public class PlayerListener implements Listener {
                         event.setCancelled(true);
                     }
                 }
+            }
+        }
+
+        if(Dungeon.isDungeonCraftItem(event.getItemDrop().getItemStack())) {
+            if(Dungeon.isUndroppableItem(event.getItemDrop().getItemStack())) {
+                event.setCancelled(true);
+            } else {
+                BukkitUtil.makeItemUndespawnable(event.getItemDrop());
             }
         }
     }
@@ -326,6 +336,18 @@ public class PlayerListener implements Listener {
         for (Trigger trigger : triggers) {
             trigger.execute(event.getPlayer().getName());
         }
+
+        //Remove the DungeonCraft Items
+        ItemStack[] content = event.getPlayer().getPlayer().getInventory().getContents();
+        ItemStack item;
+        for(int i = 0; i < content.length;i++) {
+            item = content[i];
+            if(item != null && Dungeon.isDungeonCraftItem(item)) {
+                event.getPlayer().getPlayer().getInventory().setItem(i, null);
+                BukkitUtil.dropItem(event.getPlayer().getName(),item);
+            }
+        }
+        event.getPlayer().getPlayer().updateInventory();
     }
 
     @EventHandler

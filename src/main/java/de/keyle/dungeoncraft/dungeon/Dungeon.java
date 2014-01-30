@@ -311,7 +311,7 @@ public class Dungeon implements Scheduler {
             ItemMeta meta = item.getItemMeta();
             if(meta.hasLore()) {
                 List<String> lore = meta.getLore();
-                if(lore.size() > 0 && lore.get(lore.size()-1).equals(ChatColor.RESET + "❱❱❱ " + ChatColor.DARK_RED + "D" + ChatColor.DARK_GRAY + "ungeon" + ChatColor.DARK_RED + "C" + ChatColor.DARK_GRAY + "raft" + ChatColor.GRAY + " Item" + ChatColor.RESET + " ❰❰❰")) {
+                if(lore.size() > 0 && lore.contains(ChatColor.RESET + "❱❱❱ " + ChatColor.DARK_RED + "D" + ChatColor.DARK_GRAY + "ungeon" + ChatColor.DARK_RED + "C" + ChatColor.DARK_GRAY + "raft" + ChatColor.GRAY + " Item" + ChatColor.RESET + " ❰❰❰")) {
                     return true;
                 }
             }
@@ -326,13 +326,42 @@ public class Dungeon implements Scheduler {
             if(lore == null) {
                 lore = new ArrayList<String>();
             }
-            if(lore.size() > 0 && lore.get(lore.size()-1).equals(ChatColor.RESET + "❱❱❱ " + ChatColor.DARK_RED + "D" + ChatColor.DARK_GRAY + "ungeon" + ChatColor.DARK_RED + "C" + ChatColor.DARK_GRAY + "raft" + ChatColor.GRAY + " Item" + ChatColor.RESET + " ❰❰❰")) {
+            if(lore.size() > 0 && lore.contains(ChatColor.RESET + "❱❱❱ " + ChatColor.DARK_RED + "D" + ChatColor.DARK_GRAY + "ungeon" + ChatColor.DARK_RED + "C" + ChatColor.DARK_GRAY + "raft" + ChatColor.GRAY + " Item" + ChatColor.RESET + " ❰❰❰")) {
                 return;
             }
             lore.add(ChatColor.RESET + "❱❱❱ " + ChatColor.DARK_RED + "D" + ChatColor.DARK_GRAY + "ungeon" + ChatColor.DARK_RED + "C" + ChatColor.DARK_GRAY + "raft" + ChatColor.GRAY + " Item" + ChatColor.RESET + " ❰❰❰");
             meta.setLore(lore);
             item.setItemMeta(meta);
         }
+    }
+
+    public static void markAsUndroppableItem(ItemStack item) {
+        if(item != null) {
+            ItemMeta meta = item.getItemMeta();
+            List<String> lore = meta.getLore();
+            if(lore == null) {
+                lore = new ArrayList<String>();
+            }
+            if(lore.size() > 0 && lore.contains(ChatColor.RESET + "   ▶▶▶" + ChatColor.DARK_BLUE + "U" + ChatColor.BLUE + "ndroppable" + ChatColor.RESET)) {
+                return;
+            }
+            lore.add(ChatColor.RESET + "   ▶▶▶" + ChatColor.DARK_BLUE + "U" + ChatColor.BLUE + "ndroppable" + ChatColor.RESET);
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+    }
+
+    public static boolean isUndroppableItem(ItemStack item) {
+        if(item != null && item.hasItemMeta()) {
+            ItemMeta meta = item.getItemMeta();
+            if(meta.hasLore()) {
+                List<String> lore = meta.getLore();
+                if(lore.size() > 0 && lore.contains(ChatColor.RESET + "   ▶▶▶" + ChatColor.DARK_BLUE + "U" + ChatColor.BLUE + "ndroppable" + ChatColor.RESET)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

@@ -41,11 +41,13 @@ public class ItemContext {
     public void giveItemToPlayer(String player, int itemID , int quantity) {
         ItemStack newItem = new ItemStack(itemID,quantity);
         DungeonCraftPlayer.getPlayer(player).getPlayer().getInventory().addItem(newItem);
+        DungeonCraftPlayer.getPlayer(player).getPlayer().updateInventory();
     }
 
     public void giveItemToPlayer(String player, String itemName, int quantity) {
         ItemStack newItem = BukkitUtil.getItemStackFromString(itemName,quantity);
         DungeonCraftPlayer.getPlayer(player).getPlayer().getInventory().addItem(newItem);
+        DungeonCraftPlayer.getPlayer(player).getPlayer().updateInventory();
     }
 
     public void dropItem(String player, int itemID , int quantity) {
@@ -86,12 +88,30 @@ public class ItemContext {
         ItemStack newItem = new ItemStack(itemID,quantity);
         Dungeon.markAsDungeonCraftItem(newItem);
         DungeonCraftPlayer.getPlayer(player).getPlayer().getInventory().addItem(newItem);
+        DungeonCraftPlayer.getPlayer(player).getPlayer().updateInventory();
     }
 
-    public void giveDungeonCraftToPlayer(String player, String itemName, int quantity) {
+    public void giveDungeonCraftItemToPlayer(String player, String itemName, int quantity) {
         ItemStack newItem = BukkitUtil.getItemStackFromString(itemName,quantity);
         Dungeon.markAsDungeonCraftItem(newItem);
         DungeonCraftPlayer.getPlayer(player).getPlayer().getInventory().addItem(newItem);
+        DungeonCraftPlayer.getPlayer(player).getPlayer().updateInventory();
+    }
+
+    public void giveDungeonCraftItemToPlayerUndroppable(String player, int itemID , int quantity) {
+        ItemStack newItem = new ItemStack(itemID,quantity);
+        Dungeon.markAsDungeonCraftItem(newItem);
+        Dungeon.markAsUndroppableItem(newItem);
+        DungeonCraftPlayer.getPlayer(player).getPlayer().getInventory().addItem(newItem);
+        DungeonCraftPlayer.getPlayer(player).getPlayer().updateInventory();
+    }
+
+    public void giveDungeonCraftItemToPlayerUndroppable(String player, String itemName, int quantity) {
+        ItemStack newItem = BukkitUtil.getItemStackFromString(itemName,quantity);
+        Dungeon.markAsDungeonCraftItem(newItem);
+        Dungeon.markAsUndroppableItem(newItem);
+        DungeonCraftPlayer.getPlayer(player).getPlayer().getInventory().addItem(newItem);
+        DungeonCraftPlayer.getPlayer(player).getPlayer().updateInventory();
     }
 
     public void dropDungeonCraftItem(String player, int itemID , int quantity) {
@@ -127,6 +147,48 @@ public class ItemContext {
         z += dungeon.getPosition().getBlockZ();
         ItemStack newItem = BukkitUtil.getItemStackFromString(itemName,quantity);
         Dungeon.markAsDungeonCraftItem(newItem);
+        World world = Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME);
+
+        world.dropItem(new Location(world,x,y,z),newItem);
+    }
+
+    public void dropDungeonCraftItemUndroppable(String player, int itemID , int quantity) {
+        Location playerLocation = DungeonCraftPlayer.getPlayer(player).getPlayer().getLocation();
+        ItemStack newItem = new ItemStack(itemID,quantity);
+        Dungeon.markAsDungeonCraftItem(newItem);
+        Dungeon.markAsUndroppableItem(newItem);
+        World world = Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME);
+
+        world.dropItem(playerLocation,newItem);
+    }
+
+    public void dropDungeonCraftItemUndroppable(String player, String itemName, int quantity) {
+        Location playerLocation = DungeonCraftPlayer.getPlayer(player).getPlayer().getLocation();
+        ItemStack newItem = BukkitUtil.getItemStackFromString(itemName,quantity);
+        Dungeon.markAsDungeonCraftItem(newItem);
+        Dungeon.markAsUndroppableItem(newItem);
+        World world = Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME);
+
+        world.dropItem(playerLocation,newItem);
+    }
+
+    public void dropDungeonCraftItemUndroppable(int x, int y, int z, int itemID , int quantity) {
+        x += dungeon.getPosition().getBlockX();
+        z += dungeon.getPosition().getBlockZ();
+        ItemStack newItem = new ItemStack(itemID,quantity);
+        Dungeon.markAsDungeonCraftItem(newItem);
+        Dungeon.markAsUndroppableItem(newItem);
+        World world = Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME);
+
+        world.dropItem(new Location(world,x,y,z),newItem);
+    }
+
+    public void dropDungeonCraftItemUndroppable(int x, int y, int z, String itemName, int quantity) {
+        x += dungeon.getPosition().getBlockX();
+        z += dungeon.getPosition().getBlockZ();
+        ItemStack newItem = BukkitUtil.getItemStackFromString(itemName,quantity);
+        Dungeon.markAsDungeonCraftItem(newItem);
+        Dungeon.markAsUndroppableItem(newItem);
         World world = Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME);
 
         world.dropItem(new Location(world,x,y,z),newItem);

@@ -18,21 +18,29 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.entity.template.basic;
+package de.keyle.dungeoncraft.entity.template.components;
 
-import de.keyle.dungeoncraft.entity.template.BasicTemplate;
-import de.keyle.dungeoncraft.entity.template.components.CatComponent;
-import de.keyle.dungeoncraft.entity.template.components.SitComponent;
-import de.keyle.dungeoncraft.entity.types.EntityType;
+import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
+import de.keyle.dungeoncraft.api.entity.components.Parameter;
+import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
+import de.keyle.dungeoncraft.entity.types.blaze.EntityDungeonCraftBlaze;
 
-public class OcelotTemplate extends BasicTemplate {
-    public OcelotTemplate() {
-        super("ocelot", 10, EntityType.Ocelot);
-        addBasicComponent(new CatComponent(0));
-        addBasicComponent(new SitComponent(false));
+
+public class FireComponent extends EntityTemplateComponent{
+    boolean fire = false;
+
+    public FireComponent(@Parameter(type = Parameter.Type.Boolean, name = "fire") boolean fire) {
+        this.fire = fire;
     }
 
-    public float getWalkSpeed() {
-        return walkSpeed;
+    public boolean isOnFire() {
+        return fire;
+    }
+
+    @Override
+    public void applyComponent(EntityDungeonCraft entity) {
+        if (entity instanceof EntityDungeonCraftBlaze) {
+            ((EntityDungeonCraftBlaze) entity).setOnFire(fire);
+        }
     }
 }

@@ -18,21 +18,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.entity.template.basic;
+package de.keyle.dungeoncraft.entity.template.components;
 
-import de.keyle.dungeoncraft.entity.template.BasicTemplate;
-import de.keyle.dungeoncraft.entity.template.components.CatComponent;
-import de.keyle.dungeoncraft.entity.template.components.SitComponent;
-import de.keyle.dungeoncraft.entity.types.EntityType;
+import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
+import de.keyle.dungeoncraft.api.entity.components.Parameter;
+import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
+import de.keyle.dungeoncraft.entity.types.ocelot.EntityDungeonCraftOcelot;
 
-public class OcelotTemplate extends BasicTemplate {
-    public OcelotTemplate() {
-        super("ocelot", 10, EntityType.Ocelot);
-        addBasicComponent(new CatComponent(0));
-        addBasicComponent(new SitComponent(false));
+public class CatComponent extends EntityTemplateComponent {
+    int catType = 0;
+
+    public CatComponent(@Parameter(type = Parameter.Type.Number, name = "catType") int catType) {
+        this.catType = catType;
     }
 
-    public float getWalkSpeed() {
-        return walkSpeed;
+    @Override
+    public void applyComponent(EntityDungeonCraft entity) {
+        if(entity instanceof EntityDungeonCraftOcelot) {
+            ((EntityDungeonCraftOcelot) entity).setCatType(catType);
+        }
     }
 }

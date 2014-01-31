@@ -21,13 +21,19 @@
 package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
+import de.keyle.dungeoncraft.entity.template.components.AngryComponent;
 import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
+import de.keyle.dungeoncraft.entity.template.components.SitComponent;
+import de.keyle.dungeoncraft.entity.template.components.TamedComponend;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 
 public class WolfTemplate extends BasicTemplate {
     public WolfTemplate() {
         super("wolf", 8, EntityType.Wolf);
         addBasicComponent(new MeeleDamageComponent(2));
+        addBasicComponent(new SitComponent(false));
+        addBasicComponent(new AngryComponent(false));
+        addBasicComponent(new TamedComponend(false));
     }
 
     public float getWalkSpeed() {

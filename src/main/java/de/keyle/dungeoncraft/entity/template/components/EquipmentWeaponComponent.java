@@ -31,6 +31,7 @@ import de.keyle.dungeoncraft.entity.types.zombie.EntityDungeonCraftZombie;
 import de.keyle.dungeoncraft.entity.util.EquipmentSlot;
 import de.keyle.dungeoncraft.util.ParsedItem;
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONObject;
 
 public class EquipmentWeaponComponent extends EntityTemplateComponent {
@@ -39,6 +40,13 @@ public class EquipmentWeaponComponent extends EntityTemplateComponent {
     public EquipmentWeaponComponent(@Parameter(type = Parameter.Type.JsonObject, name = "weapon") JSONObject weapon) {
         this.weapon = ParsedItem.parsedItem(weapon);
         if (this.weapon.isEmpty()) {
+            this.weapon = null;
+        }
+    }
+
+    public EquipmentWeaponComponent(ItemStack itemStack) {
+        this.weapon = new ParsedItem(itemStack);
+        if(this.weapon.isEmpty()) {
             this.weapon = null;
         }
     }

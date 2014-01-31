@@ -21,11 +21,13 @@
 package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
+import de.keyle.dungeoncraft.entity.template.components.PoweredComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 
 public class CreeperTemplate extends BasicTemplate {
     public CreeperTemplate() {
         super("creeper", 20, EntityType.Creeper);
+        addBasicComponent(new PoweredComponent(false));
     }
 
     public float getWalkSpeed() {

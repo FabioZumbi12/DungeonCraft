@@ -21,13 +21,17 @@
 package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
+import de.keyle.dungeoncraft.entity.template.components.AngryComponent;
+import de.keyle.dungeoncraft.entity.template.components.EquipmentWeaponComponent;
 import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
+import org.bukkit.inventory.ItemStack;
 
 public class EndermanTemplate extends BasicTemplate {
     public EndermanTemplate() {
         super("enderman", 40, EntityType.Enderman);
         addBasicComponent(new MeeleDamageComponent(7));
+        addBasicComponent(new AngryComponent(false));
     }
 
     public float getWalkSpeed() {

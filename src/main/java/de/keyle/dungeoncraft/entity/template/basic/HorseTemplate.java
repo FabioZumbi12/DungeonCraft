@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
+import de.keyle.dungeoncraft.entity.template.components.*;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 
 import java.util.Random;
@@ -28,6 +29,13 @@ import java.util.Random;
 public class HorseTemplate extends BasicTemplate {
     public HorseTemplate() {
         super("horse", 15 + new Random().nextInt(16), EntityType.Horse);
+        Random r = new Random();
+        addBasicComponent(new AgeComponent(0));
+        addBasicComponent(new TamedComponend(false));
+        addBasicComponent(new VariantComponent(r.nextInt(7) + r.nextInt(5) * 256));
+        addBasicComponent(new ChestComponent(false));
+        addBasicComponent(new SaddleComponent(false));
+        addBasicComponent(new BabyComponent(false));
     }
 
     public float getWalkSpeed() {

@@ -21,11 +21,15 @@
 package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
+import de.keyle.dungeoncraft.entity.template.components.ProfessionComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
+
+import java.util.Random;
 
 public class VillagerTemplate extends BasicTemplate {
     public VillagerTemplate() {
         super("villager", 20, EntityType.Villager);
+        addBasicComponent(new ProfessionComponent(new Random().nextInt(5)));
     }
 
     public float getWalkSpeed() {

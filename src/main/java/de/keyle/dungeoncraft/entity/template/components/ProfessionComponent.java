@@ -18,21 +18,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.keyle.dungeoncraft.entity.template.basic;
+package de.keyle.dungeoncraft.entity.template.components;
 
-import de.keyle.dungeoncraft.entity.template.BasicTemplate;
-import de.keyle.dungeoncraft.entity.template.components.CatComponent;
-import de.keyle.dungeoncraft.entity.template.components.SitComponent;
-import de.keyle.dungeoncraft.entity.types.EntityType;
+import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
+import de.keyle.dungeoncraft.api.entity.components.Parameter;
+import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
+import de.keyle.dungeoncraft.entity.types.villager.EntityDungeonCraftVillager;
 
-public class OcelotTemplate extends BasicTemplate {
-    public OcelotTemplate() {
-        super("ocelot", 10, EntityType.Ocelot);
-        addBasicComponent(new CatComponent(0));
-        addBasicComponent(new SitComponent(false));
+public class ProfessionComponent extends EntityTemplateComponent {
+    int profession = 0;
+
+    public ProfessionComponent(@Parameter(type = Parameter.Type.Number, name = "profession") int profession) {
+        this.profession = profession;
     }
 
-    public float getWalkSpeed() {
-        return walkSpeed;
+    @Override
+    public void applyComponent(EntityDungeonCraft entity) {
+        if(entity instanceof EntityDungeonCraftVillager) {
+            ((EntityDungeonCraftVillager) entity).setProfession(profession);
+        }
     }
 }

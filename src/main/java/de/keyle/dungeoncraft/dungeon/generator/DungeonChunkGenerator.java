@@ -48,7 +48,7 @@ public class DungeonChunkGenerator extends Thread {
         if (schematic != null) {
 
             int schematicHeight = schematic.getHeight();
-            Chunk chunk = new Chunk(world, chunkX, chunkZ);
+            Chunk chunk = new DungeonCraftChunk(world, chunkX, chunkZ);
 
             int sectionCount = (int) Math.ceil(schematicHeight / 16.D);
             for (int i = 0; i < sectionCount; i++) {

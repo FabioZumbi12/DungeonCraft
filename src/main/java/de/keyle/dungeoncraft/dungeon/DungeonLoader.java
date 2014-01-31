@@ -20,10 +20,12 @@
 
 package de.keyle.dungeoncraft.dungeon;
 
+import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftChunk;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftChunkProvider;
 import de.keyle.dungeoncraft.dungeon.region.RegionLoader;
 import de.keyle.dungeoncraft.dungeon.scripting.TriggerLoader;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
+import net.minecraft.server.v1_7_R1.Chunk;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -77,14 +79,18 @@ public class DungeonLoader extends Thread {
             }
         }
 
-        /*
+        int cCount = xCount*zCount;
         for (int x = 0; x < xCount; x++) {
             for (int z = 0; z < zCount; z++) {
-                DungeonCraftChunkProvider.chunkloader.getChunkAt(dungeon.position.getChunkX() + x, dungeon.position.getChunkZ() + z).initLighting();
-
+                Chunk c = DungeonCraftChunkProvider.chunkloader.getChunkAt(dungeon.position.getChunkX() + x, dungeon.position.getChunkZ() + z);
+                if(c instanceof DungeonCraftChunk) {
+                    ((DungeonCraftChunk) c).createHeightMap();
+                    ((DungeonCraftChunk) c).initLight();
+                    ((DungeonCraftChunk) c).spreadLight();
+                }
+                //DungeonCraftLogger.write("cCount: " + cCount--);
             }
         }
-        */
 
         new RegionLoader(dungeon);
         new TriggerLoader(dungeon);

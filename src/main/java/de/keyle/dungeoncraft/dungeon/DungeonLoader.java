@@ -50,13 +50,22 @@ public class DungeonLoader extends Thread {
         int zCount = (int) Math.ceil(schematic.getWidth() / 16.);
 
         final AtomicInteger callbackCount = new AtomicInteger(xCount * zCount);
+        final AtomicInteger generationCount = new AtomicInteger(0);
+        final int maxThreads = Math.max(1,Runtime.getRuntime().availableProcessors()-1);
         for (int x = 0; x < xCount; x++) {
             for (int z = 0; z < zCount; z++) {
+                while (true) {
+                    if(generationCount.get()<maxThreads) {
+                        break;
+                    }
+                }
+                generationCount.incrementAndGet();
                 DungeonCraftChunkProvider.chunkloader.generateChunkAt(dungeon.position.getChunkX() + x, dungeon.position.getChunkZ() + z, new Runnable() {
                     @Override
                     public void run() {
                         synchronized (callbackCount) {
                             callbackCount.decrementAndGet();
+                            generationCount.decrementAndGet();
                         }
                     }
                 });

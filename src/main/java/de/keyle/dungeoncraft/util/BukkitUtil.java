@@ -25,18 +25,17 @@ import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import de.keyle.dungeoncraft.util.vector.Vector;
+import de.keyle.knbt.*;
 import net.minecraft.server.v1_7_R1.*;
-import net.minecraft.server.v1_7_R1.Item;
-import net.minecraft.server.v1_7_R1.World;
-import net.minecraft.server.v1_7_R1.WorldType;
 import org.apache.commons.lang.Validate;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftItem;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_7_R1.inventory.CraftItemStack;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Field;
@@ -226,5 +225,46 @@ public class BukkitUtil {
     public static void makeItemUndespawnable(org.bukkit.entity.Item item) {
         EntityItem nmsItem = (EntityItem) ((CraftItem)item).getHandle();
         nmsItem.age = Integer.MIN_VALUE;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static NBTBase compoundToVanillaCompound(TagBase tag) {
+        switch (TagType.getTypeById(tag.getTagTypeId())) {
+            case Int:
+                return new NBTTagInt(((TagInt) tag).getIntData());
+            case Short:
+                return new NBTTagShort(((TagShort) tag).getShortData());
+            case String:
+                return new NBTTagString(((TagString) tag).getStringData());
+            case Byte:
+                return new NBTTagByte(((TagByte) tag).getByteData());
+            case Byte_Array:
+                return new NBTTagByteArray(((TagByteArray) tag).getByteArrayData());
+            case Double:
+                return new NBTTagDouble(((TagDouble) tag).getDoubleData());
+            case Float:
+                return new NBTTagFloat(((TagFloat) tag).getFloatData());
+            case Int_Array:
+                return new NBTTagIntArray(((TagIntArray) tag).getIntArrayData());
+            case Long:
+                return new NBTTagLong(((TagLong) tag).getLongData());
+            case List:
+                TagList TagList = (TagList) tag;
+                NBTTagList tagList = new NBTTagList();
+                for (TagBase tagInList : TagList.getReadOnlyList()) {
+                    tagList.add(compoundToVanillaCompound(tagInList));
+                }
+                return tagList;
+            case Compound:
+                TagCompound TagCompound = (TagCompound) tag;
+                NBTTagCompound tagCompound = new NBTTagCompound();
+                for (String name : TagCompound.getCompoundData().keySet()) {
+                    tagCompound.set(name, compoundToVanillaCompound(TagCompound.getCompoundData().get(name)));
+                }
+                return tagCompound;
+            case End:
+                return null;
+        }
+        return null;
     }
 }

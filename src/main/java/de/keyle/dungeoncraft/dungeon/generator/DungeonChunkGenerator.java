@@ -22,11 +22,15 @@ package de.keyle.dungeoncraft.dungeon.generator;
 
 import de.keyle.dungeoncraft.dungeon.DungeonField;
 import de.keyle.dungeoncraft.dungeon.DungeonFieldManager;
+import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
-import net.minecraft.server.v1_7_R1.Block;
-import net.minecraft.server.v1_7_R1.Chunk;
-import net.minecraft.server.v1_7_R1.ChunkSection;
-import net.minecraft.server.v1_7_R1.World;
+import de.keyle.dungeoncraft.util.vector.BlockVector;
+import de.keyle.knbt.TagCompound;
+import de.keyle.knbt.TagInt;
+import de.keyle.knbt.TagString;
+import net.minecraft.server.v1_7_R1.*;
+
+import java.util.Map;
 
 public class DungeonChunkGenerator extends Thread {
     private final World world;
@@ -57,6 +61,8 @@ public class DungeonChunkGenerator extends Thread {
             setBiomes(chunk, chunkX - field.getChunkX(), chunkZ - field.getChunkZ(), schematic);
             //chunk.initLighting(); //causes ModificationException in:
             // Collections.sort(entityplayer.chunkCoordIntPairQueue, new ChunkCoordComparator(entityplayer));
+
+            addTileEntities(field, chunk, schematic);
 
             // make the chunk ready (faked)
             chunk.lit = false;
@@ -119,6 +125,36 @@ public class DungeonChunkGenerator extends Thread {
         }
 
         return biomes;
+    }
+
+    public void addTileEntities(DungeonField dungeonField, Chunk chunk, Schematic schematic) {
+        Map<BlockVector,TagCompound> tileEntities = schematic.getTileEntities();
+        for(BlockVector position : tileEntities.keySet()) {
+            TagCompound tileEntityCompound = tileEntities.get(position).clone();
+
+            int x = dungeonField.getBlockX() + position.getBlockX();
+            int z = dungeonField.getBlockZ() + position.getBlockZ();
+
+            int chunkX = (x-(x&0xF)) / 16;
+            int chunkZ = (z-(z&0xF)) / 16;
+
+            if(!chunk.equals(world.chunkProvider.isChunkLoaded(chunkX, chunkZ))) {
+                continue;
+            }
+
+            tileEntityCompound.getCompoundData().put("x", new TagInt(x));
+            tileEntityCompound.getCompoundData().put("z", new TagInt(z));
+
+            if(!tileEntityCompound.containsKeyAs("id", TagString.class)) {
+                continue;
+            }
+            String entityType = tileEntityCompound.getAs("id",TagString.class).getStringData();
+
+            //ToDo check entity for coords
+
+            TileEntity tileEntity = TileEntity.c((NBTTagCompound) BukkitUtil.compoundToVanillaCompound(tileEntityCompound));
+            chunk.a((dungeonField.getBlockX() + position.getBlockX())&0xF,position.getBlockY(),(dungeonField.getBlockZ() + position.getBlockZ())&0xF, tileEntity);
+        }
     }
 
     public static int getSchematicIndex(int chunkX, int chunkZ, int x, int y, int z, int schematicLength, int schematicWidth) {

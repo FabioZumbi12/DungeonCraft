@@ -93,7 +93,6 @@ public class SchematicLoader extends Thread {
         Map<BlockVector, TagCompound> tileEntities = new HashMap<BlockVector, TagCompound>();
 
         for (int i = 0; i < readOnlyList.size(); i++) {
-            TagBase compound = readOnlyList.get(i);
             TagCompound tileEntity = tileEntitiesTag.getTagAs(i, TagCompound.class);
 
             if (!tileEntity.containsKeyAs("x", TagInt.class)) {

@@ -79,16 +79,14 @@ public class DungeonLoader extends Thread {
             }
         }
 
-        int cCount = xCount*zCount;
+        //Lighting calculation
         for (int x = 0; x < xCount; x++) {
             for (int z = 0; z < zCount; z++) {
                 Chunk c = DungeonCraftChunkProvider.chunkloader.getChunkAt(dungeon.position.getChunkX() + x, dungeon.position.getChunkZ() + z);
                 if(c instanceof DungeonCraftChunk) {
                     ((DungeonCraftChunk) c).initEmittedLight();
                     ((DungeonCraftChunk) c).generateSkylightMap();
-                    //c.initLighting();
                 }
-                //DungeonCraftLogger.write("cCount: " + cCount--);
             }
         }
 
@@ -97,10 +95,7 @@ public class DungeonLoader extends Thread {
                 Chunk c = DungeonCraftChunkProvider.chunkloader.getChunkAt(dungeon.position.getChunkX() + x, dungeon.position.getChunkZ() + z);
                 if(c instanceof DungeonCraftChunk) {
                    ((DungeonCraftChunk) c).updateSkylight(false);
-                   //c.b(true);
-                   //c.b(true);
                 }
-                //DungeonCraftLogger.write("cCount: " + cCount--);
             }
         }
 

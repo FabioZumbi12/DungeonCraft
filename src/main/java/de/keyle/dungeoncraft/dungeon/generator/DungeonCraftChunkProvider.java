@@ -23,6 +23,7 @@ package de.keyle.dungeoncraft.dungeon.generator;
 import com.google.common.collect.ArrayListMultimap;
 import de.keyle.dungeoncraft.dungeon.DungeonField;
 import de.keyle.dungeoncraft.dungeon.DungeonFieldManager;
+import de.keyle.dungeoncraft.dungeon.DungeonManager;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import net.minecraft.server.v1_7_R1.*;
 import org.bukkit.craftbukkit.v1_7_R1.util.LongHash;
@@ -128,12 +129,6 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer {
     public void getChunkAt(IChunkProvider ichunkprovider, int chunkX, int chunkZ) {
     }
 
-    public void replaceChunk(int chunkX, int chunkZ, Chunk chunk) {
-        List<Chunk> chunkList = new ArrayList<Chunk>();
-        chunkList.add(chunk);
-        new PacketPlayOutMapChunkBulk(chunkList);
-    }
-
     public void unloadDungeonField(DungeonField field) {
         int chunkZ = field.getChunkZ();
         int chunkX = field.getChunkX();
@@ -144,8 +139,11 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer {
         }
     }
 
-    public void queueUnload(int i, int j) {
-        this.unloadQueue.add(i, j);
+    @Override
+    public void queueUnload(int x, int z) {
+        if(!(getChunkAt(x, z) instanceof DungeonCraftChunk) || DungeonManager.getDungeonAt(DungeonFieldManager.getDungeonFieldForChunk(x, z)) == null) {
+            this.unloadQueue.add(x, z);
+        }
     }
 
     public boolean unloadChunks() {

@@ -44,7 +44,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -197,7 +196,11 @@ public class PlayerListener implements Listener {
                         } catch (MessageException e) {
                             if (e.getMessageKey().equals("player.not.leader")) {
                                 event.getPlayer().sendMessage(Locales.getString("Error.Leader.First", event.getPlayer()));
-                                event.setCancelled(true);
+                                if(eventTo.getBlockY() < event.getFrom().getBlockY()) {
+                                    event.getPlayer().teleport(entrance.getExitLocation());
+                                } else {
+                                    event.setCancelled(true);
+                                }
                                 return;
                             }
                             party = null;
@@ -251,7 +254,11 @@ public class PlayerListener implements Listener {
                 } else {
                     event.getPlayer().sendMessage(Locales.getString("Error.No.Entry.Without.Party", event.getPlayer()));
                 }
-                event.setCancelled(true);
+                if(eventTo.getBlockY() < event.getFrom().getBlockY()) {
+                    event.getPlayer().teleport(entrance.getExitLocation());
+                } else {
+                    event.setCancelled(true);
+                }
             }
         }
     }

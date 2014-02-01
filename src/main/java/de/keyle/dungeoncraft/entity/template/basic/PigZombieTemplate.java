@@ -22,14 +22,18 @@ package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
 import de.keyle.dungeoncraft.entity.template.components.ArmorComponent;
+import de.keyle.dungeoncraft.entity.template.components.EquipmentWeaponComponent;
 import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 public class PigZombieTemplate extends BasicTemplate {
     public PigZombieTemplate() {
         super("pigzombie", 20, EntityType.PigZombie);
         addBasicComponent(new MeeleDamageComponent(9));
         addBasicComponent(new ArmorComponent(2));
+        addBasicComponent(new EquipmentWeaponComponent(new ItemStack(Material.GOLD_SWORD)));
     }
 
     public float getWalkSpeed() {

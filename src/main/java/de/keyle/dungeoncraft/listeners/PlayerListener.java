@@ -213,7 +213,7 @@ public class PlayerListener implements Listener {
                             if (dungeon != null) {
                                 if (dungeon.isCompleted()) {
                                     event.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Complete", event.getPlayer()));
-                                } else if (dungeon.isReady() && !dungeon.isLoading()) {
+                                } else if (dungeon.isReady()) {
                                     long lockout = dungeonCraftPlayer.getRemainingLockout(dungeon.getDungeonName());
                                     if (lockout > 0) {
                                         event.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Dungeon.Cooldown.Remaining", event.getPlayer()), DurationFormatUtils.formatDurationWords(lockout, true, true)));

@@ -84,6 +84,7 @@ public class DungeonLoader extends Thread {
             for (int z = 0; z < zCount; z++) {
                 Chunk c = DungeonCraftChunkProvider.chunkloader.getChunkAt(dungeon.position.getChunkX() + x, dungeon.position.getChunkZ() + z);
                 if(c instanceof DungeonCraftChunk) {
+                    ((DungeonCraftChunk) c).initEmittedLight();
                     ((DungeonCraftChunk) c).generateSkylightMap();
                     //c.initLighting();
                 }

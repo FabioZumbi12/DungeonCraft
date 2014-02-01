@@ -71,7 +71,7 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer {
                 return null;
             }
 
-            chunk = getOrCreateChunkGrass(chunkX, chunkZ);
+            chunk = getOrCreateUnusedChunk(chunkX, chunkZ);
             addChunk(chunk);
         }
 
@@ -86,7 +86,7 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer {
         return getChunkAt(chunkX, chunkZ);
     }
 
-    public Chunk getOrCreateChunkGrass(int chunkX, int chunkZ) {
+    public Chunk getOrCreateUnusedChunk(int chunkX, int chunkZ) {
         //DungeonCraftLogger.write("Generate Grass Chunk at X(" + chunkX + ") Z(" + chunkZ + ")");
 
         Chunk localChunk = new EmptyChunk(this.world, chunkX, chunkZ);

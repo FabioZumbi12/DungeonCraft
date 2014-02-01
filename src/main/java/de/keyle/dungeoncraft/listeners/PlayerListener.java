@@ -37,10 +37,14 @@ import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.Util;
 import de.keyle.dungeoncraft.util.locale.Locales;
+import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -355,6 +359,41 @@ public class PlayerListener implements Listener {
         List<Trigger> triggers = event.getDungeon().getTriggerRegistry().getTriggers(PlayerDungeonEnterEvent.class);
         for (Trigger trigger : triggers) {
             trigger.execute(event.getPlayer().getName());
+        }
+
+        /*CraftWorld w = ((CraftWorld) DungeonCraftPlugin.getPlugin().getServer().getWorld(DungeonCraftWorld.WORLD_NAME));
+
+        for(int x = 0; x < event.getDungeon().getDungeonBase().getSchematic().getLenght(); x++) {
+           for(int z = 0; z < event.getDungeon().getDungeonBase().getSchematic().getWidth(); z++) {
+               for(int y = 0; y < event.getDungeon().getDungeonBase().getSchematic().getHeight(); y ++)
+               w.getHandle().worldProvider.b.m((event.getDungeon().getPosition().getX()) + x, y, (event.getDungeon().getPosition().getZ()) + z);
+           }
+        }
+        */
+    }
+
+    @EventHandler
+    public void onPlayerInteract2(final PlayerInteractEvent event) {
+        Block b = event.getClickedBlock();
+
+        if(b == null) {
+            b = event.getPlayer().getTargetBlock(null, 100);
+            DungeonCraftLogger.write("lfs x+1: " + b.getRelative(BlockFace.EAST).getLightFromSky());
+            DungeonCraftLogger.write("lfb x+1: " + b.getRelative(BlockFace.EAST).getLightFromBlocks());
+            DungeonCraftLogger.write("l x+1: " + b.getRelative(BlockFace.EAST).getLightLevel());
+            DungeonCraftLogger.write("lfs x-1: " + b.getRelative(BlockFace.WEST).getLightFromSky());
+            DungeonCraftLogger.write("lfb x-1: " + b.getRelative(BlockFace.WEST).getLightFromBlocks());
+            DungeonCraftLogger.write("l x-1: " + b.getRelative(BlockFace.WEST).getLightLevel());
+            DungeonCraftLogger.write("lfs z+1: " + b.getRelative(BlockFace.SOUTH).getLightFromSky());
+            DungeonCraftLogger.write("lfb z+1: " + b.getRelative(BlockFace.SOUTH).getLightFromBlocks());
+            DungeonCraftLogger.write("l z+1: " + b.getRelative(BlockFace.SOUTH).getLightLevel());
+            DungeonCraftLogger.write("lfs z-1: " + b.getRelative(BlockFace.NORTH).getLightFromSky());
+            DungeonCraftLogger.write("lfb z-1: " + b.getRelative(BlockFace.NORTH).getLightFromBlocks());
+            DungeonCraftLogger.write("l z-1: " + b.getRelative(BlockFace.NORTH).getLightLevel());
+        } else {
+            DungeonCraftLogger.write("lfs: " + b.getRelative(event.getBlockFace()).getLightFromSky());
+            DungeonCraftLogger.write("lfb: " + b.getRelative(event.getBlockFace()).getLightFromBlocks());
+            DungeonCraftLogger.write("l: " + b.getRelative(event.getBlockFace()).getLightLevel());
         }
     }
 

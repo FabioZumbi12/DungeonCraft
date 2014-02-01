@@ -51,7 +51,8 @@ public class DungeonCraftWorldServer extends WorldServer {
     }
 
     protected void g() {
-        B(); // -> super.g();
+        //B(); // -> super.g();
+        super.g();
 
         for (long chunkCoord : this.chunkTickList.popAll()) {
             int chunkX = LongHash.msw(chunkCoord);

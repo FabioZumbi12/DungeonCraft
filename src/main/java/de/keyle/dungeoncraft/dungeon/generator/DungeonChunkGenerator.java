@@ -59,8 +59,8 @@ public class DungeonChunkGenerator extends Thread {
             // Collections.sort(entityplayer.chunkCoordIntPairQueue, new ChunkCoordComparator(entityplayer));
 
             // make the chunk ready (faked)
-            chunk.lit = true;
-            chunk.m = true;
+            chunk.lit = false;
+            //chunk.m = true;
             chunk.done = true;
             // ----------------------
 

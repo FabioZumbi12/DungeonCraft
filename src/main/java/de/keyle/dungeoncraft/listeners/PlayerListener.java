@@ -335,6 +335,12 @@ public class PlayerListener implements Listener {
             if (player.getDungeon() == null) {
                 event.setCancelled(true);
             }
+        } else if (!event.getTo().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME) && event.getFrom().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
+            DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(event.getPlayer());
+            if (player.getDungeon() != null) {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(Util.formatText(Locales.getString("Error.Use.Leave.Command", event.getPlayer())));
+            }
         }
     }
 

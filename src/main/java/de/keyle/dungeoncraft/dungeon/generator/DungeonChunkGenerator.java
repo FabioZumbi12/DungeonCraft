@@ -23,14 +23,13 @@ package de.keyle.dungeoncraft.dungeon.generator;
 import de.keyle.dungeoncraft.dungeon.DungeonField;
 import de.keyle.dungeoncraft.dungeon.DungeonFieldManager;
 import de.keyle.dungeoncraft.util.BukkitUtil;
+import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import de.keyle.dungeoncraft.util.vector.BlockVector;
 import de.keyle.knbt.TagCompound;
 import net.minecraft.server.v1_7_R1.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DungeonChunkGenerator extends Thread {
     private final World world;
@@ -40,11 +39,37 @@ public class DungeonChunkGenerator extends Thread {
 
     private List<BlockVector> tileEntityPositions = new ArrayList<BlockVector>();
 
+    private static Map<String, Class<? extends TileEntity>> tileEntityClasses = new HashMap<String, Class<? extends TileEntity>>();
+    static {
+        tileEntityClasses.put("Furnace", TileEntityFurnace.class);
+        tileEntityClasses.put("Chest", TileEntityChest.class);
+        tileEntityClasses.put("EnderChest", TileEntityEnderChest.class);
+        tileEntityClasses.put("RecordPlayer", TileEntityRecordPlayer.class);
+        tileEntityClasses.put("Trap", TileEntityDispenser.class);
+        tileEntityClasses.put("Dropper", TileEntityDropper.class);
+        tileEntityClasses.put("Sign", TileEntitySign.class);
+        tileEntityClasses.put("MobSpawner", TileEntityMobSpawner.class);
+        tileEntityClasses.put("Music", TileEntityNote.class);
+        tileEntityClasses.put("Piston", TileEntityPiston.class);
+        tileEntityClasses.put("Cauldron", TileEntityBrewingStand.class);
+        tileEntityClasses.put("EnchantTable", TileEntityEnchantTable.class);
+        tileEntityClasses.put("Airportal", TileEntityEnderPortal.class);
+        tileEntityClasses.put("Control", TileEntityCommand.class);
+        tileEntityClasses.put("Beacon", TileEntityBeacon.class);
+        tileEntityClasses.put("Skull", TileEntitySkull.class);
+        tileEntityClasses.put("DLDetector", TileEntityLightDetector.class);
+        tileEntityClasses.put("Hopper", TileEntityHopper.class);
+        tileEntityClasses.put("Comparator", TileEntityComparator.class);
+        tileEntityClasses.put("FlowerPot", TileEntityFlowerPot.class);
+        tileEntityClasses = Collections.unmodifiableMap(tileEntityClasses);
+    }
+
     public DungeonChunkGenerator(World world, int chunkX, int chunkZ, DungeonCraftChunkProvider provider) {
         this.world = world;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.provider = provider;
+        this.setName("DungeonChunkGenerator(" + chunkX + ", " + chunkZ + ")");
     }
 
     @SuppressWarnings("unchecked")
@@ -64,10 +89,11 @@ public class DungeonChunkGenerator extends Thread {
             setBiomes(chunk, chunkX - field.getChunkX(), chunkZ - field.getChunkZ(), schematic);
 
             Map<BlockVector, TagCompound> tileEntities = schematic.getTileEntities();
-            for(BlockVector tileEntityPosition : tileEntityPositions) {
-                if(tileEntities.containsKey(tileEntityPosition)) {
+            for (BlockVector tileEntityPosition : tileEntityPositions) {
+                if (tileEntities.containsKey(tileEntityPosition)) {
                     TagCompound tileEntityCompound = tileEntities.get(tileEntityPosition);
-                    TileEntity tileEntity = TileEntity.c((NBTTagCompound) BukkitUtil.compoundToVanillaCompound(tileEntityCompound));
+                    TileEntity tileEntity = createTileEntity((NBTTagCompound) BukkitUtil.compoundToVanillaCompound(tileEntityCompound));
+                    tileEntity.a(this.world);
                     chunk.tileEntities.put(new ChunkPosition(tileEntityPosition.getBlockX() & 0xF, tileEntityPosition.getBlockY(), tileEntityPosition.getBlockZ() & 0xF), tileEntity);
                     //chunk.a(tileEntityPosition.getBlockX() & 0xF, tileEntityPosition.getBlockY(), tileEntityPosition.getBlockZ() & 0xF, tileEntity);
                 }
@@ -86,6 +112,31 @@ public class DungeonChunkGenerator extends Thread {
             provider.addChunk(chunk);
             //DungeonCraftLogger.write("Generated Chunk from schematic at X(" + chunkX + ") Z(" + chunkZ + ")");
         }
+    }
+
+    public static TileEntity createTileEntity(NBTTagCompound nbtTagCompound) {
+        TileEntity tileEntity = null;
+        try {
+            Class<? extends TileEntity> tileEntityClass = tileEntityClasses.get(nbtTagCompound.getString("id"));
+
+            if (tileEntityClass.equals(TileEntityCommand.class)) { // http://i.imgur.com/E3MKkqv.jpg
+                synchronized (Blocks.COMMAND) {
+                    tileEntity = ((BlockCommand) Blocks.COMMAND).a(null, 0);
+                }
+            } else {
+                if (tileEntityClass != null) {
+                    tileEntity = tileEntityClass.newInstance();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (tileEntity != null) {
+            tileEntity.a(nbtTagCompound);
+        } else {
+            DungeonCraftLogger.write("Skipping BlockEntity with id " + nbtTagCompound.getString("id"));
+        }
+        return tileEntity;
     }
 
     public ChunkSection generateSectionBlocks(int section, int chunkX, int chunkZ, Schematic schematic) {
@@ -112,8 +163,8 @@ public class DungeonChunkGenerator extends Thread {
                         block = Block.e(blocks[index] & 0xFF);
                         newChunkSection.setTypeId(x, y, z, block);
                         newChunkSection.setData(x, y, z, data[index]);
-                        if(isTileEntityBlock(block)) {
-                            BlockVector pos = new BlockVector((chunkX*16) + x,y + yOffset, (chunkZ*16) + z);
+                        if (isTileEntityBlock(block)) {
+                            BlockVector pos = new BlockVector((chunkX * 16) + x, y + yOffset, (chunkZ * 16) + z);
                             tileEntityPositions.add(pos);
                         }
                     }
@@ -167,6 +218,6 @@ public class DungeonChunkGenerator extends Thread {
     }
 
     public static boolean isTileEntityBlock(Block block) {
-        return  block instanceof BlockContainer;
+        return block instanceof BlockContainer;
     }
 }

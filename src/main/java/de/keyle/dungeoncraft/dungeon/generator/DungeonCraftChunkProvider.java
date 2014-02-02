@@ -65,7 +65,9 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer {
             //DungeonCraftLogger.write("Schematic found for X(" + chunkX + ") Z(" + chunkZ + ") -> " + (schematic != null));
             if (schematic != null) {
                 if (callback != null) {
-                    callbacks.put(LongHash.toLong(chunkX, chunkZ), callback);
+                    synchronized (callbacks) {
+                        callbacks.put(LongHash.toLong(chunkX, chunkZ), callback);
+                    }
                 }
                 DungeonChunkGenerator generator = new DungeonChunkGenerator(this.world, chunkX, chunkZ, this);
                 generator.start();

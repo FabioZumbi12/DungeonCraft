@@ -26,10 +26,10 @@ import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import de.keyle.dungeoncraft.util.vector.BlockVector;
 import de.keyle.knbt.TagCompound;
-import de.keyle.knbt.TagInt;
-import de.keyle.knbt.TagString;
 import net.minecraft.server.v1_7_R1.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class DungeonChunkGenerator extends Thread {
@@ -38,6 +38,8 @@ public class DungeonChunkGenerator extends Thread {
     private final int chunkZ;
     private final DungeonCraftChunkProvider provider;
 
+    private List<BlockVector> tileEntityPositions = new ArrayList<BlockVector>();
+
     public DungeonChunkGenerator(World world, int chunkX, int chunkZ, DungeonCraftChunkProvider provider) {
         this.world = world;
         this.chunkX = chunkX;
@@ -45,6 +47,7 @@ public class DungeonChunkGenerator extends Thread {
         this.provider = provider;
     }
 
+    @SuppressWarnings("unchecked")
     public void run() {
         DungeonField field = DungeonFieldManager.getDungeonFieldForChunk(chunkX, chunkZ);
         Schematic schematic = DungeonFieldManager.getSchematicForDungeonField(field);
@@ -59,10 +62,20 @@ public class DungeonChunkGenerator extends Thread {
                 chunk.i()[i] = generateSectionBlocks(i, chunkX - field.getChunkX(), chunkZ - field.getChunkZ(), schematic);
             }
             setBiomes(chunk, chunkX - field.getChunkX(), chunkZ - field.getChunkZ(), schematic);
+
+            Map<BlockVector, TagCompound> tileEntities = schematic.getTileEntities();
+            for(BlockVector tileEntityPosition : tileEntityPositions) {
+                if(tileEntities.containsKey(tileEntityPosition)) {
+                    TagCompound tileEntityCompound = tileEntities.get(tileEntityPosition);
+                    TileEntity tileEntity = TileEntity.c((NBTTagCompound) BukkitUtil.compoundToVanillaCompound(tileEntityCompound));
+                    chunk.tileEntities.put(new ChunkPosition(tileEntityPosition.getBlockX() & 0xF, tileEntityPosition.getBlockY(), tileEntityPosition.getBlockZ() & 0xF), tileEntity);
+                    //chunk.a(tileEntityPosition.getBlockX() & 0xF, tileEntityPosition.getBlockY(), tileEntityPosition.getBlockZ() & 0xF, tileEntity);
+                }
+            }
+            tileEntityPositions.clear();
+
             //chunk.initLighting(); //causes ModificationException in:
             // Collections.sort(entityplayer.chunkCoordIntPairQueue, new ChunkCoordComparator(entityplayer));
-
-            addTileEntities(field, chunk, schematic);
 
             // make the chunk ready (faked)
             chunk.lit = false;
@@ -81,12 +94,13 @@ public class DungeonChunkGenerator extends Thread {
         byte[] blocks = schematic.getBlocks();
         byte[] data = schematic.getData();
 
-        ChunkSection newChunkSection = new ChunkSection(section, true); //ToDo Check 2nd parameter -> !world.worldProvider.g
+        ChunkSection newChunkSection = new ChunkSection(section, true); //2nd parameter -> !world.worldProvider.g -> hasWorldSkylight
         int yOffset = section * 16;
         int maxY = schematic.getHeight() > yOffset ? 16 : yOffset - schematic.getHeight();
 
         int maxIndex = schematicWidth * schematicLength * schematic.getHeight();
 
+        Block block;
         for (int x = 0; x < 16; x++) {
             for (int y = 0; y < maxY; ++y) {
                 for (int z = 0; z < 16; ++z) {
@@ -95,8 +109,13 @@ public class DungeonChunkGenerator extends Thread {
                         if (index >= maxIndex) {
                             continue;
                         }
-                        newChunkSection.setTypeId(x, y, z, Block.e(blocks[index]));
+                        block = Block.e(blocks[index] & 0xFF);
+                        newChunkSection.setTypeId(x, y, z, block);
                         newChunkSection.setData(x, y, z, data[index]);
+                        if(isTileEntityBlock(block)) {
+                            BlockVector pos = new BlockVector((chunkX*16) + x,y + yOffset, (chunkZ*16) + z);
+                            tileEntityPositions.add(pos);
+                        }
                     }
                 }
             }
@@ -127,36 +146,6 @@ public class DungeonChunkGenerator extends Thread {
         return biomes;
     }
 
-    public void addTileEntities(DungeonField dungeonField, Chunk chunk, Schematic schematic) {
-        Map<BlockVector,TagCompound> tileEntities = schematic.getTileEntities();
-        for(BlockVector position : tileEntities.keySet()) {
-            TagCompound tileEntityCompound = tileEntities.get(position).clone();
-
-            int x = dungeonField.getBlockX() + position.getBlockX();
-            int z = dungeonField.getBlockZ() + position.getBlockZ();
-
-            int chunkX = (x-(x&0xF)) / 16;
-            int chunkZ = (z-(z&0xF)) / 16;
-
-            if(!chunk.equals(world.chunkProvider.isChunkLoaded(chunkX, chunkZ))) {
-                continue;
-            }
-
-            tileEntityCompound.getCompoundData().put("x", new TagInt(x));
-            tileEntityCompound.getCompoundData().put("z", new TagInt(z));
-
-            if(!tileEntityCompound.containsKeyAs("id", TagString.class)) {
-                continue;
-            }
-            String entityType = tileEntityCompound.getAs("id",TagString.class).getStringData();
-
-            //ToDo check entity for coords
-
-            TileEntity tileEntity = TileEntity.c((NBTTagCompound) BukkitUtil.compoundToVanillaCompound(tileEntityCompound));
-            chunk.a((dungeonField.getBlockX() + position.getBlockX())&0xF,position.getBlockY(),(dungeonField.getBlockZ() + position.getBlockZ())&0xF, tileEntity);
-        }
-    }
-
     public static int getSchematicIndex(int chunkX, int chunkZ, int x, int y, int z, int schematicLength, int schematicWidth) {
         if (x >= schematicWidth - chunkX * 16) {
             return -1;
@@ -175,5 +164,9 @@ public class DungeonChunkGenerator extends Thread {
             return -1;
         }
         return ((z + chunkZ * 16) * schematicWidth) + (x + chunkX * 16);
+    }
+
+    public static boolean isTileEntityBlock(Block block) {
+        return  block instanceof BlockContainer;
     }
 }

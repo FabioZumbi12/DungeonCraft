@@ -40,6 +40,7 @@ public class DungeonLoader extends Thread {
         DungeonBase dungeonBase = dungeon.dungeonBase;
         Schematic schematic;
 
+        dungeon.getDungeonLogger().info("Loading Schematic...");
         while (true) {
             schematic = dungeonBase.getSchematic();
             if (schematic != null) {
@@ -47,17 +48,20 @@ public class DungeonLoader extends Thread {
             }
         }
         dungeon.lockSchematic();
+        dungeon.getDungeonLogger().info("Schematics loaded");
 
-        int xCount = (int) Math.ceil(schematic.getLenght() / 16.);
-        int zCount = (int) Math.ceil(schematic.getWidth() / 16.);
+        dungeon.getDungeonLogger().info("Generating Chunks...");
+
+        int xCount = (int) Math.ceil(schematic.getWidth() / 16.);
+        int zCount = (int) Math.ceil(schematic.getLenght() / 16.);
 
         final AtomicInteger callbackCount = new AtomicInteger(xCount * zCount);
         final AtomicInteger generationCount = new AtomicInteger(0);
-        final int maxThreads = Math.max(1,Runtime.getRuntime().availableProcessors()-1);
+        final int maxThreads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
         for (int x = 0; x < xCount; x++) {
             for (int z = 0; z < zCount; z++) {
                 while (true) {
-                    if(generationCount.get()<maxThreads) {
+                    if (generationCount.get() < maxThreads) {
                         break;
                     }
                 }
@@ -73,17 +77,24 @@ public class DungeonLoader extends Thread {
                 });
             }
         }
+        dungeon.getDungeonLogger().info("All Chunk generators started");
         while (true) {
             if (callbackCount.get() <= 0) {
                 break;
             }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ignored) {
+            }
         }
+        dungeon.getDungeonLogger().info("Chunk Generation DONE");
 
+        dungeon.getDungeonLogger().info("Calculting Light...");
         //Lighting calculation
         for (int x = 0; x < xCount; x++) {
             for (int z = 0; z < zCount; z++) {
                 Chunk c = DungeonCraftChunkProvider.chunkloader.getChunkAt(dungeon.position.getChunkX() + x, dungeon.position.getChunkZ() + z);
-                if(c instanceof DungeonCraftChunk) {
+                if (c instanceof DungeonCraftChunk) {
                     ((DungeonCraftChunk) c).initEmittedLight();
                     ((DungeonCraftChunk) c).generateSkylightMap();
                 }
@@ -93,14 +104,20 @@ public class DungeonLoader extends Thread {
         for (int x = 0; x < xCount; x++) {
             for (int z = 0; z < zCount; z++) {
                 Chunk c = DungeonCraftChunkProvider.chunkloader.getChunkAt(dungeon.position.getChunkX() + x, dungeon.position.getChunkZ() + z);
-                if(c instanceof DungeonCraftChunk) {
-                   ((DungeonCraftChunk) c).updateSkylight(false);
+                if (c instanceof DungeonCraftChunk) {
+                    ((DungeonCraftChunk) c).updateSkylight(false);
                 }
             }
         }
+        dungeon.getDungeonLogger().info("Light Calculation DONE");
 
+        dungeon.getDungeonLogger().info("Loading Regions...");
         new RegionLoader(dungeon);
+        dungeon.getDungeonLogger().info("Region Loading DONE");
+
+        dungeon.getDungeonLogger().info("Loading Triggers...");
         new TriggerLoader(dungeon);
+        dungeon.getDungeonLogger().info("Trigger Loading DONE");
 
         dungeon.setReady();
     }

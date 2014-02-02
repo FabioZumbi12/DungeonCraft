@@ -38,13 +38,18 @@ import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.Util;
 import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.vector.Vector;
+import net.minecraft.server.v1_7_R1.EntityPlayer;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
@@ -128,17 +133,27 @@ public class PlayerListener implements Listener {
     public void onPlayerInteract(final PlayerInteractEvent event) {
         Location l = event.getPlayer().getLocation();
         if (l.getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME) && event.getClickedBlock() != null) {
-            Location clickedBlockLocation = event.getClickedBlock().getLocation();
-            DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
+            Block clickedBlock = event.getClickedBlock();
+            Location clickedBlockLocation = clickedBlock.getLocation();
             DungeonField blockPosition = DungeonFieldManager.getDungeonFieldForChunk(clickedBlockLocation.getChunk().getX(), clickedBlockLocation.getChunk().getZ());
-            DungeonField position = dungeonCraftPlayer.getDungeon().getPosition();
-            if (blockPosition.equals(position)) {
-                Dungeon d = dungeonCraftPlayer.getDungeon();
-                if (d != null) {
-                    List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerInteractEvent.class);
-                    for (Trigger trigger : triggers) {
-                        trigger.execute(dungeonCraftPlayer.getName(), event.getAction(), event.getClickedBlock(), event.getBlockFace());
-                    }
+            final DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());
+            final Dungeon d = dungeonCraftPlayer.getDungeon();
+            if (d != null && blockPosition.equals(d.getPosition())) {
+                List<Trigger> triggers = d.getTriggerRegistry().getTriggers(PlayerInteractEvent.class);
+                for (Trigger trigger : triggers) {
+                    trigger.execute(dungeonCraftPlayer.getName(), event.getAction(), event.getClickedBlock(), event.getBlockFace());
+                }
+
+                if(event.getAction() == Action.RIGHT_CLICK_BLOCK && clickedBlock.getType() == Material.ENDER_CHEST) {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(DungeonCraftPlugin.getPlugin(), new Runnable() {
+                        @Override
+                        public void run() {
+                            if(!d.isCompleted()) {
+                                EntityPlayer eh = ((CraftPlayer) dungeonCraftPlayer.getPlayer()).getHandle();
+                                eh.openContainer(d.getEnderChest(dungeonCraftPlayer));
+                            }
+                        }
+                    },1L);
                 }
             } else {
                 event.setCancelled(true);
@@ -336,7 +351,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerTeleport(final PlayerTeleportEvent event) {
         if (event.getTo().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME) && !event.getFrom().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
             DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(event.getPlayer());

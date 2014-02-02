@@ -34,6 +34,7 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import de.keyle.dungeoncraft.util.BukkitUtil;
+import de.keyle.dungeoncraft.util.CustomInventory;
 import de.keyle.dungeoncraft.util.Schedule;
 import de.keyle.dungeoncraft.util.Util;
 import de.keyle.dungeoncraft.util.locale.Locales;
@@ -61,6 +62,7 @@ public class Dungeon implements Scheduler {
     protected Result result = Result.Running;
     protected Location exitLocation;
     protected Map<DungeonCraftPlayer, OrientationVector> playerSpawn = new HashMap<DungeonCraftPlayer, OrientationVector>();
+    protected Map<DungeonCraftPlayer, CustomInventory> enderChests = new HashMap<DungeonCraftPlayer, CustomInventory>();
     protected Set<DungeonCraftPlayer> playersInDungeon = new HashSet<DungeonCraftPlayer>();
     protected final String dungeonName;
     protected final Party playerParty;
@@ -223,6 +225,21 @@ public class Dungeon implements Scheduler {
         }
     }
 
+    public CustomInventory getEnderChest(final DungeonCraftPlayer player) {
+        if(enderChests.containsKey(player)) {
+            return enderChests.get(player);
+        } else {
+            CustomInventory newEnderChest = new CustomInventory("Dungeon Ender Chest", 27) {
+                @Override
+                public String getInventoryName() {
+                    return "[" + ChatColor.RED + "DC" + ChatColor.RESET + "] " + Locales.getString("Terms.Tile.EnderChest", player);
+                }
+            };
+            enderChests.put(player, newEnderChest);
+            return newEnderChest;
+        }
+    }
+
     public boolean isCompleted() {
         return isCompleted;
     }
@@ -238,6 +255,7 @@ public class Dungeon implements Scheduler {
             objective.unregister();
         }
         DungeonCraftChunkProvider.chunkloader.unloadDungeonField(position);
+        enderChests.clear();
     }
 
     public Result getResult() {

@@ -25,6 +25,8 @@ import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 public class InventoryListener implements Listener {
@@ -33,6 +35,13 @@ public class InventoryListener implements Listener {
         ItemStack item = event.getCurrentItem();
         if(Dungeon.isDungeonCraftItem(item) && !event.getWhoClicked().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
             event.setCurrentItem(null);
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryOpen(final InventoryOpenEvent event) {
+        if(event.getInventory().getType() == InventoryType.ENDER_CHEST && event.getPlayer().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
             event.setCancelled(true);
         }
     }

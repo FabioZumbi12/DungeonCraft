@@ -326,6 +326,14 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent event) {
         Dungeon.clearDungeonCraftItems(event.getPlayer().getInventory());
+        if(event.getPlayer().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
+            Dungeon dungeon = DungeonManager.getDungeonAt(DungeonFieldManager.getDungeonFieldForChunk(event.getPlayer().getLocation().getChunk().getX(), event.getPlayer().getLocation().getChunk().getZ()));
+            if (dungeon != null) {
+                event.getPlayer().teleport(dungeon.getExitLocation());
+            } else {
+                event.getPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+            }
+        }
     }
 
     @EventHandler

@@ -64,10 +64,19 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer {
             Schematic schematic = DungeonFieldManager.getSchematicForChunk(chunkX, chunkZ);
             //DungeonCraftLogger.write("Schematic found for X(" + chunkX + ") Z(" + chunkZ + ") -> " + (schematic != null));
             if (schematic != null) {
+                boolean cancel = false;
+                synchronized (callbacks) {
+                    if(callbacks.containsKey(LongHash.toLong(chunkX, chunkZ))) {
+                        cancel = true;
+                    }
+                }
                 if (callback != null) {
                     synchronized (callbacks) {
                         callbacks.put(LongHash.toLong(chunkX, chunkZ), callback);
                     }
+                }
+                if(cancel) {
+                    return null;
                 }
                 DungeonChunkGenerator generator = new DungeonChunkGenerator(this.world, chunkX, chunkZ, this);
                 generator.start();
@@ -160,18 +169,19 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer {
     }
 
     @SuppressWarnings("SynchronizeOnNonFinalField") // "chunks" is never assigned again
-    public void addChunk(Chunk chunk) {
+    public void addChunk(final Chunk chunk) {
+        long chunkHash = LongHash.toLong(chunk.locX, chunk.locZ);
         synchronized (chunks) {
-            chunks.put(LongHash.toLong(chunk.locX, chunk.locZ), chunk);
+            chunks.put(chunkHash, chunk);
         }
         synchronized (callbacks) {
-            if (callbacks.containsKey(LongHash.toLong(chunk.locX, chunk.locZ))) {
+            if (callbacks.containsKey(chunkHash)) {
                 //DungeonCraftLogger.write("Executed Runnables for chunk at X(" + chunk.locX + ") Z(" + chunk.locZ + ")");
-                List<Runnable> runnables = callbacks.get(LongHash.toLong(chunk.locX, chunk.locZ));
+                List<Runnable> runnables = new ArrayList<Runnable>(callbacks.get(chunkHash));
+                callbacks.removeAll(chunkHash);
                 for (Runnable runnable : runnables) {
                     runnable.run();
                 }
-                callbacks.removeAll(LongHash.toLong(chunk.locX, chunk.locZ));
             }
         }
     }

@@ -85,4 +85,9 @@ public class DungeonField implements Comparable<DungeonField> {
         result = 31 * result + z;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "DungeonField{x=" + x + ", z=" + z + '}';
+    }
 }

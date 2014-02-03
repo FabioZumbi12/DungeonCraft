@@ -42,15 +42,18 @@ import de.keyle.dungeoncraft.util.logger.DungeonLogger;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.*;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
 public class Dungeon implements Scheduler {
+    private DungeonLoader loader = null;
     protected boolean isReady = false;
     protected boolean isLoading = false;
     protected boolean first = true;
@@ -107,7 +110,7 @@ public class Dungeon implements Scheduler {
     }
 
     public boolean isLoading() {
-        return isLoading;
+        return isLoading || loader != null;
     }
 
     public String getDungeonName() {
@@ -126,8 +129,17 @@ public class Dungeon implements Scheduler {
         return endTime;
     }
 
-    public synchronized void setReady() {
+    protected synchronized void setLoading() {
+        isLoading = true;
+        DungeonCraftPlayer partyLeader = playerParty.getPartyLeader();
+        if(partyLeader.isOnline()) {
+            partyLeader.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Loading", partyLeader));
+        }
+    }
+
+    protected synchronized void setReady() {
         isReady = true;
+        loader = null;
         dungeonLogger.info("Dungeon is now ready to use!");
     }
 
@@ -282,7 +294,8 @@ public class Dungeon implements Scheduler {
         if (!isCompleted() && p.isOnline() && playerParty.containsPlayer(p)) {
             playersInDungeon.add(p);
             p.setDungeon(this);
-            p.getPlayer().teleport(getPlayerSpawnLoacation(p));
+            p.getPlayer().teleport(getPlayerSpawnLoacation(p), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            p.getPlayer().setVelocity(new Vector());
             BukkitUtil.setPlayerEnvironment(p.getPlayer(), dungeonBase.getEnvironment());
             updatePlayerTime();
             updatePlayerWeather();
@@ -301,7 +314,8 @@ public class Dungeon implements Scheduler {
             playersInDungeon.remove(p);
             p.setDungeon(null);
             if (p.isOnline()) {
-                p.getPlayer().teleport(exitLocation);
+                p.getPlayer().teleport(exitLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                p.getPlayer().setVelocity(new Vector());
                 BukkitUtil.setPlayerEnvironment(p.getPlayer(), dungeonBase.getEnvironment());
                 updatePlayerTime();
                 updatePlayerWeather();
@@ -413,10 +427,15 @@ public class Dungeon implements Scheduler {
             }
             return;
         }
-        if (!isLoading) {
-            isLoading = true;
-            DungeonLoader loader = new DungeonLoader(this);
-            loader.start();
+        if (!isLoading && loader == null) {
+            loader = new DungeonLoader(this);
+            loader.startLoader();
+            if (loader.isInQueue()) {
+                DungeonCraftPlayer partyLeader = playerParty.getPartyLeader();
+                if(partyLeader.isOnline()) {
+                    partyLeader.getPlayer().sendMessage(Locales.getString("Message.Dungeon.InQueue", partyLeader));
+                }
+            }
         }
     }
 

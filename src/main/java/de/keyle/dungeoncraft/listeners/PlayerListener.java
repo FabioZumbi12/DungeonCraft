@@ -251,7 +251,6 @@ public class PlayerListener implements Listener {
                                         Dungeon d = new Dungeon(entrance.getDungeonName(), entrance.getDungeonBase(), party);
                                         d.setExitLocation(entrance.getExitLocation());
                                         DungeonManager.addDungeon(d);
-                                        event.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Loading", event.getPlayer()));
                                     } else {
                                         event.getPlayer().sendMessage(Util.formatText("Error.Party.To.Small.Extended", event.getPlayer(), base.getMinPlayerCount()));
                                     }

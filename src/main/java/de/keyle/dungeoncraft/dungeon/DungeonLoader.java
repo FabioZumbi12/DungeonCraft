@@ -27,16 +27,43 @@ import de.keyle.dungeoncraft.dungeon.scripting.TriggerLoader;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import net.minecraft.server.v1_7_R1.Chunk;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DungeonLoader extends Thread {
+    private static final Queue<DungeonLoader> LOADER_QUEUE = new ArrayDeque<DungeonLoader>();
+    private volatile static DungeonLoader runningLoader = null;
+
     private final Dungeon dungeon;
 
     public DungeonLoader(Dungeon dungeon) {
         this.dungeon = dungeon;
     }
 
+    public synchronized boolean isInQueue() {
+        return runningLoader != this;
+    }
+
+    public void startLoader() {
+        synchronized (LOADER_QUEUE) {
+            LOADER_QUEUE.add(this);
+
+            if(runningLoader == null && LOADER_QUEUE.size() == 1) {
+                runNextLoader();
+            }
+        }
+    }
+
+    @Override
+    public void start() {
+        runningLoader = this;
+        super.start();
+    }
+
     public void run() {
+        dungeon.setLoading();
+
         DungeonBase dungeonBase = dungeon.dungeonBase;
         Schematic schematic;
 
@@ -120,5 +147,19 @@ public class DungeonLoader extends Thread {
         dungeon.getDungeonLogger().info("Trigger Loading DONE");
 
         dungeon.setReady();
+
+        runNextLoader();
+    }
+
+    private static void runNextLoader() {
+        synchronized (LOADER_QUEUE) {
+            if(LOADER_QUEUE.size() > 0) {
+                DungeonLoader loader = LOADER_QUEUE.poll();
+                runningLoader = loader;
+                loader.start();
+                return;
+            }
+        }
+        runningLoader = null;
     }
 }

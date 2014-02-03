@@ -94,6 +94,9 @@ public class DungeonChunkGenerator extends Thread {
                     TagCompound tileEntityCompound = tileEntities.get(tileEntityPosition);
                     TileEntity tileEntity = createTileEntity((NBTTagCompound) BukkitUtil.compoundToVanillaCompound(tileEntityCompound));
                     tileEntity.a(this.world);
+                    tileEntity.x = field.getBlockX() + tileEntityPosition.getBlockX();
+                    tileEntity.y = tileEntityPosition.getBlockY();
+                    tileEntity.z = field.getBlockZ() + tileEntityPosition.getBlockZ();
                     chunk.tileEntities.put(new ChunkPosition(tileEntityPosition.getBlockX() & 0xF, tileEntityPosition.getBlockY(), tileEntityPosition.getBlockZ() & 0xF), tileEntity);
                     //chunk.a(tileEntityPosition.getBlockX() & 0xF, tileEntityPosition.getBlockY(), tileEntityPosition.getBlockZ() & 0xF, tileEntity);
                 }

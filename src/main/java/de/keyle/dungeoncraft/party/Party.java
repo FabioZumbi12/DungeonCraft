@@ -25,6 +25,7 @@ import de.keyle.dungeoncraft.util.locale.Locales;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -90,7 +91,7 @@ public abstract class Party implements de.keyle.dungeoncraft.api.party.Party {
 
     @Override
     public List<DungeonCraftPlayer> getPartyMembers() {
-        return this.members;
+        return Collections.unmodifiableList(this.members);
     }
 
     @Override

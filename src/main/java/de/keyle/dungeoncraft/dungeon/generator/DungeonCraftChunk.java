@@ -90,7 +90,7 @@ public class DungeonCraftChunk extends Chunk {
                         do {
                             lightValue -= this.getBlockLightOpacity(x, y, z);
 
-                            if (lightValue > 0) {
+                            if (lightValue > 0 && sections.length > (y >> 4)) {
                                 ChunkSection section = this.sections[y >> 4];
 
                                 if (section != null) {

@@ -65,8 +65,8 @@ public class CreateDungeonEntranceCommand {
                 int exitX = Integer.MIN_VALUE;
                 int exitY = Integer.MIN_VALUE;
                 int exitZ = Integer.MIN_VALUE;
-                float exitYaw = Float.NaN;
-                float exitPitch = Float.NaN;
+                float exitYaw = 0;
+                float exitPitch = 0;
                 String exitWorld = null;
                 String world = null;
                 String baseName = null;
@@ -236,12 +236,8 @@ public class CreateDungeonEntranceCommand {
                     base = DungeonBaseRegistry.getDungeonBase(baseName);
                     dungeonName = name;
                     exitLocation = new Location(Bukkit.getWorld(exitWorld), exitX, exitY + 0.5D, exitZ);
-                    if (exitYaw != Float.NaN) {
-                        exitLocation.setYaw(exitYaw);
-                    }
-                    if (exitPitch != Float.NaN) {
-                        exitLocation.setPitch(exitPitch);
-                    }
+                    exitLocation.setYaw(exitYaw);
+                    exitLocation.setPitch(exitPitch);
                 } else {
                     commandSender.sendMessage(Locales.getString("Error.Missing.Parameters", commandSender));
                 }

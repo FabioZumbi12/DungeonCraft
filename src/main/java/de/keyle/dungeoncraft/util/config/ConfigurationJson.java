@@ -49,6 +49,9 @@ public class ConfigurationJson {
     }
 
     public boolean load() {
+        if(!jsonFile.exists()) {
+            return false;
+        }
         config = new JSONObject();
         BufferedReader reader = null;
         try {

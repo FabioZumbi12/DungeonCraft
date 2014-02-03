@@ -34,6 +34,7 @@ public class DungeonLogger {
     private Logger logger;
     private boolean isEnabled = false;
     private Dungeon dungeon;
+    private FileHandler fileHandler;
 
     public DungeonLogger(Dungeon dungeon) {
         this.dungeon = dungeon;
@@ -44,14 +45,15 @@ public class DungeonLogger {
         logger = Logger.getLogger("DungeonCraft_" + dungeon.getDungeonBase().getName() + "_" + dungeon.getDungeonName() + "_" + System.currentTimeMillis());
         if (logger.getHandlers().length > 0) {
             for (Handler h : logger.getHandlers()) {
-                if (h.toString().equals("DungeonCraft-Dungeon-Logger-FileHandler")) {
+                if (h instanceof FileHandler && h.toString().equals("DungeonCraft-Dungeon-Logger-FileHandler")) {
+                    fileHandler = (FileHandler) h;
                     isEnabled = true;
                     return true;
                 }
             }
         }
         try {
-            FileHandler fileHandler = new FileHandler(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "logs" + File.separator + "dungeon" + File.separator + dungeon.getDungeonBase().getName() + "_" + dungeon.getDungeonName() + "_" + System.currentTimeMillis() + ".log", true) {
+            fileHandler = new FileHandler(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "logs" + File.separator + "dungeon" + File.separator + dungeon.getDungeonBase().getName() + "_" + dungeon.getDungeonName() + "_" + System.currentTimeMillis() + ".log", true) {
                 @Override
                 public String toString() {
                     return "DungeonCraft-Dungeon-Logger-FileHandler";
@@ -85,5 +87,9 @@ public class DungeonLogger {
         if (isEnabled) {
             logger.severe(ChatColor.stripColor(text));
         }
+    }
+
+    public void closeFileHandler() {
+        fileHandler.close();
     }
 }

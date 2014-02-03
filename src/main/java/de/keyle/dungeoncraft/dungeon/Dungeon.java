@@ -268,6 +268,9 @@ public class Dungeon implements Scheduler {
         }
         DungeonCraftChunkProvider.chunkloader.unloadDungeonField(position);
         enderChests.clear();
+
+        dungeonLogger.info("--- Dungeon END ---");
+        dungeonLogger.closeFileHandler();
     }
 
     public Result getResult() {
@@ -275,6 +278,7 @@ public class Dungeon implements Scheduler {
     }
 
     public void completeDungeon(Result result) {
+        dungeonLogger.info("Dungeon completet with status: " + result.name());
         this.result = result;
         isCompleted = true;
         for (DungeonCraftPlayer player : new HashSet<DungeonCraftPlayer>(getPlayerList())) {
@@ -285,6 +289,7 @@ public class Dungeon implements Scheduler {
             player.setDungenLockout(this.getDungeonName(), getDungeonBase().getPlayerLockoutTime());
         }
         if (!(playerParty instanceof DungeonCraftParty)) {
+            dungeonLogger.info("Party disbanded");
             playerParty.disbandParty();
         }
         schedule.cancelAllTasks();

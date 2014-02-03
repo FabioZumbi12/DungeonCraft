@@ -28,59 +28,91 @@ import java.util.Collections;
 import java.util.Set;
 
 public class DungeonManager {
-    private static BiMap<Dungeon, DungeonField> dungeon2Field = HashBiMap.create();
-    private static BiMap<DungeonField, Dungeon> field2dungeon = dungeon2Field.inverse();
+    private static final BiMap<Dungeon, DungeonField> dungeon2Field = HashBiMap.create();
+    private static final BiMap<DungeonField, Dungeon> field2dungeon = dungeon2Field.inverse();
 
-    private static BiMap<Dungeon, Party> dungeon2party = HashBiMap.create();
-    private static BiMap<Party, Dungeon> party2dungeon = dungeon2party.inverse();
+    private static final BiMap<Dungeon, Party> dungeon2party = HashBiMap.create();
+    private static final BiMap<Party, Dungeon> party2dungeon = dungeon2party.inverse();
 
     public static void addDungeon(Dungeon dungeon) {
-        if (dungeon2Field.containsKey(dungeon)) {
-            return;
+        synchronized (dungeon2Field) {
+            if (dungeon2Field.containsKey(dungeon)) {
+                return;
+            }
         }
-        if (field2dungeon.containsKey(dungeon.getPosition())) {
-            return;
+        synchronized (field2dungeon) {
+            if (field2dungeon.containsKey(dungeon.getPosition())) {
+                return;
+            }
         }
-        if (dungeon2party.containsKey(dungeon)) {
-            return;
+        synchronized (dungeon2party) {
+            if (dungeon2party.containsKey(dungeon)) {
+                return;
+            }
         }
-        if (party2dungeon.containsKey(dungeon.getPlayerParty())) {
-            return;
+        synchronized (party2dungeon) {
+            if (party2dungeon.containsKey(dungeon.getPlayerParty())) {
+                return;
+            }
         }
-        dungeon2Field.put(dungeon, dungeon.getPosition());
-        dungeon2party.put(dungeon, dungeon.getPlayerParty());
+        synchronized (dungeon2Field) {
+            dungeon2Field.put(dungeon, dungeon.getPosition());
+        }
+        synchronized (dungeon2party) {
+            dungeon2party.put(dungeon, dungeon.getPlayerParty());
+        }
     }
 
     public static Dungeon getDungeonAt(DungeonField position) {
-        return field2dungeon.get(position);
+        synchronized (field2dungeon) {
+            return field2dungeon.get(position);
+        }
     }
 
     public static Dungeon getDungeonFor(Party party) {
-        return party2dungeon.get(party);
+        synchronized (party2dungeon) {
+            return party2dungeon.get(party);
+        }
     }
 
     public static Set<Dungeon> getDungeons() {
-        return Collections.unmodifiableSet(dungeon2Field.keySet());
+        synchronized (dungeon2Field) {
+            return Collections.unmodifiableSet(dungeon2Field.keySet());
+        }
     }
 
     public static boolean removeDungeon(Dungeon dungeon) {
-        dungeon2party.remove(dungeon);
-        return dungeon2Field.remove(dungeon) != null;
+        synchronized (dungeon2party) {
+            dungeon2party.remove(dungeon);
+        }
+        synchronized (dungeon2Field) {
+            return dungeon2Field.remove(dungeon) != null;
+        }
     }
 
     public static boolean removeDungeon(DungeonField field) {
-        Dungeon dungeon = field2dungeon.remove(field);
+        Dungeon dungeon;
+        synchronized (field2dungeon) {
+            dungeon = field2dungeon.remove(field);
+        }
         if (dungeon != null) {
-            dungeon2party.remove(dungeon);
+            synchronized (dungeon2party) {
+                dungeon2party.remove(dungeon);
+            }
             return true;
         }
         return false;
     }
 
     public static boolean removeDungeon(Party party) {
-        Dungeon dungeon = party2dungeon.remove(party);
+        Dungeon dungeon;
+        synchronized (party2dungeon) {
+            dungeon = party2dungeon.remove(party);
+        }
         if (dungeon != null) {
-            dungeon2Field.remove(dungeon);
+            synchronized (dungeon2Field) {
+                dungeon2Field.remove(dungeon);
+            }
             return true;
         }
         return false;

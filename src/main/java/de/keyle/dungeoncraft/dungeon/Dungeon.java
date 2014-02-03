@@ -265,14 +265,12 @@ public class Dungeon implements Scheduler {
     public void completeDungeon(Result result) {
         this.result = result;
         isCompleted = true;
-        for (DungeonCraftPlayer player : getPlayerList()) {
-            if (playersInDungeon.contains(player)) {
-                if (player.isOnline()) {
-                    teleportOut(player);
-                    player.getPlayer().resetPlayerTime();
-                }
-                player.setDungenLockout(this.getDungeonName(), getDungeonBase().getPlayerLockoutTime());
+        for (DungeonCraftPlayer player : new HashSet<DungeonCraftPlayer>(getPlayerList())) {
+            if (player.isOnline()) {
+                teleportOut(player);
+                player.getPlayer().resetPlayerTime();
             }
+            player.setDungenLockout(this.getDungeonName(), getDungeonBase().getPlayerLockoutTime());
         }
         if (!(playerParty instanceof DungeonCraftParty)) {
             playerParty.disbandParty();
@@ -281,7 +279,7 @@ public class Dungeon implements Scheduler {
     }
 
     public void teleportIn(DungeonCraftPlayer p) {
-        if (p.isOnline() && playerParty.containsPlayer(p)) {
+        if (!isCompleted() && p.isOnline() && playerParty.containsPlayer(p)) {
             playersInDungeon.add(p);
             p.setDungeon(this);
             p.getPlayer().teleport(getPlayerSpawnLoacation(p));
@@ -396,7 +394,7 @@ public class Dungeon implements Scheduler {
                 Bukkit.getPluginManager().callEvent(new DungeonStartEvent(this));
 
                 teleportIn(playerParty.getPartyLeader());
-                for (DungeonCraftPlayer player : getPlayerList()) {
+                for (DungeonCraftPlayer player : playerParty.getPartyMembers()) {
                     if (player.isOnline() && !player.equals(playerParty.getPartyLeader())) {
                         player.getPlayer().sendMessage(Util.formatText(Locales.getString("Message.Dungeon.Ready", player), getDungeonName()));
                     }

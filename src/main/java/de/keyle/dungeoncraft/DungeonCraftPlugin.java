@@ -97,7 +97,7 @@ public class DungeonCraftPlugin extends JavaPlugin {
         new File(getPlugin().getDataFolder(), "logs").mkdirs();
         new File(getPlugin().getDataFolder().getAbsolutePath() + File.separator + "logs", "dungeon").mkdirs();
 
-        File rhino = new File(getPlugin().getDataFolder(),"js.jar");
+        File rhino = new File(getPlugin().getDataFolder(), "js.jar");
 
         DungeonCraftVersion.reset();
         DungeonCraftLogger.setConsole(getServer().getConsoleSender());
@@ -175,7 +175,7 @@ public class DungeonCraftPlugin extends JavaPlugin {
 
         DungeonCraftWorld.createWorld();
 
-        if(rhino.exists()) {
+        if (rhino.exists()) {
             DungeonCraftLogger.write("version " + DungeonCraftVersion.getVersion() + "-b" + DungeonCraftVersion.getBuild() + ChatColor.GREEN + " ENABLED");
         } else {
             DungeonCraftLogger.write(ChatColor.RED + "Missing js.jar");

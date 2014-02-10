@@ -77,9 +77,9 @@ public class CreateDungeonEntranceCommand {
                     try {
                         WorldEditPlugin worldEditPlugin = PluginSupportManager.getPluginInstance(WorldEditPlugin.class);
                         Selection selection = worldEditPlugin.getSelection(player);
-                        if(selection != null) {
-                            Location minLoc =  selection.getMinimumPoint();
-                            Location maxLoc =  selection.getMaximumPoint();
+                        if (selection != null) {
+                            Location minLoc = selection.getMinimumPoint();
+                            Location maxLoc = selection.getMaximumPoint();
                             minX = minLoc.getBlockX();
                             minY = minLoc.getBlockY();
                             minZ = minLoc.getBlockZ();

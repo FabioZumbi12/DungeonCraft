@@ -43,20 +43,20 @@ public class PartyInviteCommand {
             Party party = dungeonCraftPlayer.getParty();
             if (party != null && party instanceof DungeonCraftParty) {
                 if (!party.getPartyLeader().equals(dungeonCraftPlayer)) {
-                    player.sendMessage(Locales.getString("Error.Not.Leader",player));
+                    player.sendMessage(Locales.getString("Error.Not.Leader", player));
                     return;
                 }
                 List<String> arguments = args.getArgs();
                 if (arguments.size() >= 1) {
                     Player invitedPlayer = Bukkit.getPlayer(arguments.get(0));
                     if (dungeonCraftPlayer.equals(DungeonCraftPlayer.getPlayer(invitedPlayer))) {
-                        player.sendMessage(Locales.getString("Error.Selfinvite",player));
+                        player.sendMessage(Locales.getString("Error.Selfinvite", player));
                         return;
                     }
                     if (invitedPlayer != null) {
                         DungeonCraftPlayer invitedDungeonCraftPlayer = DungeonCraftPlayer.getPlayer(invitedPlayer);
                         if (PartyManager.isInParty(invitedPlayer)) {
-                            player.sendMessage(Util.formatText(Locales.getString("Error.Already.In.Party",player),invitedPlayer.getDisplayName()));
+                            player.sendMessage(Util.formatText(Locales.getString("Error.Already.In.Party", player), invitedPlayer.getDisplayName()));
                             return;
                         }
                         DungeonCraftParty dungeonCraftParty = ((DungeonCraftParty) party);
@@ -68,15 +68,15 @@ public class PartyInviteCommand {
                             dungeonCraftParty.invitePlayer(invitedDungeonCraftPlayer);
                             player.sendMessage(Util.formatText(Locales.getString("Message.Party.Invite.Successful", player), invitedPlayer.getDisplayName()));
                         } else {
-                            player.sendMessage(Util.formatText(Locales.getString("Error.Already.In.This.Party",player),invitedPlayer.getDisplayName()));
+                            player.sendMessage(Util.formatText(Locales.getString("Error.Already.In.This.Party", player), invitedPlayer.getDisplayName()));
                         }
                         return;
                     }
-                    player.sendMessage(Util.formatText(Locales.getString("Error.Not.Online",player),arguments.get(0)));
+                    player.sendMessage(Util.formatText(Locales.getString("Error.Not.Online", player), arguments.get(0)));
                 }
                 return;
             }
-            player.sendMessage(Locales.getString("Error.Not.In.Party",player));
+            player.sendMessage(Locales.getString("Error.Not.In.Party", player));
         }
     }
 }

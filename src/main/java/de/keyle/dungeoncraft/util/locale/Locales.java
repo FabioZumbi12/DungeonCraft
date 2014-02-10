@@ -81,11 +81,11 @@ public class Locales {
     }
 
     public static String getString(String key, CommandSender commandSender) {
-        if(commandSender instanceof Player) {
-            return getString(key,BukkitUtil.getPlayerLanguage((Player) commandSender));
+        if (commandSender instanceof Player) {
+            return getString(key, BukkitUtil.getPlayerLanguage((Player) commandSender));
         }
 
-        return getString(key,"en");
+        return getString(key, "en");
     }
 
     public String getText(String key, String localeString) {

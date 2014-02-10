@@ -27,7 +27,7 @@ import de.keyle.dungeoncraft.entity.types.ocelot.EntityDungeonCraftOcelot;
 import de.keyle.dungeoncraft.entity.types.wolf.EntityDungeonCraftWolf;
 
 
-public class SitComponent extends EntityTemplateComponent{
+public class SitComponent extends EntityTemplateComponent {
     boolean sitting = false;
 
     public SitComponent(@Parameter(type = Parameter.Type.Boolean, name = "sitting") boolean sitting) {

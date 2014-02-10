@@ -31,7 +31,7 @@ public class SlimeTemplate extends BasicTemplate {
     public SlimeTemplate() {
         super("slime", 1, EntityType.Slime);
         int randomInt = 1 + new Random().nextInt(3);
-        if(randomInt == 1) {
+        if (randomInt == 1) {
         } else if (randomInt == 2) {
             addBasicComponent(new MeeleDamageComponent(2));
         } else {

@@ -79,7 +79,7 @@ public abstract class Party implements de.keyle.dungeoncraft.api.party.Party {
     public void sendMessage(String message, String... args) {
         for (DungeonCraftPlayer player : members) {
             if (player.isOnline()) {
-                player.getPlayer().sendMessage(Util.formatText(Locales.getString(message,player),args));
+                player.getPlayer().sendMessage(Util.formatText(Locales.getString(message, player), args));
             }
         }
     }
@@ -104,7 +104,7 @@ public abstract class Party implements de.keyle.dungeoncraft.api.party.Party {
         for (DungeonCraftPlayer member : members) {
             member.setParty(null);
             if (member.isOnline() && !member.equals(leader)) {
-                member.getPlayer().sendMessage(Locales.getString("Message.Party.Disband",member));
+                member.getPlayer().sendMessage(Locales.getString("Message.Party.Disband", member));
             }
         }
         members.clear();

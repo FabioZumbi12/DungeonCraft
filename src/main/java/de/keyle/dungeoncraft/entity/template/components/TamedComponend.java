@@ -27,7 +27,7 @@ import de.keyle.dungeoncraft.entity.types.horse.EntityDungeonCraftHorse;
 import de.keyle.dungeoncraft.entity.types.wolf.EntityDungeonCraftWolf;
 
 
-public class TamedComponend extends EntityTemplateComponent{
+public class TamedComponend extends EntityTemplateComponent {
     boolean tamed = false;
 
     public TamedComponend(@Parameter(type = Parameter.Type.Boolean, name = "tamed") boolean tamed) {

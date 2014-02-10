@@ -27,7 +27,7 @@ import de.keyle.dungeoncraft.entity.types.enderman.EntityDungeonCraftEnderman;
 import de.keyle.dungeoncraft.entity.types.wolf.EntityDungeonCraftWolf;
 
 
-public class AngryComponent extends EntityTemplateComponent{
+public class AngryComponent extends EntityTemplateComponent {
     boolean angry = false;
 
     public AngryComponent(@Parameter(type = Parameter.Type.Boolean, name = "angry") boolean angry) {

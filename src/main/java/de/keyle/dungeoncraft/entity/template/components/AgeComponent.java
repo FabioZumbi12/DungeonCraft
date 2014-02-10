@@ -34,7 +34,7 @@ public class AgeComponent extends EntityTemplateComponent {
 
     @Override
     public void applyComponent(EntityDungeonCraft entity) {
-        if(entity instanceof EntityDungeonCraftHorse) {
+        if (entity instanceof EntityDungeonCraftHorse) {
             ((EntityDungeonCraftHorse) entity).setAge(age);
         }
     }

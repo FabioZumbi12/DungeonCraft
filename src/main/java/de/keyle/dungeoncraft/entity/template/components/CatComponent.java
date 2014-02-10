@@ -34,7 +34,7 @@ public class CatComponent extends EntityTemplateComponent {
 
     @Override
     public void applyComponent(EntityDungeonCraft entity) {
-        if(entity instanceof EntityDungeonCraftOcelot) {
+        if (entity instanceof EntityDungeonCraftOcelot) {
             ((EntityDungeonCraftOcelot) entity).setCatType(catType);
         }
     }

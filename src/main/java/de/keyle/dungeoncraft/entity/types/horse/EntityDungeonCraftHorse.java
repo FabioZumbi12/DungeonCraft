@@ -137,7 +137,7 @@ public class EntityDungeonCraftHorse extends EntityDungeonCraft {
     }
 
     public void setTamed(boolean tamed) {
-        this.datawatcher.watch(2,tamed);
+        this.datawatcher.watch(2, tamed);
     }
 
     private int getHorseArmorId(ItemStack itemstack) {

@@ -208,7 +208,7 @@ public class BukkitUtil {
     }
 
     public static org.bukkit.inventory.ItemStack getItemStackFromString(String itemName, int quantity) {
-        return new ItemStack(CraftItemStack.asBukkitCopy(new net.minecraft.server.v1_7_R1.ItemStack(BukkitUtil.getItem(itemName))).getType(),quantity);
+        return new ItemStack(CraftItemStack.asBukkitCopy(new net.minecraft.server.v1_7_R1.ItemStack(BukkitUtil.getItem(itemName))).getType(), quantity);
     }
 
     public static boolean isRealPlayer(Player player) {
@@ -219,11 +219,11 @@ public class BukkitUtil {
         Location playerLocation = DungeonCraftPlayer.getPlayer(player).getPlayer().getLocation();
         org.bukkit.World world = Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME);
 
-        world.dropItem(playerLocation,itemStack);
+        world.dropItem(playerLocation, itemStack);
     }
 
     public static void makeItemUndespawnable(org.bukkit.entity.Item item) {
-        EntityItem nmsItem = (EntityItem) ((CraftItem)item).getHandle();
+        EntityItem nmsItem = (EntityItem) ((CraftItem) item).getHandle();
         nmsItem.age = Integer.MIN_VALUE;
     }
 

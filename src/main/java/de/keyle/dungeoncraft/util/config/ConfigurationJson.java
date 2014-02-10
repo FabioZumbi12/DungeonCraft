@@ -49,7 +49,7 @@ public class ConfigurationJson {
     }
 
     public boolean load() {
-        if(!jsonFile.exists()) {
+        if (!jsonFile.exists()) {
             return false;
         }
         config = new JSONObject();

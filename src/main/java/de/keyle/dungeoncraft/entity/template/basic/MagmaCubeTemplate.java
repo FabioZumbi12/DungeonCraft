@@ -32,10 +32,10 @@ public class MagmaCubeTemplate extends BasicTemplate {
     public MagmaCubeTemplate() {
         super("magmacube", 1, EntityType.MagmaCube);
         int randomInt = 1 + new Random().nextInt(3);
-        if(randomInt == 1) {
+        if (randomInt == 1) {
             addBasicComponent(new MeeleDamageComponent(3));
         } else {
-            addBasicComponent(new MeeleDamageComponent(randomInt*2));
+            addBasicComponent(new MeeleDamageComponent(randomInt * 2));
         }
         addBasicComponent(new ArmorComponent(2));
         addBasicComponent(new SizeComponent(randomInt));

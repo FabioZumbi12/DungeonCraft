@@ -80,10 +80,10 @@ public class DungeonEntrance {
         exit.put("x", exitLocation.getX());
         exit.put("y", exitLocation.getY());
         exit.put("z", exitLocation.getZ());
-        if(exitLocation.getYaw() != 0) {
+        if (exitLocation.getYaw() != 0) {
             exit.put("yaw", exitLocation.getYaw());
         }
-        if(exitLocation.getPitch() != 0) {
+        if (exitLocation.getPitch() != 0) {
             exit.put("pitch", exitLocation.getPitch());
         }
         exit.put("world", exitLocation.getWorld().getName());

@@ -26,7 +26,7 @@ import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.blaze.EntityDungeonCraftBlaze;
 
 
-public class FireComponent extends EntityTemplateComponent{
+public class FireComponent extends EntityTemplateComponent {
     boolean fire = false;
 
     public FireComponent(@Parameter(type = Parameter.Type.Boolean, name = "fire") boolean fire) {

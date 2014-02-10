@@ -53,14 +53,14 @@ public class PartyJoinCommand {
                     Bukkit.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         party.addPlayer(player);
-                        player.sendMessage(Util.formatText(Locales.getString("Message.Party.Joined",player),dungeonCraftParty.getPartyLeader().getName()));
+                        player.sendMessage(Util.formatText(Locales.getString("Message.Party.Joined", player), dungeonCraftParty.getPartyLeader().getName()));
                     }
                     return;
                 }
-                player.sendMessage(Locales.getString("Error.Player.Not.Found",player));
+                player.sendMessage(Locales.getString("Error.Player.Not.Found", player));
                 return;
             }
-            player.sendMessage(Locales.getString("Error.Player.Name.Required",player));
+            player.sendMessage(Locales.getString("Error.Player.Name.Required", player));
         }
     }
 }

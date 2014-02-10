@@ -103,8 +103,8 @@ public class PlayerListener implements Listener {
             }
         }
 
-        if(Dungeon.isDungeonCraftItem(event.getItemDrop().getItemStack())) {
-            if(Dungeon.isUndroppableItem(event.getItemDrop().getItemStack())) {
+        if (Dungeon.isDungeonCraftItem(event.getItemDrop().getItemStack())) {
+            if (Dungeon.isUndroppableItem(event.getItemDrop().getItemStack())) {
                 event.setCancelled(true);
             } else {
                 BukkitUtil.makeItemUndespawnable(event.getItemDrop());
@@ -144,16 +144,16 @@ public class PlayerListener implements Listener {
                     trigger.execute(dungeonCraftPlayer.getName(), event.getAction(), event.getClickedBlock(), event.getBlockFace());
                 }
 
-                if(event.getAction() == Action.RIGHT_CLICK_BLOCK && clickedBlock.getType() == Material.ENDER_CHEST) {
+                if (event.getAction() == Action.RIGHT_CLICK_BLOCK && clickedBlock.getType() == Material.ENDER_CHEST) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(DungeonCraftPlugin.getPlugin(), new Runnable() {
                         @Override
                         public void run() {
-                            if(!d.isCompleted()) {
+                            if (!d.isCompleted()) {
                                 EntityPlayer eh = ((CraftPlayer) dungeonCraftPlayer.getPlayer()).getHandle();
                                 eh.openContainer(d.getEnderChest(dungeonCraftPlayer));
                             }
                         }
-                    },1L);
+                    }, 1L);
                 }
             } else {
                 event.setCancelled(true);
@@ -208,7 +208,7 @@ public class PlayerListener implements Listener {
                         } catch (MessageException e) {
                             if (e.getMessageKey().equals("player.not.leader")) {
                                 event.getPlayer().sendMessage(Locales.getString("Error.Leader.First", event.getPlayer()));
-                                if(eventTo.getBlockY() < event.getFrom().getBlockY()) {
+                                if (eventTo.getBlockY() < event.getFrom().getBlockY()) {
                                     event.getPlayer().teleport(entrance.getExitLocation());
                                 } else {
                                     event.setCancelled(true);
@@ -265,7 +265,7 @@ public class PlayerListener implements Listener {
                 } else {
                     event.getPlayer().sendMessage(Locales.getString("Error.No.Entry.Without.Party", event.getPlayer()));
                 }
-                if(eventTo.getBlockY() < event.getFrom().getBlockY()) {
+                if (eventTo.getBlockY() < event.getFrom().getBlockY()) {
                     event.getPlayer().teleport(entrance.getExitLocation());
                 } else {
                     event.setCancelled(true);
@@ -340,7 +340,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent event) {
         Dungeon.clearDungeonCraftItems(event.getPlayer().getInventory());
-        if(event.getPlayer().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
+        if (event.getPlayer().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
             Dungeon dungeon = DungeonManager.getDungeonAt(DungeonFieldManager.getDungeonFieldForChunk(event.getPlayer().getLocation().getChunk().getX(), event.getPlayer().getLocation().getChunk().getZ()));
             if (dungeon != null) {
                 event.getPlayer().teleport(dungeon.getExitLocation());
@@ -376,11 +376,11 @@ public class PlayerListener implements Listener {
         //Remove the DungeonCraft Items
         ItemStack[] content = event.getPlayer().getPlayer().getInventory().getContents();
         ItemStack item;
-        for(int i = 0; i < content.length;i++) {
+        for (int i = 0; i < content.length; i++) {
             item = content[i];
-            if(item != null && Dungeon.isDungeonCraftItem(item)) {
+            if (item != null && Dungeon.isDungeonCraftItem(item)) {
                 event.getPlayer().getPlayer().getInventory().setItem(i, null);
-                BukkitUtil.dropItem(event.getPlayer().getName(),item);
+                BukkitUtil.dropItem(event.getPlayer().getName(), item);
             }
         }
         event.getPlayer().getPlayer().updateInventory();

@@ -41,7 +41,7 @@ public class PartyKickCommand {
             Party party = dungeonCraftPlayer.getParty();
             if (party != null && party instanceof DungeonCraftParty) {
                 if (!party.getPartyLeader().equals(dungeonCraftPlayer)) {
-                    player.sendMessage(Locales.getString("Error.Not.Leader",player));
+                    player.sendMessage(Locales.getString("Error.Not.Leader", player));
                     return;
                 }
                 List<String> arguments = args.getArgs();
@@ -50,7 +50,7 @@ public class PartyKickCommand {
                     for (DungeonCraftPlayer partyMember : party.getPartyMembers()) {
                         if (kickedPlayername.equalsIgnoreCase(partyMember.getName())) {
                             if (dungeonCraftPlayer.equals(partyMember)) {
-                                player.sendMessage(Locales.getString("Error.Selfkick",player));
+                                player.sendMessage(Locales.getString("Error.Selfkick", player));
                                 return;
                             }
                             player.sendMessage(Util.formatText(Locales.getString("Message.Party.Player.Kick", player), partyMember.getName()));
@@ -59,11 +59,11 @@ public class PartyKickCommand {
                             return;
                         }
                     }
-                    player.sendMessage(Util.formatText(Locales.getString("Error.No.Party.Member",player),kickedPlayername));
+                    player.sendMessage(Util.formatText(Locales.getString("Error.No.Party.Member", player), kickedPlayername));
                 }
                 return;
             }
-            player.sendMessage(Locales.getString("Error.Not.In.Party",player));
+            player.sendMessage(Locales.getString("Error.Not.In.Party", player));
         }
     }
 }

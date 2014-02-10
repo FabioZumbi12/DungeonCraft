@@ -49,7 +49,7 @@ public class PartyLeaveCommand {
                             player.sendMessage(Locales.getString("Message.Party.Disband.Leader", player));
                         } else {
                             party.removePlayer(dungeonCraftPlayer);
-                            player.sendMessage(Util.formatText(Locales.getString("Message.Party.Leave", player),party.getPartyLeader().getName()));
+                            player.sendMessage(Util.formatText(Locales.getString("Message.Party.Leave", player), party.getPartyLeader().getName()));
                         }
                     }
                     return;

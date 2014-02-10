@@ -32,10 +32,10 @@ public class DungeonLeaveCommand {
     public void onCommand(CommandArgs args) {
         if (args.getSender() instanceof Player) {
             Player p = (Player) args.getSender();
-            if(DungeonCraftPlayer.isDungeonCraftPlayer(p)) {
+            if (DungeonCraftPlayer.isDungeonCraftPlayer(p)) {
                 DungeonCraftPlayer player = DungeonCraftPlayer.getPlayer(p);
                 Dungeon dungeon = player.getDungeon();
-                if(dungeon != null) {
+                if (dungeon != null) {
                     dungeon.teleportOut(player);
                     return;
                 }

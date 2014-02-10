@@ -33,7 +33,7 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void onPlayerItemClick(final InventoryClickEvent event) {
         ItemStack item = event.getCurrentItem();
-        if(Dungeon.isDungeonCraftItem(item) && !event.getWhoClicked().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
+        if (Dungeon.isDungeonCraftItem(item) && !event.getWhoClicked().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
             event.setCurrentItem(null);
             event.setCancelled(true);
         }
@@ -41,7 +41,7 @@ public class InventoryListener implements Listener {
 
     @EventHandler
     public void onInventoryOpen(final InventoryOpenEvent event) {
-        if(event.getInventory().getType() == InventoryType.ENDER_CHEST && event.getPlayer().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
+        if (event.getInventory().getType() == InventoryType.ENDER_CHEST && event.getPlayer().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
             event.setCancelled(true);
         }
     }

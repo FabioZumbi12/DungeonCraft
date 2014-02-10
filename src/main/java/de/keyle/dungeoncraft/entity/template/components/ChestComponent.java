@@ -26,7 +26,7 @@ import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.horse.EntityDungeonCraftHorse;
 
 
-public class ChestComponent extends EntityTemplateComponent{
+public class ChestComponent extends EntityTemplateComponent {
     boolean chest = false;
 
     public ChestComponent(@Parameter(type = Parameter.Type.Boolean, name = "chest") boolean chest) {

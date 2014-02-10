@@ -40,6 +40,7 @@ public class DungeonChunkGenerator extends Thread {
     private List<BlockVector> tileEntityPositions = new ArrayList<BlockVector>();
 
     private static Map<String, Class<? extends TileEntity>> tileEntityClasses = new HashMap<String, Class<? extends TileEntity>>();
+
     static {
         tileEntityClasses.put("Furnace", TileEntityFurnace.class);
         tileEntityClasses.put("Chest", TileEntityChest.class);

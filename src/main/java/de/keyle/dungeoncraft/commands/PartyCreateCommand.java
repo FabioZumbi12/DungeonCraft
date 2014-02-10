@@ -35,10 +35,10 @@ public class PartyCreateCommand {
             Player player = (Player) args.getSender();
             if (!PartyManager.isInParty(player)) {
                 PartyManager.newParty(DungeonCraftPlayer.getPlayer(player));
-                player.sendMessage(Locales.getString("Message.Party.Created",player));
+                player.sendMessage(Locales.getString("Message.Party.Created", player));
                 return;
             }
-            player.sendMessage(Locales.getString("Error.Already.In.Party",player));
+            player.sendMessage(Locales.getString("Error.Already.In.Party", player));
         }
     }
 }

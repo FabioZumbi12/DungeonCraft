@@ -23,11 +23,10 @@ package de.keyle.dungeoncraft.entity.template.components;
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
-import de.keyle.dungeoncraft.entity.types.blaze.EntityDungeonCraftBlaze;
 import de.keyle.dungeoncraft.entity.types.creeper.EntityDungeonCraftCreeper;
 
 
-public class PoweredComponent extends EntityTemplateComponent{
+public class PoweredComponent extends EntityTemplateComponent {
     boolean powered = false;
 
     public PoweredComponent(@Parameter(type = Parameter.Type.Boolean, name = "powered") boolean powered) {

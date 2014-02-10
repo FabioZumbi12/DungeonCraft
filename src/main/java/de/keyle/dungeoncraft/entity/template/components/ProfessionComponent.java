@@ -34,7 +34,7 @@ public class ProfessionComponent extends EntityTemplateComponent {
 
     @Override
     public void applyComponent(EntityDungeonCraft entity) {
-        if(entity instanceof EntityDungeonCraftVillager) {
+        if (entity instanceof EntityDungeonCraftVillager) {
             ((EntityDungeonCraftVillager) entity).setProfession(profession);
         }
     }

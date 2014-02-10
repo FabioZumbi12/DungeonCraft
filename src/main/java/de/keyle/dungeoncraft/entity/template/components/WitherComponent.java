@@ -26,7 +26,7 @@ import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.skeleton.EntityDungeonCraftSkeleton;
 
 
-public class WitherComponent extends EntityTemplateComponent{
+public class WitherComponent extends EntityTemplateComponent {
     boolean wither = false;
 
     public WitherComponent(@Parameter(type = Parameter.Type.Boolean, name = "wither") boolean wither) {

@@ -66,7 +66,7 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer {
             if (schematic != null) {
                 boolean cancel = false;
                 synchronized (callbacks) {
-                    if(callbacks.containsKey(LongHash.toLong(chunkX, chunkZ))) {
+                    if (callbacks.containsKey(LongHash.toLong(chunkX, chunkZ))) {
                         cancel = true;
                     }
                 }
@@ -75,7 +75,7 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer {
                         callbacks.put(LongHash.toLong(chunkX, chunkZ), callback);
                     }
                 }
-                if(cancel) {
+                if (cancel) {
                     return null;
                 }
                 DungeonChunkGenerator generator = new DungeonChunkGenerator(this.world, chunkX, chunkZ, this);
@@ -152,7 +152,7 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer {
 
     @Override
     public void queueUnload(int x, int z) {
-        if(!(getChunkAt(x, z) instanceof DungeonCraftChunk) || DungeonManager.getDungeonAt(DungeonFieldManager.getDungeonFieldForChunk(x, z)) == null) {
+        if (!(getChunkAt(x, z) instanceof DungeonCraftChunk) || DungeonManager.getDungeonAt(DungeonFieldManager.getDungeonFieldForChunk(x, z)) == null) {
             this.unloadQueue.add(x, z);
         }
     }

@@ -41,7 +41,7 @@ public class PartyLeaderCommand {
             Party party = dungeonCraftPlayer.getParty();
             if (party != null && party instanceof DungeonCraftParty) {
                 if (!party.getPartyLeader().equals(dungeonCraftPlayer)) {
-                    player.sendMessage(Locales.getString("Error.Not.Leader",player));
+                    player.sendMessage(Locales.getString("Error.Not.Leader", player));
                     return;
                 }
                 List<String> arguments = args.getArgs();
@@ -50,14 +50,14 @@ public class PartyLeaderCommand {
                     for (DungeonCraftPlayer partyMember : party.getPartyMembers()) {
                         if (newLeaderName.equalsIgnoreCase(partyMember.getName())) {
                             if (dungeonCraftPlayer.equals(partyMember)) {
-                                player.sendMessage(Locales.getString("Error.Already.Leader",player));
+                                player.sendMessage(Locales.getString("Error.Already.Leader", player));
                                 return;
                             }
                             ((DungeonCraftParty) party).setLeader(partyMember);
                             return;
                         }
                     }
-                    player.sendMessage(Util.formatText(Locales.getString("Error.No.Party.Member",player),newLeaderName));
+                    player.sendMessage(Util.formatText(Locales.getString("Error.No.Party.Member", player), newLeaderName));
                 }
                 return;
             }

@@ -56,13 +56,13 @@ public class PartyManager {
             DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
             Party party = dungeonCraftPlayer.getParty();
             if (party != null) {
-                if(party instanceof DungeonCraftParty) {
+                if (party instanceof DungeonCraftParty) {
                     return Party.PartyType.DUNGEONCRAFT;
-                } else if(party instanceof McMmoParty) {
+                } else if (party instanceof McMmoParty) {
                     return Party.PartyType.MCMMO;
-                } else if(party instanceof HeroesParty) {
+                } else if (party instanceof HeroesParty) {
                     return Party.PartyType.HEROES;
-                } else if(party instanceof AncientRpgParty) {
+                } else if (party instanceof AncientRpgParty) {
                     return Party.PartyType.ANCIENT;
                 }
             }

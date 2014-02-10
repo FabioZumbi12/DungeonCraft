@@ -46,7 +46,7 @@ public class EquipmentWeaponComponent extends EntityTemplateComponent {
 
     public EquipmentWeaponComponent(ItemStack itemStack) {
         this.weapon = new ParsedItem(itemStack);
-        if(this.weapon.isEmpty()) {
+        if (this.weapon.isEmpty()) {
             this.weapon = null;
         }
     }

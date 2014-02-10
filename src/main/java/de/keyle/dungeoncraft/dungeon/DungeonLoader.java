@@ -49,7 +49,7 @@ public class DungeonLoader extends Thread {
         synchronized (LOADER_QUEUE) {
             LOADER_QUEUE.add(this);
 
-            if(runningLoader == null && LOADER_QUEUE.size() == 1) {
+            if (runningLoader == null && LOADER_QUEUE.size() == 1) {
                 runNextLoader();
             }
         }
@@ -153,7 +153,7 @@ public class DungeonLoader extends Thread {
 
     private static void runNextLoader() {
         synchronized (LOADER_QUEUE) {
-            if(LOADER_QUEUE.size() > 0) {
+            if (LOADER_QUEUE.size() > 0) {
                 DungeonLoader loader = LOADER_QUEUE.poll();
                 runningLoader = loader;
                 loader.start();

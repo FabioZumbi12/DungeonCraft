@@ -142,10 +142,12 @@ public class EntityListener implements Listener {
         }
 
         for(float roll : rolls) {
+            float lowestKey = 100;
             for(float key : lootTable.keySet()) {
-                if(key >= roll) {
-                    items.add(lootTable.get(key));
+                if(key >= roll && lowestKey > key) {
+                    lowestKey = key;
                 }
+                items.add(lootTable.get(lowestKey));
             }
         }
 

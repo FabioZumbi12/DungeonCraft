@@ -24,17 +24,21 @@ import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
 import de.keyle.dungeoncraft.dungeon.DungeonBase;
 import de.keyle.dungeoncraft.entity.types.EntityType;
+import de.keyle.dungeoncraft.util.ParsedItem;
 import de.keyle.dungeoncraft.util.Util;
 import de.keyle.dungeoncraft.util.config.ConfigurationJson;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import net.minecraft.util.org.apache.commons.lang3.math.NumberUtils;
+import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EntityTemplateLoader {
     private final DungeonBase dungeonBase;
@@ -82,10 +86,32 @@ public class EntityTemplateLoader {
                             String displayName = template.get("display-name").toString();
                             newEntityTemplate.setDisplayName(displayName);
                         }
-
                         if(template.containsKey("exp")) {
-                            String displayName = template.get("exp").toString();
-                            newEntityTemplate.setExp(Integer.parseInt(displayName));
+                            String exp = template.get("exp").toString();
+                            newEntityTemplate.setExp(Integer.parseInt(exp));
+                        }
+                        if(template.containsKey("loot-iterations")) {
+                            int lootIterations = Integer.parseInt(template.get("loot-iterations").toString());
+                            newEntityTemplate.setLootIterations(lootIterations);
+                        }
+
+                        if(template.containsKey("max-drops")) {
+                            int maxDrops = Integer.parseInt(template.get("max-drops").toString());
+                            newEntityTemplate.setMaxDrops(maxDrops);
+                        }
+
+                        if(template.containsKey("loot-table")) {
+                            Object lootObjcets = template.get("loot-table");
+                            if(lootObjcets instanceof JSONArray) {
+                                JSONArray lootArray = (JSONArray) lootObjcets;
+                                Map<Float,ItemStack> newLootTable = new HashMap<Float, ItemStack>();
+                                for (Object lootObject : lootArray) {
+                                    if(lootObject instanceof JSONObject) {
+                                        newLootTable.put(Float.parseFloat(((JSONObject)lootObject).get("dropchance").toString()),ParsedItem.parsedItem((JSONObject)lootObject).getBukkitItem());
+                                    }
+                                }
+                                newEntityTemplate.setLootTable(newLootTable);
+                            }
                         }
 
                         if (template.containsKey("components")) {

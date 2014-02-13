@@ -27,9 +27,12 @@ import de.keyle.dungeoncraft.entity.ai.navigation.AbstractNavigation;
 import de.keyle.dungeoncraft.entity.ai.navigation.VanillaNavigation;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import net.minecraft.server.v1_7_R1.*;
+import net.minecraft.server.v1_7_R1.ItemStack;
 import org.bukkit.Location;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public abstract class EntityDungeonCraft extends EntityCreature implements IMonster {
@@ -39,6 +42,9 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
     protected boolean hasRider = false;
     protected int idleSoundTimer = 0;
     public AbstractNavigation petNavigation;
+    private Map<Float, org.bukkit.inventory.ItemStack> lootTable = new HashMap<Float, org.bukkit.inventory.ItemStack>();
+    private int maxDrops;
+    private int lootIterations;
 
     private Field jump = null;
     private int armor = 0;
@@ -128,6 +134,30 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
             e.printStackTrace();
         }
         return damageEntity;
+    }
+
+    public void setLootTable(Map<Float,org.bukkit.inventory.ItemStack> lootTable) {
+        this.lootTable = lootTable;
+    }
+
+    public Map<Float,org.bukkit.inventory.ItemStack> getLootTable() {
+        return lootTable;
+    }
+
+    public int getMaxDrops() {
+        return maxDrops;
+    }
+
+    public void setMaxDrops(int maxDrops) {
+        this.maxDrops = maxDrops;
+    }
+
+    public int getLootIterations() {
+        return lootIterations;
+    }
+
+    public void setLootIterations(int lootIterations) {
+        this.lootIterations = lootIterations;
     }
 
     /**

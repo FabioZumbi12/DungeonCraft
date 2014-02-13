@@ -33,6 +33,9 @@ public class EntityFactory {
 
         entity.getBukkitEntity().setMaxHealth(template.getMaxHealth());
         entity.expToDrop = template.getExp();
+        entity.setMaxDrops(template.getMaxDrops());
+        entity.setLootIterations(template.getLootIterations());
+        entity.setLootTable(template.getLootTable());
 
         if (!template.getDisplayName().equals("")) {
             entity.setCustomName(template.getDisplayName());

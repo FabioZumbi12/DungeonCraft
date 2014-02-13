@@ -22,9 +22,11 @@ package de.keyle.dungeoncraft.entity.template;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class EntityTemplate {
     protected double maxHealth = 10;
@@ -33,6 +35,9 @@ public class EntityTemplate {
     protected final String templateId;
     protected final EntityType type;
     protected int exp = 0;
+    protected int lootIterations = 0;
+    protected int maxDrops = 0;
+    protected Map<Float,ItemStack> lootTable;
     protected List<EntityTemplateComponent> components = new ArrayList<EntityTemplateComponent>();
 
     public EntityTemplate(String templateId, EntityType type) {
@@ -89,5 +94,29 @@ public class EntityTemplate {
 
     public List<EntityTemplateComponent> getComponents() {
         return components;
+    }
+
+    public int getLootIterations() {
+        return lootIterations;
+    }
+
+    public void setLootIterations(int lootIterations) {
+        this.lootIterations = lootIterations;
+    }
+
+    public int getMaxDrops() {
+        return maxDrops;
+    }
+
+    public void setMaxDrops(int maxDrops) {
+        this.maxDrops = maxDrops;
+    }
+
+    public Map<Float, ItemStack> getLootTable() {
+        return lootTable;
+    }
+
+    public void setLootTable(Map<Float, ItemStack> lootTable) {
+        this.lootTable = lootTable;
     }
 }

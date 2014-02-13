@@ -28,11 +28,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 public class CraftDungeonCraftEntity extends CraftCreature {
-    protected EntityDungeonCraft petEntity;
+    protected EntityDungeonCraft dungeonCraftEntity;
 
     public CraftDungeonCraftEntity(CraftServer server, EntityDungeonCraft entityDungeonCraft) {
         super(server, entityDungeonCraft);
-        petEntity = entityDungeonCraft;
+        dungeonCraftEntity = entityDungeonCraft;
     }
 
     @Override
@@ -75,15 +75,15 @@ public class CraftDungeonCraftEntity extends CraftCreature {
     }
 
     public boolean canMove() {
-        return petEntity.canMove();
+        return dungeonCraftEntity.canMove();
     }
 
     @Override
     public EntityDungeonCraft getHandle() {
-        return petEntity;
+        return dungeonCraftEntity;
     }
 
-    public EntityType getPetType() {
+    public EntityType getDungeonCraftEntityType() {
         return EntityType.Bat; //ToDo Change that
     }
 
@@ -108,12 +108,12 @@ public class CraftDungeonCraftEntity extends CraftCreature {
         if (target == null) {
             entity.target = null;
         } else if (target instanceof CraftLivingEntity) {
-            petEntity.setGoalTarget(((CraftLivingEntity) target).getHandle());
+            dungeonCraftEntity.setGoalTarget(((CraftLivingEntity) target).getHandle());
         }
     }
 
     @Override
     public String toString() {
-        return "CraftDungeonCraftEntity{type=" + getPetType() + "}";
+        return "CraftDungeonCraftEntity{type=" + getDungeonCraftEntityType() + "}";
     }
 }

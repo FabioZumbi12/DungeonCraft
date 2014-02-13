@@ -83,6 +83,11 @@ public class EntityTemplateLoader {
                             newEntityTemplate.setDisplayName(displayName);
                         }
 
+                        if(template.containsKey("exp")) {
+                            String displayName = template.get("exp").toString();
+                            newEntityTemplate.setExp(Integer.parseInt(displayName));
+                        }
+
                         if (template.containsKey("components")) {
                             Object componentsObject = template.get("components");
                             if (componentsObject instanceof JSONArray) {

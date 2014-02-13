@@ -32,6 +32,7 @@ public class EntityTemplate {
     protected String displayName = "";
     protected final String templateId;
     protected final EntityType type;
+    protected int exp = 0;
     protected List<EntityTemplateComponent> components = new ArrayList<EntityTemplateComponent>();
 
     public EntityTemplate(String templateId, EntityType type) {
@@ -56,6 +57,14 @@ public class EntityTemplate {
             return;
         }
         this.maxHealth = maxHealth;
+    }
+
+    public int getExp() {
+        return exp;
+    }
+
+    public void setExp(int exp) {
+        this.exp = exp;
     }
 
     public float getWalkSpeed() {

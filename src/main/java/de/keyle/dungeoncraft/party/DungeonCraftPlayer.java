@@ -134,6 +134,11 @@ public class DungeonCraftPlayer {
         }
     }
 
+    public void giveEXP(int amount) {
+        getPlayer().giveExp(amount);
+        //sendMessage("You've gained " + amount + " EXP");
+    }
+
     public boolean equals(Object o) {
         if (o == null) {
             return false;

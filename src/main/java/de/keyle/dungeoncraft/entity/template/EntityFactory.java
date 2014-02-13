@@ -32,6 +32,7 @@ public class EntityFactory {
         EntityDungeonCraft entity = template.getType().getNewEntityInstance(mcWorld);
 
         entity.getBukkitEntity().setMaxHealth(template.getMaxHealth());
+        entity.expToDrop = template.getExp();
 
         if (!template.getDisplayName().equals("")) {
             entity.setCustomName(template.getDisplayName());

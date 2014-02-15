@@ -21,9 +21,12 @@
 package de.keyle.dungeoncraft.dungeon.region;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
-import de.keyle.dungeoncraft.util.config.ConfigurationYaml;
+import de.keyle.dungeoncraft.util.Util;
+import de.keyle.dungeoncraft.util.config.ConfigurationJson;
 import de.keyle.dungeoncraft.util.vector.Vector;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.json.simple.JSONObject;
+
+import java.io.File;
 
 public class RegionLoader {
     private final Dungeon dungeon;
@@ -35,22 +38,53 @@ public class RegionLoader {
 
     private void loadRegions() {
         if (dungeon.getDungeonBase().getRegionFile().exists()) {
-            ConfigurationYaml configurationYaml = new ConfigurationYaml(dungeon.getDungeonBase().getRegionFile());
-            FileConfiguration config = configurationYaml.getConfig();
+            File regionFile = dungeon.getDungeonBase().getRegionFile();
+            ConfigurationJson jsonConfig = new ConfigurationJson(regionFile);
+            jsonConfig.load();
 
-            for (String key : config.getKeys(false)) {
-                int minX = config.getInt(key + ".min.x", -1);
-                int minY = config.getInt(key + ".min.y", -1);
-                int minZ = config.getInt(key + ".min.z", -1);
-                int maxX = config.getInt(key + ".max.x", -1);
-                int maxY = config.getInt(key + ".max.y", -1);
-                int maxZ = config.getInt(key + ".max.z", -1);
+            JSONObject regionsObject = jsonConfig.getJSONObject();
+            for (Object regionObject : regionsObject.keySet()) {
+                String regionName = regionObject.toString();
+                JSONObject region = (JSONObject) regionsObject.get(regionObject);
+                if (!region.containsKey("min") || !region.containsKey("max")) {
+                    continue;
+                }
+                JSONObject min = (JSONObject) region.get("min");
+                if (!min.containsKey("x") || !min.containsKey("y") || !min.containsKey("z")) {
+                    continue;
+                }
+                JSONObject max = (JSONObject) region.get("max");
+                if (!max.containsKey("x") || !max.containsKey("y") || !max.containsKey("z")) {
+                    continue;
+                }
+                String xMinString = min.get("x").toString();
+                String yMinString = min.get("y").toString();
+                String zMinString = min.get("z").toString();
 
-                Vector min = new Vector(minX, minY, minZ);
-                Vector max = new Vector(maxX, maxY, maxZ);
+                String xMaxString = max.get("x").toString();
+                String yMaxString = max.get("y").toString();
+                String zMaxString = max.get("z").toString();
+
+                if (!Util.isInt(xMinString) || !Util.isInt(yMinString) || !Util.isInt(zMinString)) {
+                    continue;
+                }
+
+                if (!Util.isInt(xMaxString) || !Util.isInt(yMaxString) || !Util.isInt(zMaxString)) {
+                    continue;
+                }
+
+                int xMin = Integer.parseInt(xMinString);
+                int yMin = Integer.parseInt(yMinString);
+                int zMin = Integer.parseInt(zMinString);
+                int xMax = Integer.parseInt(xMaxString);
+                int yMax = Integer.parseInt(yMaxString);
+                int zMax = Integer.parseInt(zMaxString);
+
+                Vector minVector = new Vector(Math.min(xMin, xMax), Math.min(yMin, yMax), Math.min(zMin, zMax));
+                Vector maxVector = new Vector(Math.max(xMin, xMax), Math.max(yMin, yMax), Math.max(zMin, zMax));
 
                 try {
-                    DungeonRegion r = new DungeonRegion(key, min, max);
+                    DungeonRegion r = new DungeonRegion(regionName, minVector, maxVector);
                     dungeon.getRegionRegistry().addRegion(r);
                     dungeon.getDungeonLogger().info("Region loaded: " + r);
                 } catch (IllegalArgumentException e) {

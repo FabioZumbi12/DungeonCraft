@@ -187,7 +187,7 @@ public class DungeonBase implements ISchematicReveiver {
     }
 
     public File getRegionFile() {
-        return new File(getFolder(), "regions.yml");
+        return new File(getFolder(), "regions.json");
     }
 
     public File getEntityTemplateFile() {

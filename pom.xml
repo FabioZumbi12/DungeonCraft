@@ -33,7 +33,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <minecraft.version>1.7.2</minecraft.version>
-        <bukkit.version>R0.3-SNAPSHOT</bukkit.version>
+        <bukkit.version>R0.4-SNAPSHOT</bukkit.version>
 
         <vault.version>1.2.30</vault.version>
         <worldedit.version>5.5.8</worldedit.version>
@@ -144,7 +144,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-        <groupId>com.gmail.nossr50.mcMMO</groupId>
+            <groupId>com.gmail.nossr50.mcMMO</groupId>
             <artifactId>mcMMO</artifactId>
             <version>${mcmmo.version}</version>
             <scope>provided</scope>
@@ -322,7 +322,8 @@
                     <execution>
                         <phase>${download.translations}</phase>
                         <configuration>
-                            <connectionUrl>scm:git:https://github.com/xXKeyleXx/DungeonCraft-Translations.git</connectionUrl>
+                            <connectionUrl>scm:git:https://github.com/xXKeyleXx/DungeonCraft-Translations.git
+                            </connectionUrl>
                             <checkoutDirectory>target/classes/locale</checkoutDirectory>
                             <excludes>exclude,.git,.gitignore</excludes>
                         </configuration>

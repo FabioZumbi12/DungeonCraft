@@ -23,14 +23,14 @@ package de.keyle.dungeoncraft.entity.template.basic;
 import de.keyle.dungeoncraft.entity.ai.attack.ranged.Projectile;
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
 import de.keyle.dungeoncraft.entity.template.components.FireComponent;
-import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
+import de.keyle.dungeoncraft.entity.template.components.MeleeDamageComponent;
 import de.keyle.dungeoncraft.entity.template.components.RangedDamageComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 
 public class BlazeTemplate extends BasicTemplate {
     public BlazeTemplate() {
         super("blaze", 20, EntityType.Blaze);
-        addBasicComponent(new MeeleDamageComponent(6));
+        addBasicComponent(new MeleeDamageComponent(6));
         addBasicComponent(new RangedDamageComponent(5, Projectile.ProjectileTypes.SmallFireball));
         addBasicComponent(new FireComponent(true));
     }

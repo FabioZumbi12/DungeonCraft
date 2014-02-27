@@ -21,7 +21,7 @@
 package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
-import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
+import de.keyle.dungeoncraft.entity.template.components.MeleeDamageComponent;
 import de.keyle.dungeoncraft.entity.template.components.SizeComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 
@@ -33,9 +33,9 @@ public class SlimeTemplate extends BasicTemplate {
         int randomInt = 1 + new Random().nextInt(3);
         if (randomInt == 1) {
         } else if (randomInt == 2) {
-            addBasicComponent(new MeeleDamageComponent(2));
+            addBasicComponent(new MeleeDamageComponent(2));
         } else {
-            addBasicComponent(new MeeleDamageComponent(4));
+            addBasicComponent(new MeleeDamageComponent(4));
         }
         addBasicComponent(new SizeComponent(randomInt));
     }

@@ -21,7 +21,7 @@
 package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
-import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
+import de.keyle.dungeoncraft.entity.template.components.MeleeDamageComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 
 import java.util.Random;
@@ -29,7 +29,7 @@ import java.util.Random;
 public class IronGolemTemplate extends BasicTemplate {
     public IronGolemTemplate() {
         super("irongolem", 100, EntityType.IronGolem);
-        addBasicComponent(new MeeleDamageComponent(7 + new Random().nextInt(15)));
+        addBasicComponent(new MeleeDamageComponent(7 + new Random().nextInt(15)));
     }
 
     public float getWalkSpeed() {

@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.ai.attack.ranged.Projectile;
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
-import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
+import de.keyle.dungeoncraft.entity.template.components.MeleeDamageComponent;
 import de.keyle.dungeoncraft.entity.template.components.RangedDamageComponent;
 import de.keyle.dungeoncraft.entity.template.components.WitherComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
@@ -30,7 +30,7 @@ import de.keyle.dungeoncraft.entity.types.EntityType;
 public class SkeletonTemplate extends BasicTemplate {
     public SkeletonTemplate() {
         super("skeleton", 20, EntityType.Skeleton);
-        addBasicComponent(new MeeleDamageComponent(2));
+        addBasicComponent(new MeleeDamageComponent(2));
         addBasicComponent(new RangedDamageComponent(3, Projectile.ProjectileTypes.Arrow));
         addBasicComponent(new WitherComponent(false));
     }

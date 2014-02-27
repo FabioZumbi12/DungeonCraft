@@ -22,13 +22,13 @@ package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
 import de.keyle.dungeoncraft.entity.template.components.ArmorComponent;
-import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
+import de.keyle.dungeoncraft.entity.template.components.MeleeDamageComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 
 public class ZombieTemplate extends BasicTemplate {
     public ZombieTemplate() {
         super("zombie", 20, EntityType.Zombie);
-        addBasicComponent(new MeeleDamageComponent(3));
+        addBasicComponent(new MeleeDamageComponent(3));
         addBasicComponent(new ArmorComponent(2));
     }
 

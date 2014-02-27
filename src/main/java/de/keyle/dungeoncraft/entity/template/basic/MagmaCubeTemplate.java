@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
 import de.keyle.dungeoncraft.entity.template.components.ArmorComponent;
-import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
+import de.keyle.dungeoncraft.entity.template.components.MeleeDamageComponent;
 import de.keyle.dungeoncraft.entity.template.components.SizeComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 
@@ -33,9 +33,9 @@ public class MagmaCubeTemplate extends BasicTemplate {
         super("magmacube", 1, EntityType.MagmaCube);
         int randomInt = 1 + new Random().nextInt(3);
         if (randomInt == 1) {
-            addBasicComponent(new MeeleDamageComponent(3));
+            addBasicComponent(new MeleeDamageComponent(3));
         } else {
-            addBasicComponent(new MeeleDamageComponent(randomInt * 2));
+            addBasicComponent(new MeleeDamageComponent(randomInt * 2));
         }
         addBasicComponent(new ArmorComponent(2));
         addBasicComponent(new SizeComponent(randomInt));

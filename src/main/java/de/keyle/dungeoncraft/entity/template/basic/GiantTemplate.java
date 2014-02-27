@@ -21,13 +21,13 @@
 package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
-import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
+import de.keyle.dungeoncraft.entity.template.components.MeleeDamageComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 
 public class GiantTemplate extends BasicTemplate {
     public GiantTemplate() {
         super("giant", 100, EntityType.Giant);
-        addBasicComponent(new MeeleDamageComponent(50));
+        addBasicComponent(new MeleeDamageComponent(50));
     }
 
     public float getWalkSpeed() {

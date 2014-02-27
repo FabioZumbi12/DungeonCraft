@@ -21,13 +21,13 @@
 package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
-import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
+import de.keyle.dungeoncraft.entity.template.components.MeleeDamageComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 
 public class SilverfishTemplate extends BasicTemplate {
     public SilverfishTemplate() {
         super("silverfish", 8, EntityType.Silverfish);
-        addBasicComponent(new MeeleDamageComponent(1));
+        addBasicComponent(new MeleeDamageComponent(1));
     }
 
     public float getWalkSpeed() {

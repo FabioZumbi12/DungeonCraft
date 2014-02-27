@@ -21,13 +21,13 @@
 package de.keyle.dungeoncraft.entity.template.basic;
 
 import de.keyle.dungeoncraft.entity.template.BasicTemplate;
-import de.keyle.dungeoncraft.entity.template.components.MeeleDamageComponent;
+import de.keyle.dungeoncraft.entity.template.components.MeleeDamageComponent;
 import de.keyle.dungeoncraft.entity.types.EntityType;
 
 public class SpiderTemplate extends BasicTemplate {
     public SpiderTemplate() {
         super("spider", 16, EntityType.Spider);
-        addBasicComponent(new MeeleDamageComponent(2));
+        addBasicComponent(new MeleeDamageComponent(2));
     }
 
     public float getWalkSpeed() {

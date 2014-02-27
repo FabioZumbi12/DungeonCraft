@@ -68,8 +68,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 public class DungeonCraftPlugin extends JavaPlugin {
@@ -174,6 +176,17 @@ public class DungeonCraftPlugin extends JavaPlugin {
         BukkitUtil.registerEntity(EntityDungeonCraftVillager.class, "Villager", 120);
 
         DungeonCraftWorld.createWorld();
+
+        try {
+            Metrics metrics = new Metrics(this);
+            boolean metricsActive = false;
+            if (!metrics.isOptOut()) {
+                metricsActive = metrics.start();
+            }
+            DebugLogger.info("Metrics " + (metricsActive ? "" : "not ") + "activated");
+        } catch (IOException e) {
+            DungeonCraftLogger.write(e.getMessage());
+        }
 
         if (rhino.exists()) {
             DungeonCraftLogger.write("version " + DungeonCraftVersion.getVersion() + "-b" + DungeonCraftVersion.getBuild() + ChatColor.GREEN + " ENABLED");

@@ -66,8 +66,8 @@ public class VariablesContext {
         return variables.get(key);
     }
 
-    public void removeVariable(String key) {
-        variables.remove(key);
+    public boolean removeVariable(String key) {
+        return variables.remove(key) != null;
     }
 
     public Set<String> getVariablesKeys() {

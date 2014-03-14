@@ -53,7 +53,7 @@ public class ScoreboardContext {
         }
     }
 
-    public void setObjectiveDisplayName(String name, DisplaySlot displaySlot) {
+    public void setObjectiveDisplaySlot(String name, DisplaySlot displaySlot) {
         Objective objective = scoreboard.getObjective(name);
         if (objective != null) {
             objective.setDisplaySlot(displaySlot);
@@ -67,7 +67,7 @@ public class ScoreboardContext {
         }
     }
 
-    public int getObjectiveScore(String name, String playername, int score) {
+    public int getObjectiveScore(String name, String playername) {
         Objective objective = scoreboard.getObjective(name);
         if (objective != null) {
             return objective.getScore(Bukkit.getOfflinePlayer(playername)).getScore();

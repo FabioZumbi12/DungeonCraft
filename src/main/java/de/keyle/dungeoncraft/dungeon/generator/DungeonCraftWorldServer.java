@@ -27,10 +27,15 @@ import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_7_R1.util.LongHash;
 import org.bukkit.generator.ChunkGenerator;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 public class DungeonCraftWorldServer extends WorldServer {
 
     public static DungeonCraftWorldServer dungeonCraftWorldServer;
     private DungeonCraftChunkProvider dungeonCrafthunkProviderServer;
+
+    private static Method METHOD_Z = null;
 
     public DungeonCraftWorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, String s, int i, WorldSettings worldsettings, MethodProfiler methodprofiler, World.Environment env, ChunkGenerator gen) {
         super(minecraftserver, idatamanager, s, i, worldsettings, methodprofiler, env, gen);
@@ -38,6 +43,14 @@ public class DungeonCraftWorldServer extends WorldServer {
             this.worldProvider = new DungeonCraftWorldProvider(this);
         }
         dungeonCraftWorldServer = this;
+        if (METHOD_Z == null) {
+            try {
+                METHOD_Z = WorldServer.class.getDeclaredMethod("Z");
+                METHOD_Z.setAccessible(true);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     protected IChunkProvider j() {
@@ -118,5 +131,14 @@ public class DungeonCraftWorldServer extends WorldServer {
         this.methodProfiler.c("portalForcer");
         this.t().a(getTime());
         this.methodProfiler.b();
+
+
+        try {
+            METHOD_Z.invoke(this);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -29,6 +29,7 @@ import org.bukkit.generator.ChunkGenerator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class DungeonCraftWorldServer extends WorldServer {
 
@@ -104,7 +105,7 @@ public class DungeonCraftWorldServer extends WorldServer {
 
     @Override
     public void doTick() {
-        for (Dungeon dungeon : DungeonManager.getDungeons()) {
+        for (Dungeon dungeon : new ArrayList<Dungeon>(DungeonManager.getDungeons())) {
             dungeon.schedule();
             if (dungeon.isCompleted()) {
                 DungeonManager.removeDungeon(dungeon);

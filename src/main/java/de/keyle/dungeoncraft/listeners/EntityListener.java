@@ -30,14 +30,15 @@ import de.keyle.dungeoncraft.entity.types.CraftDungeonCraftEntity;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.party.Party;
-import net.minecraft.server.v1_7_R1.ItemStack;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_7_R1.inventory.CraftItemStack;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,13 +61,16 @@ public class EntityListener implements Listener {
             }
 
             if(entity instanceof CraftDungeonCraftEntity) {
-                Player killer = entity.getKiller();
-                Party party = DungeonCraftPlayer.getPlayer(killer).getParty();
                 CraftDungeonCraftEntity craftEntity = (CraftDungeonCraftEntity) entity;
                 EntityDungeonCraft entityDungeonCraft = craftEntity.getHandle();
-                for(DungeonCraftPlayer player : party.getPartyMembers()) {
-                    if(craftEntity.getHandle().expToDrop != 0) {
-                        player.giveEXP((int) Math.ceil(entityDungeonCraft.expToDrop / party.getPartyStrength()));
+
+                Player killer = entity.getKiller();
+                if (killer != null) {
+                    Party party = DungeonCraftPlayer.getPlayer(killer).getParty();
+                    for (DungeonCraftPlayer player : party.getPartyMembers()) {
+                        if (craftEntity.getHandle().expToDrop != 0) {
+                            player.giveEXP((int) Math.ceil(entityDungeonCraft.expToDrop / party.getPartyStrength()));
+                        }
                     }
                 }
 

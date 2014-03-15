@@ -20,11 +20,14 @@
 
 package de.keyle.dungeoncraft.util;
 
+import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
+import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.WordUtils;
 
 import java.text.MessageFormat;
+import java.util.concurrent.TimeUnit;
 
 public class Util {
     public static String cutString(String string, int length) {
@@ -89,5 +92,26 @@ public class Util {
         } catch (NumberFormatException nFE) {
             return false;
         }
+    }
+
+    public static String getDurationBreakdown(long millis, DungeonCraftPlayer dungeonCraftPlayer)
+    {
+        if(millis < 0)
+        {
+            throw new IllegalArgumentException("Duration must be greater than zero!");
+        }
+
+        long days = TimeUnit.MILLISECONDS.toDays(millis);
+        millis -= TimeUnit.DAYS.toMillis(days);
+        long hours = TimeUnit.MILLISECONDS.toHours(millis);
+        millis -= TimeUnit.HOURS.toMillis(hours);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+        millis -= TimeUnit.MINUTES.toMillis(minutes);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+
+        return(Util.formatText(Locales.getString("Terms.Common.Days", dungeonCraftPlayer), days)
+                + Util.formatText(Locales.getString("Terms.Common.Hours", dungeonCraftPlayer), hours)
+                + Util.formatText(Locales.getString("Terms.Common.Minutes", dungeonCraftPlayer), minutes)
+                + Util.formatText(Locales.getString("Terms.Common.Seconds", dungeonCraftPlayer), seconds));
     }
 }

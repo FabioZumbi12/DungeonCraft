@@ -52,6 +52,7 @@ public class CreateDungeonEntranceCommand {
             DungeonBase base = null;
             String dungeonName = null;
             Location exitLocation = null;
+            boolean enabled = false;
 
             CommandSender commandSender = args.getSender();
 
@@ -207,6 +208,8 @@ public class CreateDungeonEntranceCommand {
                         }
                     } else if (arg.startsWith("n=")) {
                         name = arg.substring(2);
+                    } else if (arg.startsWith("enabled=")) {
+                        enabled = Boolean.parseBoolean(arg.substring(8));
                     }
                 }
                 if (world == null && args.getSender() instanceof Player) {
@@ -245,7 +248,7 @@ public class CreateDungeonEntranceCommand {
 
             if (region != null && worldName != null && base != null && dungeonName != null && exitLocation != null) {
                 commandSender.sendMessage(Locales.getString("Message.Entrance.Created", commandSender));
-                DungeonEntrance entrance = new DungeonEntrance(dungeonName, worldName, region, base, exitLocation);
+                DungeonEntrance entrance = new DungeonEntrance(dungeonName, worldName, region, base, exitLocation, enabled);
                 DungeonEntranceRegistry.registerEntrance(entrance);
                 DungeonEntranceRegistry.saveEntrances();
             }

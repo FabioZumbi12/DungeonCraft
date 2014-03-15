@@ -31,13 +31,15 @@ public class DungeonEntrance {
     protected final String dungeonName;
     protected final DungeonBase dungeonBase;
     protected final Location exitLocation;
+    protected boolean enabled;
 
-    public DungeonEntrance(String dungeonName, String worldName, Region region, DungeonBase dungeonBase, Location exitLocation) {
+    public DungeonEntrance(String dungeonName, String worldName, Region region, DungeonBase dungeonBase, Location exitLocation, boolean enabled) {
         this.worldName = worldName;
         this.entraceRegion = region;
         this.dungeonName = dungeonName;
         this.dungeonBase = dungeonBase;
         this.exitLocation = exitLocation;
+        this.enabled = enabled;
     }
 
     public Region getEntraceRegion() {
@@ -92,7 +94,16 @@ public class DungeonEntrance {
         json.put("world", worldName);
         json.put("name", dungeonName);
         json.put("base", dungeonBase.getName());
+        json.put("enabled", enabled);
 
         return json;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

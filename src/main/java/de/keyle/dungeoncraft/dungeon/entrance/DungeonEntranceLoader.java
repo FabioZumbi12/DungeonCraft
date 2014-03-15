@@ -72,6 +72,8 @@ public class DungeonEntranceLoader {
                             continue;
                         }
 
+                        boolean enabled = Boolean.parseBoolean(entrance.get("enabled").toString());
+
                         Object minObject = entrance.get("min");
                         Vector minVector;
                         if (minObject instanceof JSONObject) {
@@ -139,7 +141,7 @@ public class DungeonEntranceLoader {
                             continue;
                         }
 
-                        DungeonEntrance dungeonEntrance = new DungeonEntrance(dungeonName, worldName, region, dungeonBase, exitLocation);
+                        DungeonEntrance dungeonEntrance = new DungeonEntrance(dungeonName, worldName, region, dungeonBase, exitLocation, enabled);
                         DungeonEntranceRegistry.registerEntrance(dungeonEntrance);
                     }
                 }

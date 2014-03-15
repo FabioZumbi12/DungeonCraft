@@ -64,4 +64,13 @@ public class DungeonEntranceRegistry {
             entranceLoader = new DungeonEntranceLoader();
         }
     }
+
+    public static DungeonEntrance getEntranceByName(String name) {
+        for(DungeonEntrance dungeonEntrance : getAllEntrances()) {
+            if(dungeonEntrance.dungeonName.equals(name)) {
+                return dungeonEntrance;
+            }
+        }
+        return null;
+    }
 }

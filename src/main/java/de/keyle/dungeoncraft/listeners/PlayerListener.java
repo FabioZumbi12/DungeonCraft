@@ -196,6 +196,10 @@ public class PlayerListener implements Listener {
         } else {
             DungeonEntrance entrance = DungeonEntranceRegistry.getEntranceAt(eventTo);
             if (entrance != null) {
+                if(!entrance.isEnabled()) {
+                    event.getPlayer().sendMessage(Util.formatText(Locales.getString("Error.Entrance.Disabled", event.getPlayer())));
+                    return;
+                }
                 PartyType partyType = PartyManager.getPartyType(event.getPlayer());
                 if (partyType != PartyType.NONE) {
                     DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(event.getPlayer());

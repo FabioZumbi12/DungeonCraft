@@ -35,6 +35,7 @@ import de.keyle.dungeoncraft.party.PartyManager;
 import de.keyle.dungeoncraft.party.systems.DungeonCraftParty;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.Configuration;
+import de.keyle.dungeoncraft.util.SQLite.SQLiteDataModel;
 import de.keyle.dungeoncraft.util.Util;
 import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.vector.Vector;
@@ -344,6 +345,8 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent event) {
         Dungeon.clearDungeonCraftItems(event.getPlayer().getInventory());
+        SQLiteDataModel.addPlayer(event.getPlayer().getName());
+        DungeonCraftPlayer.getPlayer(event.getPlayer()).setDungeonLockout(SQLiteDataModel.getCooldowns(event.getPlayer().getName()));
         if (event.getPlayer().getWorld().getName().equals(DungeonCraftWorld.WORLD_NAME)) {
             Dungeon dungeon = DungeonManager.getDungeonAt(DungeonFieldManager.getDungeonFieldForChunk(event.getPlayer().getLocation().getChunk().getX(), event.getPlayer().getLocation().getChunk().getZ()));
             if (dungeon != null) {

@@ -22,6 +22,7 @@ package de.keyle.dungeoncraft.party;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
 import de.keyle.dungeoncraft.util.BukkitUtil;
+import de.keyle.dungeoncraft.util.SQLite.SQLiteDataModel;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -95,14 +96,20 @@ public class DungeonCraftPlayer {
             if (lockout < 0L) {
                 lockout = 0L;
                 dungeonLockout.remove(instanceName);
+                SQLiteDataModel.deleteCooldown(this.playerName,instanceName);
             }
             return lockout;
         }
         return 0L;
     }
 
+    public void setDungeonLockout(Map<String,Long> lockoutMap) {
+        this.dungeonLockout.putAll(lockoutMap);
+    }
+
     public void setDungenLockout(String instanceName, long time) {
         this.dungeonLockout.put(instanceName, System.currentTimeMillis() + time);
+        SQLiteDataModel.addCooldown(this.playerName,instanceName,System.currentTimeMillis() + time);
     }
 
     public static DungeonCraftPlayer getPlayer(Player player) {

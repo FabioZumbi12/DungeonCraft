@@ -61,6 +61,7 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.DungeonCraftVersion;
+import de.keyle.dungeoncraft.util.SQLite.SQLiteDataModel;
 import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
@@ -107,6 +108,8 @@ public class DungeonCraftPlugin extends JavaPlugin {
         Configuration.setDefault();
         Configuration.loadConfiguration();
         DebugLogger.setup();
+
+        SQLiteDataModel.setupSQLiteDB();
 
         DebugLogger.info("----------- loading DungeonCraft ... -----------");
         DebugLogger.info("DungeonCraft " + DungeonCraftVersion.getVersion() + " build: " + DungeonCraftVersion.getBuild());

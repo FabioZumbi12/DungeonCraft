@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.dungeon.entrance;
 
 import com.google.common.collect.ArrayListMultimap;
+import de.keyle.dungeoncraft.util.SQLite.SQLiteDataModel;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import org.bukkit.Location;
 
@@ -46,6 +47,7 @@ public class DungeonEntranceRegistry {
 
     public static void registerEntrance(DungeonEntrance entrance) {
         entrances.put(entrance.getWorldName(), entrance);
+        SQLiteDataModel.addDungeon(entrance.getDungeonName());
     }
 
     public static Collection<DungeonEntrance> getAllEntrances() {

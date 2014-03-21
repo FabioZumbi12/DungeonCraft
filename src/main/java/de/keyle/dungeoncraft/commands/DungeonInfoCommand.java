@@ -33,15 +33,15 @@ public class DungeonInfoCommand {
     @Command(name = "dcdungeoninfo", aliases = {"dcdi"})
     public void onCommand(CommandArgs args) {
         CommandSender sender = args.getSender();
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player player = (Player) sender;
             DungeonCraftPlayer dungeonCraftPlayer = DungeonCraftPlayer.getPlayer(player);
             Dungeon dungeon = dungeonCraftPlayer.getDungeon();
-            if(dungeon != null) {
-                player.sendMessage(Util.formatText(Locales.getString("Terms.Common.Dungeon.Name",dungeonCraftPlayer),dungeon.getDungeonName()));
-                player.sendMessage(Util.formatText(Locales.getString("Message.Dungeon.Ends.In", dungeonCraftPlayer), Util.getDurationBreakdown(dungeon.getEndTime() - System.currentTimeMillis(),dungeonCraftPlayer)));
+            if (dungeon != null) {
+                player.sendMessage(Util.formatText(Locales.getString("Terms.Common.Dungeon.Name", dungeonCraftPlayer), dungeon.getDungeonName()));
+                player.sendMessage(Util.formatText(Locales.getString("Message.Dungeon.Ends.In", dungeonCraftPlayer), Util.getDurationBreakdown(dungeon.getEndTime() - System.currentTimeMillis(), dungeonCraftPlayer)));
             } else {
-                player.sendMessage(Util.formatText(Locales.getString("Error.Not.In.Dungeon",dungeonCraftPlayer)));
+                player.sendMessage(Util.formatText(Locales.getString("Error.Not.In.Dungeon", dungeonCraftPlayer)));
             }
         }
     }

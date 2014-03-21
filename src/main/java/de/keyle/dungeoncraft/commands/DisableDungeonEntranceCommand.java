@@ -30,15 +30,15 @@ import de.keyle.dungeoncraft.util.locale.Locales;
 public class DisableDungeonEntranceCommand {
     @Command(name = "dcdisableentrance", aliases = {"dcdde"}, permission = "dungeoncraft.admin.disableentrance")
     public void onCommand(CommandArgs args) {
-        if(args.getArgs().size() > 0) {
+        if (args.getArgs().size() > 0) {
             String name = args.getArgs().get(0);
             DungeonEntrance entrance = DungeonEntranceRegistry.getEntranceByName(name);
-            if(entrance != null) {
+            if (entrance != null) {
                 entrance.setEnabled(false);
                 DungeonEntranceRegistry.saveEntrances();
-                args.getSender().sendMessage(Util.formatText(Locales.getString("Message.Entrance.Disabled", args.getSender()),name));
+                args.getSender().sendMessage(Util.formatText(Locales.getString("Message.Entrance.Disabled", args.getSender()), name));
             } else {
-                args.getSender().sendMessage(Util.formatText(Locales.getString("Error.Entrance.Not.Found", args.getSender()),name));
+                args.getSender().sendMessage(Util.formatText(Locales.getString("Error.Entrance.Not.Found", args.getSender()), name));
             }
         }
     }

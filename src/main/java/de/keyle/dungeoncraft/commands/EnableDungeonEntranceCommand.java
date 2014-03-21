@@ -31,15 +31,15 @@ public class EnableDungeonEntranceCommand {
 
     @Command(name = "dcenableentrance", aliases = {"dcede"}, permission = "dungeoncraft.admin.enableentrance")
     public void onCommand(CommandArgs args) {
-        if(args.getArgs().size() > 0) {
+        if (args.getArgs().size() > 0) {
             String name = args.getArgs().get(0);
             DungeonEntrance entrance = DungeonEntranceRegistry.getEntranceByName(name);
-            if(entrance != null) {
+            if (entrance != null) {
                 entrance.setEnabled(true);
                 DungeonEntranceRegistry.saveEntrances();
-                args.getSender().sendMessage(Util.formatText(Locales.getString("Message.Entrance.Enabled", args.getSender()),name));
+                args.getSender().sendMessage(Util.formatText(Locales.getString("Message.Entrance.Enabled", args.getSender()), name));
             } else {
-                args.getSender().sendMessage(Util.formatText(Locales.getString("Error.Entrance.Not.Found", args.getSender()),name));
+                args.getSender().sendMessage(Util.formatText(Locales.getString("Error.Entrance.Not.Found", args.getSender()), name));
             }
         }
     }

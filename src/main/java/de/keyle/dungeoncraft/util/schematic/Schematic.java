@@ -34,9 +34,9 @@ public class Schematic {
     private final short lenght;
     private final short height;
     private final Map<BlockVector, TagCompound> tileEntities = new HashMap<BlockVector, TagCompound>();
-    //private final Map<Vector, CompoundMap> entities = new HashMap<Vector, CompoundMap>();
+    private final Map<BlockVector, TagCompound> entities = new HashMap<BlockVector, TagCompound>();
 
-    public Schematic(byte[] blocks, byte[] data, byte[] biomes, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities) {
+    public Schematic(byte[] blocks, byte[] data, byte[] biomes, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities, Map<BlockVector, TagCompound> entities) {
         this.blocks = blocks;
         this.data = data;
         this.biomes = biomes;
@@ -44,9 +44,10 @@ public class Schematic {
         this.lenght = lenght;
         this.height = height;
         this.tileEntities.putAll(tileEntities);
+        this.entities.putAll(entities);
     }
 
-    public Schematic(byte[] blocks, byte[] data, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities) {
+    public Schematic(byte[] blocks, byte[] data, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities, Map<BlockVector, TagCompound> entities) {
         this.blocks = blocks;
         this.data = data;
         this.biomes = new byte[width * lenght];
@@ -54,6 +55,7 @@ public class Schematic {
         this.lenght = lenght;
         this.height = height;
         this.tileEntities.putAll(tileEntities);
+        this.entities.putAll(entities);
     }
 
     public byte[] getBlocks() {
@@ -82,5 +84,9 @@ public class Schematic {
 
     public Map<BlockVector, TagCompound> getTileEntities() {
         return tileEntities;
+    }
+
+    public Map<BlockVector, TagCompound> getEntities() {
+        return entities;
     }
 }

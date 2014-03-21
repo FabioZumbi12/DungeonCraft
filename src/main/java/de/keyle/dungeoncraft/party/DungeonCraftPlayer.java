@@ -96,20 +96,20 @@ public class DungeonCraftPlayer {
             if (lockout < 0L) {
                 lockout = 0L;
                 dungeonLockout.remove(instanceName);
-                SQLiteDataModel.deleteCooldown(this.playerName,instanceName);
+                SQLiteDataModel.deleteCooldown(this.playerName, instanceName);
             }
             return lockout;
         }
         return 0L;
     }
 
-    public void setDungeonLockout(Map<String,Long> lockoutMap) {
+    public void setDungeonLockout(Map<String, Long> lockoutMap) {
         this.dungeonLockout.putAll(lockoutMap);
     }
 
     public void setDungenLockout(String instanceName, long time) {
         this.dungeonLockout.put(instanceName, System.currentTimeMillis() + time);
-        SQLiteDataModel.addCooldown(this.playerName,instanceName,System.currentTimeMillis() + time);
+        SQLiteDataModel.addCooldown(this.playerName, instanceName, System.currentTimeMillis() + time);
     }
 
     public static DungeonCraftPlayer getPlayer(Player player) {

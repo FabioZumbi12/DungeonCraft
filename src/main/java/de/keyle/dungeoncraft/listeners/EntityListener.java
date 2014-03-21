@@ -60,7 +60,7 @@ public class EntityListener implements Listener {
                 }
             }
 
-            if(entity instanceof CraftDungeonCraftEntity) {
+            if (entity instanceof CraftDungeonCraftEntity) {
                 CraftDungeonCraftEntity craftEntity = (CraftDungeonCraftEntity) entity;
                 EntityDungeonCraft entityDungeonCraft = craftEntity.getHandle();
 
@@ -75,10 +75,10 @@ public class EntityListener implements Listener {
                 }
 
                 //Drop the loot
-                List<org.bukkit.inventory.ItemStack> drops = lootGenerator(entityDungeonCraft.getLootTable(),entityDungeonCraft.getLootIterations(),entityDungeonCraft.getMaxDrops());
-                if(drops != null && !drops.isEmpty()) {
-                    for(org.bukkit.inventory.ItemStack item : drops) {
-                        l.getWorld().dropItem(l,item);
+                List<org.bukkit.inventory.ItemStack> drops = lootGenerator(entityDungeonCraft.getLootTable(), entityDungeonCraft.getLootIterations(), entityDungeonCraft.getMaxDrops());
+                if (drops != null && !drops.isEmpty()) {
+                    for (org.bukkit.inventory.ItemStack item : drops) {
+                        l.getWorld().dropItem(l, item);
                     }
                 }
             }
@@ -136,27 +136,27 @@ public class EntityListener implements Listener {
         }
     }
 
-    private List<org.bukkit.inventory.ItemStack> lootGenerator(Map<Float,org.bukkit.inventory.ItemStack> lootTable, int iterations, int maxdrops) {
+    private List<org.bukkit.inventory.ItemStack> lootGenerator(Map<Float, org.bukkit.inventory.ItemStack> lootTable, int iterations, int maxdrops) {
         List<Float> rolls = new ArrayList<Float>();
         List<org.bukkit.inventory.ItemStack> items = new ArrayList<org.bukkit.inventory.ItemStack>();
         List<org.bukkit.inventory.ItemStack> ret = new ArrayList<org.bukkit.inventory.ItemStack>();
         Random r = new Random();
-        for(int i = 0; i<iterations+1; i++) {
-            rolls.add(r.nextFloat()*100);
+        for (int i = 0; i < iterations + 1; i++) {
+            rolls.add(r.nextFloat() * 100);
         }
 
-        for(float roll : rolls) {
+        for (float roll : rolls) {
             float lowestKey = 100;
-            for(float key : lootTable.keySet()) {
-                if(key >= roll && lowestKey > key) {
+            for (float key : lootTable.keySet()) {
+                if (key >= roll && lowestKey > key) {
                     lowestKey = key;
                 }
                 items.add(lootTable.get(lowestKey));
             }
         }
 
-        if(maxdrops < items.size()) {
-            for(int i = 0; i< maxdrops; i++) {
+        if (maxdrops < items.size()) {
+            for (int i = 0; i < maxdrops; i++) {
                 ret.add(items.get(r.nextInt(items.size())));
             }
         }

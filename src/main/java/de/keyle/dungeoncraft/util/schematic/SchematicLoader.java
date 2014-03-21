@@ -87,7 +87,7 @@ public class SchematicLoader extends Thread {
         }
 
         TagList tileEntitiesTag = getChildTag(schematicTag, "TileEntities", TagList.class);
-        //ListTag<TagCompound> entitiesTag = getChildTag(schematic, "Entities", ListTag.class);
+        TagList entitiesTag = getChildTag(schematicTag, "Entities", TagList.class);
 
         List<TagBase> readOnlyList = tileEntitiesTag.getReadOnlyList();
         Map<BlockVector, TagCompound> tileEntities = new HashMap<BlockVector, TagCompound>();
@@ -110,7 +110,29 @@ public class SchematicLoader extends Thread {
             tileEntities.put(v, tileEntity);
         }
 
-        return new Schematic(blocks, blockData, biomeData, width, length, height, tileEntities);
+        List<TagBase> readOnlyEntityList = entitiesTag.getReadOnlyList();
+        Map<BlockVector, TagCompound> entities = new HashMap<BlockVector, TagCompound>();
+
+        for (int i = 0; i < readOnlyEntityList.size(); i++) {
+            TagCompound entity = entitiesTag.getTagAs(i, TagCompound.class);
+
+            int x = 0;
+            int y = 0;
+            int z = 0;
+
+            if (entity.containsKeyAs("TileX", TagInt.class)) {
+                x = ((TagInt) entity.get("TileX")).getIntData();
+            } else if (entity.containsKeyAs("TileY", TagInt.class)) {
+                y = ((TagInt) entity.get("TileY")).getIntData();
+            } else if (entity.containsKeyAs("TileZ", TagInt.class)) {
+                z = ((TagInt) entity.get("TileZ")).getIntData();
+            }
+
+            BlockVector v = new BlockVector(x, y, z);
+            entities.put(v, entity);
+        }
+
+        return new Schematic(blocks, blockData, biomeData, width, length, height, tileEntities, entities);
     }
 
     private static <T extends TagBase> T getChildTag(TagCompound items, String key, Class<T> expected) throws IllegalArgumentException {

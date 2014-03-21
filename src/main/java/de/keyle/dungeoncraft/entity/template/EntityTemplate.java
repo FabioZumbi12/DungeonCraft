@@ -37,7 +37,7 @@ public class EntityTemplate {
     protected int exp = 0;
     protected int lootIterations = 0;
     protected int maxDrops = 0;
-    protected Map<Float,ItemStack> lootTable;
+    protected Map<Float, ItemStack> lootTable;
     protected List<EntityTemplateComponent> components = new ArrayList<EntityTemplateComponent>();
 
     public EntityTemplate(String templateId, EntityType type) {

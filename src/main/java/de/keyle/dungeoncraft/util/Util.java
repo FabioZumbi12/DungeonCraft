@@ -94,10 +94,8 @@ public class Util {
         }
     }
 
-    public static String getDurationBreakdown(long millis, DungeonCraftPlayer dungeonCraftPlayer)
-    {
-        if(millis < 0)
-        {
+    public static String getDurationBreakdown(long millis, DungeonCraftPlayer dungeonCraftPlayer) {
+        if (millis < 0) {
             throw new IllegalArgumentException("Duration must be greater than zero!");
         }
 
@@ -109,7 +107,7 @@ public class Util {
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
-        return(Util.formatText(Locales.getString("Terms.Common.Days", dungeonCraftPlayer), days)
+        return (Util.formatText(Locales.getString("Terms.Common.Days", dungeonCraftPlayer), days)
                 + Util.formatText(Locales.getString("Terms.Common.Hours", dungeonCraftPlayer), hours)
                 + Util.formatText(Locales.getString("Terms.Common.Minutes", dungeonCraftPlayer), minutes)
                 + Util.formatText(Locales.getString("Terms.Common.Seconds", dungeonCraftPlayer), seconds));

@@ -27,7 +27,6 @@ import de.keyle.dungeoncraft.entity.ai.navigation.AbstractNavigation;
 import de.keyle.dungeoncraft.entity.ai.navigation.VanillaNavigation;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import net.minecraft.server.v1_7_R1.*;
-import net.minecraft.server.v1_7_R1.ItemStack;
 import org.bukkit.Location;
 
 import java.lang.reflect.Field;
@@ -136,11 +135,11 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
         return damageEntity;
     }
 
-    public void setLootTable(Map<Float,org.bukkit.inventory.ItemStack> lootTable) {
+    public void setLootTable(Map<Float, org.bukkit.inventory.ItemStack> lootTable) {
         this.lootTable = lootTable;
     }
 
-    public Map<Float,org.bukkit.inventory.ItemStack> getLootTable() {
+    public Map<Float, org.bukkit.inventory.ItemStack> getLootTable() {
         return lootTable;
     }
 

@@ -33,19 +33,15 @@ public class SQLiteConnection {
 
     private static Connection connection = null;
 
-    public static Connection getConnection()
-    {
-        if(connection != null)
-        {
+    public static Connection getConnection() {
+        if (connection != null) {
             return connection;
-        }
-        else
-        {
+        } else {
             SQLiteConfig config = new SQLiteConfig();
             config.enforceForeignKeys(true);
             String driver = "org.sqlite.JDBC";
             String datafolder = DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath();
-            String url = "jdbc:sqlite:"+ datafolder + File.separator + "dungeoncraft.db";
+            String url = "jdbc:sqlite:" + datafolder + File.separator + "dungeoncraft.db";
             try {
                 Class.forName(driver);
             } catch (ClassNotFoundException e) {
@@ -53,7 +49,7 @@ public class SQLiteConnection {
                 return null;
             }
             try {
-                connection =  DriverManager.getConnection(url, config.toProperties());
+                connection = DriverManager.getConnection(url, config.toProperties());
                 return connection;
             } catch (SQLException e) {
                 DungeonCraftLogger.write("Can't get a connection");

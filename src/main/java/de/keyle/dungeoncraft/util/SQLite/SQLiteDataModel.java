@@ -95,7 +95,7 @@ public class SQLiteDataModel {
         connection = SQLiteConnection.getConnection();
         try {
             PreparedStatement getDungeonStatement = connection.prepareStatement(GET_DUNGEON);
-            getDungeonStatement.setString(1,dungeonName);
+            getDungeonStatement.setString(1, dungeonName);
             ResultSet getDungeonResult = getDungeonStatement.executeQuery();
             return getDungeonResult.next();
         } catch (Exception e) {
@@ -106,11 +106,11 @@ public class SQLiteDataModel {
     }
 
     public static void addDungeon(String dungeonName) {
-        if(!containsDungeon(dungeonName)) {
+        if (!containsDungeon(dungeonName)) {
             connection = SQLiteConnection.getConnection();
             try {
                 PreparedStatement insertDungeonStatement = connection.prepareStatement(INSERT_DUNGEON);
-                insertDungeonStatement.setString(1,dungeonName);
+                insertDungeonStatement.setString(1, dungeonName);
                 insertDungeonStatement.execute();
             } catch (Exception e) {
                 DungeonCraftLogger.write("Error inserting dungeon " + dungeonName);
@@ -134,7 +134,7 @@ public class SQLiteDataModel {
     }
 
     public static void addPlayer(String playerName) {
-        if(!containsPlayer(playerName)) {
+        if (!containsPlayer(playerName)) {
             connection = SQLiteConnection.getConnection();
             try {
                 PreparedStatement insertPlayerStatement = connection.prepareStatement(INSERT_PLAYER);
@@ -184,13 +184,13 @@ public class SQLiteDataModel {
     public static void addCooldown(String playerName, String dungeonName, long cooldown) {
         int playerID = getPlayerID(playerName);
         int dungeonID = getDungeonID(dungeonName);
-        if(playerID != -1 && dungeonID != -1) {
+        if (playerID != -1 && dungeonID != -1) {
             connection = SQLiteConnection.getConnection();
             try {
                 PreparedStatement insertCooldownStatement = connection.prepareStatement(INSERT_COOLDOWN);
-                insertCooldownStatement.setInt(1,playerID);
-                insertCooldownStatement.setInt(2,dungeonID);
-                insertCooldownStatement.setLong(3,cooldown);
+                insertCooldownStatement.setInt(1, playerID);
+                insertCooldownStatement.setInt(2, dungeonID);
+                insertCooldownStatement.setLong(3, cooldown);
                 insertCooldownStatement.execute();
             } catch (Exception e) {
                 DungeonCraftLogger.write("Error inserting cooldown");
@@ -203,7 +203,7 @@ public class SQLiteDataModel {
         connection = SQLiteConnection.getConnection();
         try {
             PreparedStatement getDungeonStatement = connection.prepareStatement(GET_DUNGEON_BY_ID);
-            getDungeonStatement.setInt(1,id);
+            getDungeonStatement.setInt(1, id);
             ResultSet getDungeonResult = getDungeonStatement.executeQuery();
             getDungeonResult.next();
             return getDungeonResult.getString("dungeonname");
@@ -214,17 +214,17 @@ public class SQLiteDataModel {
         return null;
     }
 
-    public static Map<String,Long> getCooldowns(String playerName) {
+    public static Map<String, Long> getCooldowns(String playerName) {
         int playerID = getPlayerID(playerName);
-        Map<String,Long> returnMap = new HashMap<String, Long>();
-        if(playerID != -1) {
+        Map<String, Long> returnMap = new HashMap<String, Long>();
+        if (playerID != -1) {
             connection = SQLiteConnection.getConnection();
             try {
                 PreparedStatement getCooldownsStatement = connection.prepareStatement(GET_COOLDOWNS);
-                getCooldownsStatement.setInt(1,playerID);
+                getCooldownsStatement.setInt(1, playerID);
                 ResultSet getCooldownsResult = getCooldownsStatement.executeQuery();
                 while (getCooldownsResult.next()) {
-                    returnMap.put(getDungeonByID(getCooldownsResult.getInt("FK_DUNGEON")),getCooldownsResult.getLong("cooldown"));
+                    returnMap.put(getDungeonByID(getCooldownsResult.getInt("FK_DUNGEON")), getCooldownsResult.getLong("cooldown"));
                 }
             } catch (Exception e) {
                 DungeonCraftLogger.write("Error getting cooldown");
@@ -240,8 +240,8 @@ public class SQLiteDataModel {
         connection = SQLiteConnection.getConnection();
         try {
             PreparedStatement deleteCooldownStatement = connection.prepareStatement(DELETE_COOLDOWN);
-            deleteCooldownStatement.setInt(1,playerID);
-            deleteCooldownStatement.setInt(2,dungeonID);
+            deleteCooldownStatement.setInt(1, playerID);
+            deleteCooldownStatement.setInt(2, dungeonID);
             deleteCooldownStatement.executeUpdate();
         } catch (Exception e) {
             DungeonCraftLogger.write("Error deleting cooldown for dungeon " + dungeonName + "from player " + playerName);

@@ -86,28 +86,28 @@ public class EntityTemplateLoader {
                             String displayName = template.get("display-name").toString();
                             newEntityTemplate.setDisplayName(displayName);
                         }
-                        if(template.containsKey("exp")) {
+                        if (template.containsKey("exp")) {
                             String exp = template.get("exp").toString();
                             newEntityTemplate.setExp(Integer.parseInt(exp));
                         }
-                        if(template.containsKey("loot-iterations")) {
+                        if (template.containsKey("loot-iterations")) {
                             int lootIterations = Integer.parseInt(template.get("loot-iterations").toString());
                             newEntityTemplate.setLootIterations(lootIterations);
                         }
 
-                        if(template.containsKey("max-drops")) {
+                        if (template.containsKey("max-drops")) {
                             int maxDrops = Integer.parseInt(template.get("max-drops").toString());
                             newEntityTemplate.setMaxDrops(maxDrops);
                         }
 
-                        if(template.containsKey("loot-table")) {
+                        if (template.containsKey("loot-table")) {
                             Object lootObjcets = template.get("loot-table");
-                            if(lootObjcets instanceof JSONArray) {
+                            if (lootObjcets instanceof JSONArray) {
                                 JSONArray lootArray = (JSONArray) lootObjcets;
-                                Map<Float,ItemStack> newLootTable = new HashMap<Float, ItemStack>();
+                                Map<Float, ItemStack> newLootTable = new HashMap<Float, ItemStack>();
                                 for (Object lootObject : lootArray) {
-                                    if(lootObject instanceof JSONObject) {
-                                        newLootTable.put(Float.parseFloat(((JSONObject)lootObject).get("dropchance").toString()),ParsedItem.parsedItem((JSONObject)lootObject).getBukkitItem());
+                                    if (lootObject instanceof JSONObject) {
+                                        newLootTable.put(Float.parseFloat(((JSONObject) lootObject).get("dropchance").toString()), ParsedItem.parsedItem((JSONObject) lootObject).getBukkitItem());
                                     }
                                 }
                                 newEntityTemplate.setLootTable(newLootTable);

@@ -197,7 +197,7 @@ public class PlayerListener implements Listener {
         } else {
             DungeonEntrance entrance = DungeonEntranceRegistry.getEntranceAt(eventTo);
             if (entrance != null) {
-                if(!entrance.isEnabled()) {
+                if (!entrance.isEnabled()) {
                     event.getPlayer().sendMessage(Util.formatText(Locales.getString("Error.Entrance.Disabled", event.getPlayer())));
                     return;
                 }

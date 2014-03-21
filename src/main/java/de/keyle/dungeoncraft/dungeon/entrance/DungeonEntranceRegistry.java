@@ -68,8 +68,8 @@ public class DungeonEntranceRegistry {
     }
 
     public static DungeonEntrance getEntranceByName(String name) {
-        for(DungeonEntrance dungeonEntrance : getAllEntrances()) {
-            if(dungeonEntrance.dungeonName.equals(name)) {
+        for (DungeonEntrance dungeonEntrance : getAllEntrances()) {
+            if (dungeonEntrance.dungeonName.equals(name)) {
                 return dungeonEntrance;
             }
         }

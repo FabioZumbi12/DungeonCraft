@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 public class SchematicLoader extends Thread {
     private ISchematicReveiver schematicReceiver;
@@ -111,14 +112,14 @@ public class SchematicLoader extends Thread {
         }
 
         List<TagBase> readOnlyEntityList = entitiesTag.getReadOnlyList();
-        Map<BlockVector, TagCompound> entities = new HashMap<BlockVector, TagCompound>();
+        Map<Vector<Double>, TagCompound> entities = new HashMap<Vector<Double>, TagCompound>();
 
         for (int i = 0; i < readOnlyEntityList.size(); i++) {
             TagCompound entity = entitiesTag.getTagAs(i, TagCompound.class);
 
-            int x = 0;
-            int y = 0;
-            int z = 0;
+            double x = 0;
+            double y = 0;
+            double z = 0;
 
             if (entity.containsKeyAs("TileX", TagInt.class)) {
                 x = ((TagInt) entity.get("TileX")).getIntData();
@@ -127,8 +128,19 @@ public class SchematicLoader extends Thread {
             } else if (entity.containsKeyAs("TileZ", TagInt.class)) {
                 z = ((TagInt) entity.get("TileZ")).getIntData();
             }
+            if (entity.containsKeyAs("Pos", TagList.class)) {
+                TagList posTag = getChildTag(entity, "Pos", TagList.class);
+                //List<TagBase> readOnlyPos = posTag.getReadOnlyList();
+                x = posTag.getTagAs(0, TagDouble.class).getDoubleData();
+                y = posTag.getTagAs(1, TagDouble.class).getDoubleData();
+                z = posTag.getTagAs(2, TagDouble.class).getDoubleData();
+            }
 
-            BlockVector v = new BlockVector(x, y, z);
+            Vector<Double> v = new Vector<Double>();
+            v.add(x);
+            v.add(y);
+            v.add(z);
+
             entities.put(v, entity);
         }
 

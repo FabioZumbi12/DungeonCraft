@@ -25,6 +25,7 @@ import de.keyle.knbt.TagCompound;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 public class Schematic {
     private final byte[] blocks;
@@ -34,9 +35,9 @@ public class Schematic {
     private final short lenght;
     private final short height;
     private final Map<BlockVector, TagCompound> tileEntities = new HashMap<BlockVector, TagCompound>();
-    private final Map<BlockVector, TagCompound> entities = new HashMap<BlockVector, TagCompound>();
+    private final Map<Vector<Double>, TagCompound> entities = new HashMap<Vector<Double>, TagCompound>();
 
-    public Schematic(byte[] blocks, byte[] data, byte[] biomes, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities, Map<BlockVector, TagCompound> entities) {
+    public Schematic(byte[] blocks, byte[] data, byte[] biomes, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities, Map<Vector<Double>, TagCompound> entities) {
         this.blocks = blocks;
         this.data = data;
         this.biomes = biomes;
@@ -47,7 +48,7 @@ public class Schematic {
         this.entities.putAll(entities);
     }
 
-    public Schematic(byte[] blocks, byte[] data, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities, Map<BlockVector, TagCompound> entities) {
+    public Schematic(byte[] blocks, byte[] data, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities, Map<Vector<Double>, TagCompound> entities) {
         this.blocks = blocks;
         this.data = data;
         this.biomes = new byte[width * lenght];
@@ -86,7 +87,7 @@ public class Schematic {
         return tileEntities;
     }
 
-    public Map<BlockVector, TagCompound> getEntities() {
+    public Map<Vector<Double>, TagCompound> getEntities() {
         return entities;
     }
 }

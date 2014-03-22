@@ -27,7 +27,6 @@ import de.keyle.dungeoncraft.dungeon.region.RegionLoader;
 import de.keyle.dungeoncraft.dungeon.scripting.TriggerLoader;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
-import de.keyle.dungeoncraft.util.vector.BlockVector;
 import de.keyle.knbt.TagCompound;
 import de.keyle.knbt.TagString;
 import net.minecraft.server.v1_7_R1.*;
@@ -39,6 +38,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DungeonLoader extends Thread {
@@ -179,49 +179,49 @@ public class DungeonLoader extends Thread {
     }
 
     private void spawnEntities(Schematic schematic) {
-        Method METHOD_A = null;
-        //TODO Some coordinates aren't working. Paintings and itemframes work, minecarts don't rest is not tested
         net.minecraft.server.v1_7_R1.World world = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
-        Map<BlockVector, TagCompound> entities = schematic.getEntities();
-        for (BlockVector pos : entities.keySet()) {
+        Map<Vector<Double>, TagCompound> entities = schematic.getEntities();
+        for (Vector<Double> pos : entities.keySet()) {
             Entity entity = null;
+            Method METHOD_A = null;
+            String methodName = "a";
             TagCompound entityCompound = entities.get(pos);
             String entityType = ((TagString) entityCompound.get("id")).getStringData();
-            int x = pos.getBlockX() + (dungeon.position.getChunkX() * 16);
-            int y = pos.getBlockY();
-            int z = pos.getBlockZ() + (dungeon.position.getChunkZ() * 16);
+            double x = pos.get(0) + (dungeon.position.getChunkX() * 16);
+            double y = pos.get(1);
+            double z = pos.get(2) + (dungeon.position.getChunkZ() * 16);
             try {
                 NBTTagCompound nbtTagCompound = (NBTTagCompound) BukkitUtil.compoundToVanillaCompound(entityCompound);
                 if (entityType.equals("Painting")) {
-                    entity = new EntityPainting(world, x, y, z, 0);
+                    entity = new EntityPainting(world, (int) x, (int) y, (int) z, 0);
                     ((EntityPainting) entity).a(nbtTagCompound);
                 } else if (entityType.equals("ItemFrame")) {
-                    entity = new EntityItemFrame(world, x, y, z, 0);
+                    entity = new EntityItemFrame(world, (int) x, (int) y, (int) z, 0);
                     ((EntityItemFrame) entity).a(nbtTagCompound);
                 } else if (entityType.equals("Boat")) {
                     entity = new EntityBoat(world, x, y, z);
-                    //METHOD_A = EntityBoat.class.getDeclaredMethod("a", NBTTagCompound.class); -->Empty method
+                    //a Method empty
                 } else if (entityType.equals("MinecartRideable")) {
                     entity = new EntityMinecartRideable(world, x, y, z);
-                    METHOD_A = EntityMinecartRideable.class.getDeclaredMethod("a", NBTTagCompound.class);
+                    METHOD_A = EntityMinecartAbstract.class.getDeclaredMethod(methodName, NBTTagCompound.class);
                 } else if (entityType.equals("MinecartChest")) {
                     entity = new EntityMinecartChest(world, x, y, z);
-                    //METHOD_A = EntityMinecartChest.class.getDeclaredMethod("a", NBTTagCompound.class); --> Seems it's not there
+                    METHOD_A = EntityMinecartContainer.class.getDeclaredMethod(methodName, NBTTagCompound.class);
                 } else if (entityType.equals("MinecartFurnace")) {
                     entity = new EntityMinecartFurnace(world, x, y, z);
-                    METHOD_A = EntityMinecartFurnace.class.getDeclaredMethod("a", NBTTagCompound.class);
+                    METHOD_A = EntityMinecartFurnace.class.getDeclaredMethod(methodName, NBTTagCompound.class);
                 } else if (entityType.equals("MinecartTNT")) {
                     entity = new EntityMinecartTNT(world, x, y, z);
-                    METHOD_A = EntityMinecartTNT.class.getDeclaredMethod("a", NBTTagCompound.class);
+                    METHOD_A = EntityMinecartTNT.class.getDeclaredMethod(methodName, NBTTagCompound.class);
                 } else if (entityType.equals("MinecartHopper")) {
                     entity = new EntityMinecartHopper(world, x, y, z);
-                    METHOD_A = EntityMinecartHopper.class.getDeclaredMethod("a", NBTTagCompound.class);
+                    METHOD_A = EntityMinecartHopper.class.getDeclaredMethod(methodName, NBTTagCompound.class);
                 } else if (entityType.equals("MinecartSpawner")) {
                     entity = new EntityMinecartMobSpawner(world, x, y, z);
-                    METHOD_A = EntityMinecartMobSpawner.class.getDeclaredMethod("a", NBTTagCompound.class);
+                    METHOD_A = EntityMinecartMobSpawner.class.getDeclaredMethod(methodName, NBTTagCompound.class);
                 } else if (entityType.equals("MinecartCommandBlock")) {
                     entity = new EntityMinecartCommandBlock(world, x, y, z);
-                    METHOD_A = EntityMinecartCommandBlock.class.getDeclaredMethod("a", NBTTagCompound.class);
+                    METHOD_A = EntityMinecartCommandBlock.class.getDeclaredMethod(methodName, NBTTagCompound.class);
                 } else if (entityType.equals("Item")) {
                     entity = new EntityItem(world, x, y, z);
                     ((EntityItem) entity).a(nbtTagCompound);
@@ -254,10 +254,10 @@ public class DungeonLoader extends Thread {
                     ((EntityFireworks) entity).a(nbtTagCompound);
                 } else if (entityType.equals("PrimedTnt")) {
                     entity = new EntityTNTPrimed(world, x, y, z, null);
-                    METHOD_A = EntityTNTPrimed.class.getDeclaredMethod("a", NBTTagCompound.class);
+                    METHOD_A = EntityTNTPrimed.class.getDeclaredMethod(methodName, NBTTagCompound.class);
                 } else if (entityType.equals("FallingSand")) {
                     entity = new EntityFallingBlock(world, x, y, z, null);
-                    METHOD_A = EntityFallingBlock.class.getDeclaredMethod("a", NBTTagCompound.class);
+                    METHOD_A = EntityFallingBlock.class.getDeclaredMethod(methodName, NBTTagCompound.class);
                 } else if (entityType.equals("Fireball")) {
                     entity = new EntityLargeFireball(world, null, x, y, z);
                     //a method modifies the position of the object based on these coordinates
@@ -274,15 +274,13 @@ public class DungeonLoader extends Thread {
                     entity = new EntityEnderCrystal(world);
                     //METHOD_A = EntityEnderCrystal.class.getDeclaredMethod("a", NBTTagCompound.class); --> Empty method
                 }
-
                 if (METHOD_A != null) {
                     METHOD_A.setAccessible(true);
-                    METHOD_A.invoke(nbtTagCompound);
+                    METHOD_A.invoke(entity, nbtTagCompound);
                 }
                 if (entity != null) {
                     world.addEntity(entity);
                 }
-
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
@@ -290,8 +288,6 @@ public class DungeonLoader extends Thread {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
-
-            METHOD_A = null;
         }
     }
 }

@@ -23,8 +23,8 @@ package de.keyle.dungeoncraft.entity.types.wolf;
 import de.keyle.dungeoncraft.entity.ai.movement.Sit;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
-import net.minecraft.server.v1_7_R1.MathHelper;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R2.MathHelper;
+import net.minecraft.server.v1_7_R2.World;
 
 @EntityInfo(width = 0.6F, height = 0.8F)
 public class EntityDungeonCraftWolf extends EntityDungeonCraft {
@@ -108,7 +108,7 @@ public class EntityDungeonCraftWolf extends EntityDungeonCraft {
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if (this.isWet && !this.shaking && !bQ() && this.onGround) // bQ() -> has pathentity
+        if (this.isWet && !this.shaking && !bS() && this.onGround) // bS() -> has pathentity
         {
             this.shaking = true;
             this.shakeCounter = 0.0F;
@@ -122,7 +122,7 @@ public class EntityDungeonCraftWolf extends EntityDungeonCraft {
             this.shakeCounter = 0.0F;
         } else if ((this.isWet || this.shaking) && this.shaking) {
             if (this.shakeCounter == 0.0F) {
-                makeSound("mob.wolf.shake", bf(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+                makeSound("mob.wolf.shake", be(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             }
 
             this.shakeCounter += 0.05F;

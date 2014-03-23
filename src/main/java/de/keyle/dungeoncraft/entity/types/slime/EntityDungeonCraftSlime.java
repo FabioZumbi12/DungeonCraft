@@ -23,8 +23,8 @@ package de.keyle.dungeoncraft.entity.types.slime;
 import de.keyle.dungeoncraft.entity.ai.attack.MeleeAttack;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
-import net.minecraft.server.v1_7_R1.PathEntity;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R2.PathEntity;
+import net.minecraft.server.v1_7_R2.World;
 
 @EntityInfo(width = 0.6F, height = 0.6F)
 public class EntityDungeonCraftSlime extends EntityDungeonCraft {

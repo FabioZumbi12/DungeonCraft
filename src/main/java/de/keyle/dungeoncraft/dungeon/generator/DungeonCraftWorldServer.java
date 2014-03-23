@@ -22,9 +22,9 @@ package de.keyle.dungeoncraft.dungeon.generator;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
 import de.keyle.dungeoncraft.dungeon.DungeonManager;
-import net.minecraft.server.v1_7_R1.*;
+import net.minecraft.server.v1_7_R2.*;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_7_R1.util.LongHash;
+import org.bukkit.craftbukkit.v1_7_R2.util.LongHash;
 import org.bukkit.generator.ChunkGenerator;
 
 import java.lang.reflect.InvocationTargetException;
@@ -130,7 +130,7 @@ public class DungeonCraftWorldServer extends WorldServer {
         this.methodProfiler.c("chunkMap");
         this.getPlayerChunkMap().flush();
         this.methodProfiler.c("portalForcer");
-        this.t().a(getTime());
+        this.getTravelAgent().a(getTime());
         this.methodProfiler.b();
 
 

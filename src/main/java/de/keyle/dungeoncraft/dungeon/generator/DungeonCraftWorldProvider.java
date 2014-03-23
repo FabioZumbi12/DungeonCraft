@@ -20,10 +20,10 @@
 
 package de.keyle.dungeoncraft.dungeon.generator;
 
-import net.minecraft.server.v1_7_R1.IChunkProvider;
-import net.minecraft.server.v1_7_R1.World;
-import net.minecraft.server.v1_7_R1.WorldProvider;
-import net.minecraft.server.v1_7_R1.WorldType;
+import net.minecraft.server.v1_7_R2.IChunkProvider;
+import net.minecraft.server.v1_7_R2.World;
+import net.minecraft.server.v1_7_R2.WorldProvider;
+import net.minecraft.server.v1_7_R2.WorldType;
 
 public class DungeonCraftWorldProvider extends WorldProvider {
 

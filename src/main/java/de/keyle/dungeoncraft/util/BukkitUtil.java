@@ -26,15 +26,15 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import de.keyle.knbt.*;
-import net.minecraft.server.v1_7_R1.*;
+import net.minecraft.server.v1_7_R2.*;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftItem;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_7_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_7_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_7_R2.entity.CraftItem;
+import org.bukkit.craftbukkit.v1_7_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -175,7 +175,7 @@ public class BukkitUtil {
 
     public static void setTileEntity(Location location, String data) {
         Validate.notNull(data, "Data can not be null");
-        NBTBase localNBTBase = MojangsonParser.a(data);
+        NBTBase localNBTBase = MojangsonParser.parse(data);
         Validate.isTrue(localNBTBase instanceof NBTTagCompound, "Data has to be a valid tag");
         if (localNBTBase instanceof NBTTagCompound) {
             setTileEntity(location, (NBTTagCompound) localNBTBase);
@@ -208,7 +208,7 @@ public class BukkitUtil {
     }
 
     public static org.bukkit.inventory.ItemStack getItemStackFromString(String itemName, int quantity) {
-        return new ItemStack(CraftItemStack.asBukkitCopy(new net.minecraft.server.v1_7_R1.ItemStack(BukkitUtil.getItem(itemName))).getType(), quantity);
+        return new ItemStack(CraftItemStack.asBukkitCopy(new net.minecraft.server.v1_7_R2.ItemStack(BukkitUtil.getItem(itemName))).getType(), quantity);
     }
 
     public static boolean isRealPlayer(Player player) {

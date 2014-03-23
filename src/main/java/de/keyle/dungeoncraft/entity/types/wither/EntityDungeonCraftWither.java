@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.entity.types.wither;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R2.World;
 
 @EntityInfo(width = 0.9F, height = 4.0F)
 public class EntityDungeonCraftWither extends EntityDungeonCraft {

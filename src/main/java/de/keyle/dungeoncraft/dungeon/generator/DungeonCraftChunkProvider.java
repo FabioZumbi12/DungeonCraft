@@ -25,8 +25,8 @@ import de.keyle.dungeoncraft.dungeon.DungeonField;
 import de.keyle.dungeoncraft.dungeon.DungeonFieldManager;
 import de.keyle.dungeoncraft.dungeon.DungeonManager;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
-import net.minecraft.server.v1_7_R1.*;
-import org.bukkit.craftbukkit.v1_7_R1.util.LongHash;
+import net.minecraft.server.v1_7_R2.*;
+import org.bukkit.craftbukkit.v1_7_R2.util.LongHash;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,6 +120,7 @@ public class DungeonCraftChunkProvider extends ChunkProviderServer {
             }
         }
 
+        //Mal auskomentieren
         localChunk.initLighting();
         localChunk.lit = true;
         localChunk.m = true;

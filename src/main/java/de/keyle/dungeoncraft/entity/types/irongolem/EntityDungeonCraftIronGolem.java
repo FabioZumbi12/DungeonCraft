@@ -23,8 +23,8 @@ package de.keyle.dungeoncraft.entity.types.irongolem;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
-import net.minecraft.server.v1_7_R1.Entity;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R2.Entity;
+import net.minecraft.server.v1_7_R2.World;
 
 @EntityInfo(width = 1.4F, height = 2.9F)
 public class EntityDungeonCraftIronGolem extends EntityDungeonCraft {

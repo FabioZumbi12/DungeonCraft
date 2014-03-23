@@ -23,7 +23,7 @@ package de.keyle.dungeoncraft.entity.types.horse;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
-import net.minecraft.server.v1_7_R1.*;
+import net.minecraft.server.v1_7_R2.*;
 
 @EntityInfo(width = 1.4F, height = 1.6F)
 public class EntityDungeonCraftHorse extends EntityDungeonCraft {

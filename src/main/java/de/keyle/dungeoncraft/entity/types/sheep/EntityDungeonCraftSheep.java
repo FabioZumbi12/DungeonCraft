@@ -23,7 +23,7 @@ package de.keyle.dungeoncraft.entity.types.sheep;
 import de.keyle.dungeoncraft.entity.ai.movement.EatGrass;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R2.World;
 
 @EntityInfo(width = 0.9F, height = 1.3F)
 public class EntityDungeonCraftSheep extends EntityDungeonCraft {

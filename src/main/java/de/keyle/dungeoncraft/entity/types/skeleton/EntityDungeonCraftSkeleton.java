@@ -22,10 +22,10 @@ package de.keyle.dungeoncraft.entity.types.skeleton;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
-import net.minecraft.server.v1_7_R1.ItemStack;
-import net.minecraft.server.v1_7_R1.PacketPlayOutEntityEquipment;
-import net.minecraft.server.v1_7_R1.World;
-import net.minecraft.server.v1_7_R1.WorldServer;
+import net.minecraft.server.v1_7_R2.ItemStack;
+import net.minecraft.server.v1_7_R2.PacketPlayOutEntityEquipment;
+import net.minecraft.server.v1_7_R2.World;
+import net.minecraft.server.v1_7_R2.WorldServer;
 
 @EntityInfo(width = 0.6F, height = 1.9F)
 public class EntityDungeonCraftSkeleton extends EntityDungeonCraft {

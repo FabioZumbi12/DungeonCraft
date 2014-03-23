@@ -23,7 +23,7 @@ package de.keyle.dungeoncraft.entity.types.ocelot;
 import de.keyle.dungeoncraft.entity.ai.movement.Sit;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R2.World;
 
 @EntityInfo(width = 0.6F, height = 0.8F)
 public class EntityDungeonCraftOcelot extends EntityDungeonCraft {

@@ -22,12 +22,12 @@ package de.keyle.dungeoncraft.entity.ai.attack.ranged;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
-import net.minecraft.server.v1_7_R1.EntityArrow;
-import net.minecraft.server.v1_7_R1.EntityLiving;
-import net.minecraft.server.v1_7_R1.NBTTagCompound;
-import net.minecraft.server.v1_7_R1.World;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftArrow;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftEntity;
+import net.minecraft.server.v1_7_R2.EntityArrow;
+import net.minecraft.server.v1_7_R2.EntityLiving;
+import net.minecraft.server.v1_7_R2.NBTTagCompound;
+import net.minecraft.server.v1_7_R2.World;
+import org.bukkit.craftbukkit.v1_7_R2.entity.CraftArrow;
+import org.bukkit.craftbukkit.v1_7_R2.entity.CraftEntity;
 
 public class Arrow extends EntityArrow implements Projectile {
     public Arrow(World world, EntityDungeonCraft entityDungeonCraft, EntityLiving target, float v, int i) {

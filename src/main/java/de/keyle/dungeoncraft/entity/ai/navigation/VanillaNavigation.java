@@ -21,10 +21,10 @@
 package de.keyle.dungeoncraft.entity.ai.navigation;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
-import net.minecraft.server.v1_7_R1.EntityLiving;
-import net.minecraft.server.v1_7_R1.GenericAttributes;
-import net.minecraft.server.v1_7_R1.Navigation;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftLivingEntity;
+import net.minecraft.server.v1_7_R2.EntityLiving;
+import net.minecraft.server.v1_7_R2.GenericAttributes;
+import net.minecraft.server.v1_7_R2.Navigation;
+import org.bukkit.craftbukkit.v1_7_R2.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
 
 public class VanillaNavigation extends AbstractNavigation {

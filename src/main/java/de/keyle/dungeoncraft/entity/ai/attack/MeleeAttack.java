@@ -25,7 +25,7 @@ import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.pigzombie.EntityDungeonCraftPigZombie;
 import de.keyle.dungeoncraft.entity.types.skeleton.EntityDungeonCraftSkeleton;
 import de.keyle.dungeoncraft.entity.types.zombie.EntityDungeonCraftZombie;
-import net.minecraft.server.v1_7_R1.EntityLiving;
+import net.minecraft.server.v1_7_R2.EntityLiving;
 
 public class MeleeAttack extends AIGoal {
     EntityDungeonCraft entityDungeonCraft;
@@ -96,7 +96,7 @@ public class MeleeAttack extends AIGoal {
         if (Math.sqrt(this.entityDungeonCraft.e(targetEntity.locX, targetEntity.boundingBox.b, targetEntity.locZ)) - (targetEntity.length * (2. / 3.)) <= this.range && this.ticksUntilNextHitLeft-- <= 0) {
             this.ticksUntilNextHitLeft = ticksUntilNextHit;
             if (this.entityDungeonCraft instanceof EntityDungeonCraftPigZombie || this.entityDungeonCraft instanceof EntityDungeonCraftZombie || this.entityDungeonCraft instanceof EntityDungeonCraftSkeleton) {
-                this.entityDungeonCraft.aR(); // -> swingItem()
+                this.entityDungeonCraft.aZ(); // -> swingItem()
             }
             this.entityDungeonCraft.attack(targetEntity);
         }

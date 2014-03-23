@@ -22,12 +22,12 @@ package de.keyle.dungeoncraft.dungeon.generator;
 
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import de.keyle.dungeoncraft.util.vector.Vector;
-import net.minecraft.server.v1_7_R1.Block;
-import net.minecraft.server.v1_7_R1.NBTTagCompound;
-import net.minecraft.server.v1_7_R1.TileEntity;
+import net.minecraft.server.v1_7_R2.Block;
+import net.minecraft.server.v1_7_R2.NBTTagCompound;
+import net.minecraft.server.v1_7_R2.TileEntity;
 import org.bukkit.Chunk;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_7_R2.CraftWorld;
 import org.bukkit.generator.BlockPopulator;
 
 import java.util.Random;

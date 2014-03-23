@@ -28,7 +28,7 @@ import de.keyle.dungeoncraft.entity.template.EntityTemplateRegistry;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_7_R2.CraftWorld;
 import org.bukkit.entity.LivingEntity;
 
 @SuppressWarnings("unused")
@@ -48,7 +48,7 @@ public class EntityContext {
         EntityTemplate et = r.getTemplate(templateId);
         if (et != null) {
             EntityDungeonCraft entity = EntityFactory.createEntityByTemplate(et);
-            net.minecraft.server.v1_7_R1.World mcWorld = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
+            net.minecraft.server.v1_7_R2.World mcWorld = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
             entity.setPosition(dungeon.getPosition().getBlockX() + posX, posY, dungeon.getPosition().getBlockZ() + posZ);
             mcWorld.addEntity(entity);
         }

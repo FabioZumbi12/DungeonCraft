@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.entity.types.spider;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R2.World;
 
 @EntityInfo(width = 1.4F, height = 0.9F)
 public class EntityDungeonCraftSpider extends EntityDungeonCraft {

@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.entity.types.creeper;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R2.World;
 
 
 @EntityInfo(width = 0.6F, height = 1.9F)

@@ -60,6 +60,6 @@ public class RandomLookaround extends AIGoal {
     @Override
     public void tick() {
         this.ticksUntilStopLookingAround--;
-        this.entityDungeonCraft.getControllerLook().a(this.entityDungeonCraft.locX + this.directionX, this.entityDungeonCraft.locY + this.entityDungeonCraft.getHeadHeight(), this.entityDungeonCraft.locZ + this.directionZ, 10.0F, this.entityDungeonCraft.x());
+        this.entityDungeonCraft.getControllerLook().a(this.entityDungeonCraft.locX + this.directionX, this.entityDungeonCraft.locY + this.entityDungeonCraft.getHeadHeight(), this.entityDungeonCraft.locZ + this.directionZ, 10.0F, this.entityDungeonCraft.bv());
     }
 }

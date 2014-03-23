@@ -23,7 +23,7 @@ package de.keyle.dungeoncraft.entity.types.ghast;
 import de.keyle.dungeoncraft.entity.ai.attack.MeleeAttack;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R2.World;
 
 @EntityInfo(width = 4.F, height = 4.F)
 public class EntityDungeonCraftGhast extends EntityDungeonCraft {

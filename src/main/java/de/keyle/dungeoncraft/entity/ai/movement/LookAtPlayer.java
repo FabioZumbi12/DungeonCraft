@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.entity.ai.movement;
 
 import de.keyle.dungeoncraft.api.entity.ai.AIGoal;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
-import net.minecraft.server.v1_7_R1.Entity;
+import net.minecraft.server.v1_7_R2.Entity;
 
 public class LookAtPlayer extends AIGoal {
     private EntityDungeonCraft entityDungeonCraft;
@@ -84,7 +84,7 @@ public class LookAtPlayer extends AIGoal {
 
     @Override
     public void tick() {
-        this.entityDungeonCraft.getControllerLook().a(this.targetPlayer.locX, this.targetPlayer.locY + this.targetPlayer.getHeadHeight(), this.targetPlayer.locZ, 10.0F, this.entityDungeonCraft.x());
+        this.entityDungeonCraft.getControllerLook().a(this.targetPlayer.locX, this.targetPlayer.locY + this.targetPlayer.getHeadHeight(), this.targetPlayer.locZ, 10.0F, this.entityDungeonCraft.bv());
         this.ticksUntilStopLooking -= 1;
     }
 }

@@ -21,10 +21,10 @@
 package de.keyle.dungeoncraft.dungeon.generator;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
-import net.minecraft.server.v1_7_R1.*;
+import net.minecraft.server.v1_7_R2.*;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_7_R1.scoreboard.CraftScoreboard;
+import org.bukkit.craftbukkit.v1_7_R2.scoreboard.CraftScoreboard;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
 

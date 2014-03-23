@@ -50,8 +50,8 @@ import de.keyle.dungeoncraft.entity.types.wolf.EntityDungeonCraftWolf;
 import de.keyle.dungeoncraft.entity.types.zombie.EntityDungeonCraftZombie;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
-import net.minecraft.server.v1_7_R1.EntityCreature;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R2.EntityCreature;
+import net.minecraft.server.v1_7_R2.World;
 import org.bukkit.ChatColor;
 
 import java.lang.reflect.Constructor;

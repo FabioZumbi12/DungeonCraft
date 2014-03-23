@@ -20,10 +20,10 @@
 
 package de.keyle.dungeoncraft.dungeon.generator;
 
-import net.minecraft.server.v1_7_R1.Chunk;
-import net.minecraft.server.v1_7_R1.ChunkSection;
-import net.minecraft.server.v1_7_R1.EnumSkyBlock;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R2.Chunk;
+import net.minecraft.server.v1_7_R2.ChunkSection;
+import net.minecraft.server.v1_7_R2.EnumSkyBlock;
+import net.minecraft.server.v1_7_R2.World;
 
 import java.util.Arrays;
 

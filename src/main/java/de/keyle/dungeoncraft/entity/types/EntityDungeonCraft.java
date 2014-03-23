@@ -26,7 +26,7 @@ import de.keyle.dungeoncraft.entity.ai.movement.RandomLookaround;
 import de.keyle.dungeoncraft.entity.ai.navigation.AbstractNavigation;
 import de.keyle.dungeoncraft.entity.ai.navigation.VanillaNavigation;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
-import net.minecraft.server.v1_7_R1.*;
+import net.minecraft.server.v1_7_R2.*;
 import org.bukkit.Location;
 
 import java.lang.reflect.Field;
@@ -296,7 +296,7 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
      * Returns the sound that is played when the Entity get hurt
      * -> getHurtSound()
      */
-    protected String aT() {
+    protected String aS() {
         try {
             return getHurtSound();
         } catch (Exception e) {
@@ -310,7 +310,7 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
      * Returns the sound that is played when the Entity dies
      * -> getDeathSound()
      */
-    protected String aU() {
+    protected String aT() {
         try {
             return getDeathSound();
         } catch (Exception e) {
@@ -324,33 +324,33 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
      * Returns basic armor value of the entity
      * -> getArmor()
      */
-    public int aV() {
+    public int aU() {
         try {
-            return super.aV() + getArmor();
+            return super.aU() + getArmor();
         } catch (Exception e) {
             e.printStackTrace();
             DebugLogger.printThrowable(e);
         }
-        return super.aV();
+        return super.aU();
     }
 
     /**
      * Returns the speed of played sounds
      */
-    protected float bg() {
+    protected float bf() {
         try {
             return getSoundSpeed();
         } catch (Exception e) {
             e.printStackTrace();
             DebugLogger.printThrowable(e);
         }
-        return super.bg();
+        return super.bf();
     }
 
     /**
      * Set weather the "new" AI is used
      */
-    public boolean bk() {
+    public boolean bj() {
         return true;
     }
 
@@ -359,9 +359,9 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
      * -> updateAITasks()
      */
     @Override
-    protected void bn() {
+    protected void bm() {
         try {
-            aV += 1; // entityAge
+            aU += 1; // entityAge
 
             if (isAlive()) {
                 getEntitySenses().a(); // sensing
@@ -371,7 +371,7 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
                 petNavigation.tick(); // navigation
             }
 
-            bp(); // "mob tick"
+            bo(); // "mob tick"
 
             // controls
             getControllerMove().c(); // move
@@ -401,8 +401,8 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
         this.aP = (this.aN = this.yaw);
 
         // get motion from passenger (player)
-        motionSideways = ((EntityLiving) this.passenger).be * 0.5F;
-        motionForward = ((EntityLiving) this.passenger).bf;
+        motionSideways = ((EntityLiving) this.passenger).bd * 0.5F;
+        motionForward = ((EntityLiving) this.passenger).be;
 
         // backwards is slower
         if (motionForward <= 0.0F) {

@@ -22,12 +22,12 @@ package de.keyle.dungeoncraft.entity.ai.movement;
 
 import de.keyle.dungeoncraft.api.entity.ai.AIGoal;
 import de.keyle.dungeoncraft.entity.types.sheep.EntityDungeonCraftSheep;
-import net.minecraft.server.v1_7_R1.Block;
-import net.minecraft.server.v1_7_R1.Blocks;
-import net.minecraft.server.v1_7_R1.MathHelper;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R2.Block;
+import net.minecraft.server.v1_7_R2.Blocks;
+import net.minecraft.server.v1_7_R2.MathHelper;
+import net.minecraft.server.v1_7_R2.World;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_7_R1.event.CraftEventFactory;
+import org.bukkit.craftbukkit.v1_7_R2.event.CraftEventFactory;
 
 public class EatGrass extends AIGoal {
     private EntityDungeonCraftSheep entityMySheep;

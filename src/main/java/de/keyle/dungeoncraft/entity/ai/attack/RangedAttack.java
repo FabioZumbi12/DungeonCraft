@@ -23,10 +23,10 @@ package de.keyle.dungeoncraft.entity.ai.attack;
 import de.keyle.dungeoncraft.api.entity.ai.AIGoal;
 import de.keyle.dungeoncraft.entity.ai.attack.ranged.*;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
-import net.minecraft.server.v1_7_R1.EntityArrow;
-import net.minecraft.server.v1_7_R1.EntityLiving;
-import net.minecraft.server.v1_7_R1.MathHelper;
-import net.minecraft.server.v1_7_R1.World;
+import net.minecraft.server.v1_7_R2.EntityArrow;
+import net.minecraft.server.v1_7_R2.EntityLiving;
+import net.minecraft.server.v1_7_R2.MathHelper;
+import net.minecraft.server.v1_7_R2.World;
 
 public class RangedAttack extends AIGoal {
     private final EntityDungeonCraft entityDungeonCraft;
@@ -124,7 +124,7 @@ public class RangedAttack extends AIGoal {
         if (projectileTypes == Projectile.ProjectileTypes.Arrow) {
             EntityArrow arrow = new Arrow(world, entityDungeonCraft, target, 1.6F, 1);
             arrow.b(damage);
-            arrow.a(false);
+            arrow.setCritical(false);
             entityDungeonCraft.makeSound("random.bow", 1.0F, 1.0F / (entityDungeonCraft.getRandom().nextFloat() * 0.4F + 0.8F));
             world.addEntity(arrow);
         } else if (projectileTypes == Projectile.ProjectileTypes.Snowball) {

@@ -25,10 +25,7 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.vector.Region;
 import de.keyle.dungeoncraft.util.vector.Vector;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DungeonRegion extends Region {
     protected final String regionId;
@@ -70,7 +67,7 @@ public class DungeonRegion extends Region {
     }
 
     public static List<DungeonRegion> getPlayerRegions(DungeonCraftPlayer player) {
-        return Collections.unmodifiableList(playerRegionMultimap.get(player));
+        return Collections.unmodifiableList(new ArrayList<DungeonRegion>(playerRegionMultimap.get(player)));
     }
 
     @Override

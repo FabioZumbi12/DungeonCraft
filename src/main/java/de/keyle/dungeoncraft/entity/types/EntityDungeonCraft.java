@@ -136,7 +136,9 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
     }
 
     public void setLootTable(Map<Float, org.bukkit.inventory.ItemStack> lootTable) {
-        this.lootTable = lootTable;
+        if (lootTable != null) {
+            this.lootTable = lootTable;
+        }
     }
 
     public Map<Float, org.bukkit.inventory.ItemStack> getLootTable() {

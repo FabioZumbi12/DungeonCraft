@@ -35,10 +35,7 @@ import org.bukkit.craftbukkit.v1_7_R2.CraftWorld;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayDeque;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Vector;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DungeonLoader extends Thread {
@@ -46,6 +43,7 @@ public class DungeonLoader extends Thread {
     private volatile static DungeonLoader runningLoader = null;
 
     private final Dungeon dungeon;
+    private final List<Entity> entities = new ArrayList<Entity>();
 
     public DungeonLoader(Dungeon dungeon) {
         this.dungeon = dungeon;
@@ -147,11 +145,9 @@ public class DungeonLoader extends Thread {
         }
         dungeon.getDungeonLogger().info("Light Calculation DONE");
 
-        dungeon.getDungeonLogger().info("Hanging Paintings");
-
-        spawnEntities(schematic);
-
-        dungeon.getDungeonLogger().info("Ohhhh such paintings");
+        dungeon.getDungeonLogger().info("Load Paintings");
+        loadEntities(schematic);
+        dungeon.getDungeonLogger().info("Much Color");
 
         dungeon.getDungeonLogger().info("Loading Regions...");
         new RegionLoader(dungeon);
@@ -178,7 +174,14 @@ public class DungeonLoader extends Thread {
         runningLoader = null;
     }
 
-    private void spawnEntities(Schematic schematic) {
+    public void spawnEntities() {
+        net.minecraft.server.v1_7_R2.World world = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
+        for (Entity entity : this.entities) {
+            world.addEntity(entity);
+        }
+    }
+
+    public void loadEntities(Schematic schematic) {
         net.minecraft.server.v1_7_R2.World world = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
         Map<Vector<Double>, TagCompound> entities = schematic.getEntities();
         for (Vector<Double> pos : entities.keySet()) {
@@ -279,7 +282,7 @@ public class DungeonLoader extends Thread {
                     METHOD_A.invoke(entity, nbtTagCompound);
                 }
                 if (entity != null) {
-                    world.addEntity(entity);
+                    this.entities.add(entity);
                 }
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();

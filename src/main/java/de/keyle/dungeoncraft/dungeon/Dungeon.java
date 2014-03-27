@@ -403,6 +403,10 @@ public class Dungeon implements Scheduler {
     public void schedule() {
         if (isReady()) {
             if (first) {
+                getDungeonLogger().info("Hanging Paintings");
+                loader.spawnEntities();
+                getDungeonLogger().info("Ohhhh such paintings");
+
                 unlockSchematic();
                 first = false;
 

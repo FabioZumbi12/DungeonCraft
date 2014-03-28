@@ -65,7 +65,7 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
             this.setPathfinder();
 
             try {
-                jump = EntityLiving.class.getDeclaredField("bd");
+                jump = EntityLiving.class.getDeclaredField("bc");
                 jump.setAccessible(true);
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();

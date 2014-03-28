@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.util.schematic;
 
 import de.keyle.dungeoncraft.util.vector.BlockVector;
+import de.keyle.dungeoncraft.util.vector.Vector;
 import de.keyle.knbt.*;
 
 import java.io.File;
@@ -29,7 +30,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 public class SchematicLoader extends Thread {
     private ISchematicReveiver schematicReceiver;
@@ -69,26 +69,26 @@ public class SchematicLoader extends Thread {
             throw new IllegalArgumentException("Schematic file is missing a \"Blocks\" tag");
         }
 
-        short width = getChildTag(schematicTag, "Width", TagShort.class).getShortData();
-        short length = getChildTag(schematicTag, "Length", TagShort.class).getShortData();
-        short height = getChildTag(schematicTag, "Height", TagShort.class).getShortData();
+        short width = schematicTag.getAs("Width", TagShort.class).getShortData();
+        short length = schematicTag.getAs("Length", TagShort.class).getShortData();
+        short height = schematicTag.getAs("Height", TagShort.class).getShortData();
 
-        String materials = getChildTag(schematicTag, "Materials", TagString.class).getStringData();
+        String materials = schematicTag.getAs("Materials", TagString.class).getStringData();
         if (!materials.equals("Alpha")) {
             throw new IllegalArgumentException("Schematic file is not an Alpha schematic");
         }
 
-        byte[] blocks = getChildTag(schematicTag, "Blocks", TagByteArray.class).getByteArrayData();
-        byte[] blockData = getChildTag(schematicTag, "Data", TagByteArray.class).getByteArrayData();
+        byte[] blocks = schematicTag.getAs("Blocks", TagByteArray.class).getByteArrayData();
+        byte[] blockData = schematicTag.getAs("Data", TagByteArray.class).getByteArrayData();
         byte[] biomeData;
         if (schematicTag.containsKeyAs("Biomes", TagByteArray.class)) {
-            biomeData = getChildTag(schematicTag, "Biomes", TagByteArray.class).getByteArrayData();
+            biomeData = schematicTag.getAs("Biomes", TagByteArray.class).getByteArrayData();
         } else {
             biomeData = new byte[length * width];
         }
 
-        TagList tileEntitiesTag = getChildTag(schematicTag, "TileEntities", TagList.class);
-        TagList entitiesTag = getChildTag(schematicTag, "Entities", TagList.class);
+        TagList tileEntitiesTag = schematicTag.getAs("TileEntities", TagList.class);
+        TagList entitiesTag = schematicTag.getAs("Entities", TagList.class);
 
         List<TagBase> readOnlyList = tileEntitiesTag.getReadOnlyList();
         Map<BlockVector, TagCompound> tileEntities = new HashMap<BlockVector, TagCompound>();
@@ -112,7 +112,7 @@ public class SchematicLoader extends Thread {
         }
 
         List<TagBase> readOnlyEntityList = entitiesTag.getReadOnlyList();
-        Map<Vector<Double>, TagCompound> entities = new HashMap<Vector<Double>, TagCompound>();
+        Map<Vector, TagCompound> entities = new HashMap<Vector, TagCompound>();
 
         for (int i = 0; i < readOnlyEntityList.size(); i++) {
             TagCompound entity = entitiesTag.getTagAs(i, TagCompound.class);
@@ -129,32 +129,32 @@ public class SchematicLoader extends Thread {
                 z = ((TagInt) entity.get("TileZ")).getIntData();
             }
             if (entity.containsKeyAs("Pos", TagList.class)) {
-                TagList posTag = getChildTag(entity, "Pos", TagList.class);
+                TagList posTag = entity.getAs("Pos", TagList.class);
                 //List<TagBase> readOnlyPos = posTag.getReadOnlyList();
                 x = posTag.getTagAs(0, TagDouble.class).getDoubleData();
                 y = posTag.getTagAs(1, TagDouble.class).getDoubleData();
                 z = posTag.getTagAs(2, TagDouble.class).getDoubleData();
             }
 
-            Vector<Double> v = new Vector<Double>();
-            v.add(x);
-            v.add(y);
-            v.add(z);
+            Vector v = new Vector(x, y, z);
 
             entities.put(v, entity);
         }
+        Schematic schematic = new Schematic(blocks, blockData, biomeData, width, length, height, tileEntities, entities);
 
-        return new Schematic(blocks, blockData, biomeData, width, length, height, tileEntities, entities);
-    }
+        if (schematicTag.containsKeyAs("Light", TagCompound.class)) {
+            TagCompound lightTag = schematicTag.getAs("Light", TagCompound.class);
+            boolean lightVersionCorrect = false;
+            if (lightTag.containsKeyAs("Version", TagInt.class)) {
+                lightVersionCorrect = lightTag.getAs("Version", TagInt.class).getIntData() >= LightCalculator.VERSION;
+            }
+            if (lightVersionCorrect && lightTag.containsKeyAs("SkyLight", TagByteArray.class) && lightTag.containsKeyAs("BlockLight", TagByteArray.class)) {
+                byte[] skyLight = lightTag.getAs("SkyLight", TagByteArray.class).getByteArrayData();
+                byte[] blockLight = lightTag.getAs("BlockLight", TagByteArray.class).getByteArrayData();
+                schematic.setLight(skyLight, blockLight);
+            }
+        }
 
-    private static <T extends TagBase> T getChildTag(TagCompound items, String key, Class<T> expected) throws IllegalArgumentException {
-        if (!items.getCompoundData().containsKey(key)) {
-            throw new IllegalArgumentException("Schematic file is missing a \"" + key + "\" tag");
-        }
-        TagBase tag = items.get(key);
-        if (!expected.isInstance(tag)) {
-            throw new IllegalArgumentException(key + " tag is not of tag type " + expected.getName());
-        }
-        return expected.cast(tag);
+        return schematic;
     }
 }

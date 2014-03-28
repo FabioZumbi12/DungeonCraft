@@ -21,13 +21,16 @@
 package de.keyle.dungeoncraft.util.schematic;
 
 import de.keyle.dungeoncraft.util.vector.BlockVector;
+import de.keyle.dungeoncraft.util.vector.Vector;
 import de.keyle.knbt.TagCompound;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 public class Schematic {
+    private boolean lightingInitialised = false;
+    private byte[] blockLight = null;
+    private byte[] skyLight = null;
     private final byte[] blocks;
     private final byte[] data;
     private final byte[] biomes;
@@ -35,9 +38,9 @@ public class Schematic {
     private final short lenght;
     private final short height;
     private final Map<BlockVector, TagCompound> tileEntities = new HashMap<BlockVector, TagCompound>();
-    private final Map<Vector<Double>, TagCompound> entities = new HashMap<Vector<Double>, TagCompound>();
+    private final Map<Vector, TagCompound> entities = new HashMap<Vector, TagCompound>();
 
-    public Schematic(byte[] blocks, byte[] data, byte[] biomes, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities, Map<Vector<Double>, TagCompound> entities) {
+    public Schematic(byte[] blocks, byte[] data, byte[] biomes, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities, Map<Vector, TagCompound> entities) {
         this.blocks = blocks;
         this.data = data;
         this.biomes = biomes;
@@ -48,7 +51,7 @@ public class Schematic {
         this.entities.putAll(entities);
     }
 
-    public Schematic(byte[] blocks, byte[] data, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities, Map<Vector<Double>, TagCompound> entities) {
+    public Schematic(byte[] blocks, byte[] data, short width, short lenght, short height, Map<BlockVector, TagCompound> tileEntities, Map<Vector, TagCompound> entities) {
         this.blocks = blocks;
         this.data = data;
         this.biomes = new byte[width * lenght];
@@ -71,6 +74,28 @@ public class Schematic {
         return biomes;
     }
 
+    public byte[] getSkyLight() {
+        if (skyLight == null) {
+            return new byte[0];
+        }
+        return skyLight;
+    }
+
+    public byte[] getBlockLight() {
+        if (blockLight == null) {
+            return new byte[0];
+        }
+        return blockLight;
+    }
+
+    public void setLight(byte[] skyLight, byte[] blockLight) {
+        if (!lightingInitialised) {
+            this.skyLight = skyLight;
+            this.blockLight = blockLight;
+            lightingInitialised = true;
+        }
+    }
+
     public short getWidth() {
         return width;
     }
@@ -83,11 +108,15 @@ public class Schematic {
         return height;
     }
 
+    public boolean isLightingInitialised() {
+        return lightingInitialised;
+    }
+
     public Map<BlockVector, TagCompound> getTileEntities() {
         return tileEntities;
     }
 
-    public Map<Vector<Double>, TagCompound> getEntities() {
+    public Map<Vector, TagCompound> getEntities() {
         return entities;
     }
 }

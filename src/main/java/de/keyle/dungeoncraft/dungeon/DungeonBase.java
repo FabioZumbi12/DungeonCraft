@@ -29,18 +29,22 @@ import de.keyle.dungeoncraft.util.Util;
 import de.keyle.dungeoncraft.util.config.ConfigurationYaml;
 import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.locale.ResourceBundle;
+import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import de.keyle.dungeoncraft.util.schematic.ISchematicReveiver;
+import de.keyle.dungeoncraft.util.schematic.LightCalculator;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
 import de.keyle.dungeoncraft.util.schematic.SchematicLoader;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
+import de.keyle.knbt.TagByteArray;
+import de.keyle.knbt.TagCompound;
+import de.keyle.knbt.TagInt;
+import de.keyle.knbt.TagStream;
 import org.apache.commons.lang.Validate;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -277,5 +281,38 @@ public class DungeonBase implements ISchematicReveiver {
 
 
         new EntityTemplateLoader(this);
+
+        try {
+            Schematic s = SchematicLoader.loadSchematic(getSchematicFile());
+            if (!s.isLightingInitialised()) {
+                DungeonCraftLogger.write("Calculating Light for Schematic (" + getSchematicFile().getName() + ")");
+                long startTime = System.currentTimeMillis();
+                LightCalculator lc = new LightCalculator(s);
+
+                FileInputStream is = new FileInputStream(getSchematicFile());
+
+                TagCompound schematicTag = TagStream.readTag(is, true);
+                if (schematicTag == null) {
+                    schematicTag = TagStream.readTag(is, false);
+                    if (schematicTag == null) {
+                        throw new IllegalArgumentException("Can not read tags");
+                    }
+                }
+                TagCompound lightTag = new TagCompound();
+                TagByteArray skyLightTag = new TagByteArray(lc.skylight);
+                TagByteArray blockLightTag = new TagByteArray(lc.blocklight);
+                lightTag.getCompoundData().put("Version", new TagInt(LightCalculator.VERSION));
+                lightTag.getCompoundData().put("SkyLight", skyLightTag);
+                lightTag.getCompoundData().put("BlockLight", blockLightTag);
+                schematicTag.getCompoundData().put("Light", lightTag);
+
+                FileOutputStream os = new FileOutputStream(getSchematicFile());
+                TagStream.writeTag(schematicTag, os, true);
+                long estimatedTime = System.currentTimeMillis() - startTime;
+                DungeonCraftLogger.write("Light calculation took " + DurationFormatUtils.formatDurationWords(estimatedTime, true, true) + ".");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

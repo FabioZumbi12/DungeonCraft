@@ -27,6 +27,7 @@ import de.keyle.dungeoncraft.dungeon.region.RegionLoader;
 import de.keyle.dungeoncraft.dungeon.scripting.TriggerLoader;
 import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.schematic.Schematic;
+import de.keyle.dungeoncraft.util.vector.Vector;
 import de.keyle.knbt.TagCompound;
 import de.keyle.knbt.TagString;
 import net.minecraft.server.v1_7_R2.*;
@@ -183,16 +184,16 @@ public class DungeonLoader extends Thread {
 
     public void loadEntities(Schematic schematic) {
         net.minecraft.server.v1_7_R2.World world = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
-        Map<Vector<Double>, TagCompound> entities = schematic.getEntities();
-        for (Vector<Double> pos : entities.keySet()) {
+        Map<Vector, TagCompound> entities = schematic.getEntities();
+        for (Vector pos : entities.keySet()) {
             Entity entity = null;
             Method METHOD_A = null;
             String methodName = "a";
             TagCompound entityCompound = entities.get(pos);
             String entityType = ((TagString) entityCompound.get("id")).getStringData();
-            double x = pos.get(0) + (dungeon.position.getChunkX() * 16);
-            double y = pos.get(1);
-            double z = pos.get(2) + (dungeon.position.getChunkZ() * 16);
+            double x = pos.getX() + (dungeon.position.getChunkX() * 16);
+            double y = pos.getY();
+            double z = pos.getZ() + (dungeon.position.getChunkZ() * 16);
             try {
                 NBTTagCompound nbtTagCompound = (NBTTagCompound) BukkitUtil.compoundToVanillaCompound(entityCompound);
                 if (entityType.equals("Painting")) {

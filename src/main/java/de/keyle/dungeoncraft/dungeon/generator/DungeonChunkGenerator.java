@@ -108,8 +108,8 @@ public class DungeonChunkGenerator extends Thread {
             // Collections.sort(entityplayer.chunkCoordIntPairQueue, new ChunkCoordComparator(entityplayer));
 
             // make the chunk ready (faked)
-            chunk.lit = false;
-            //chunk.m = true;
+            chunk.lit = true;
+            chunk.m = true;
             chunk.done = true;
             // ----------------------
 
@@ -148,6 +148,8 @@ public class DungeonChunkGenerator extends Thread {
         int schematicLength = schematic.getLenght();
         byte[] blocks = schematic.getBlocks();
         byte[] data = schematic.getData();
+        byte[] skyLight = schematic.getSkyLight();
+        byte[] blockLight = schematic.getBlockLight();
 
         ChunkSection newChunkSection = new ChunkSection(section, true); //2nd parameter -> !world.worldProvider.g -> hasWorldSkylight
         int yOffset = section * 16;
@@ -167,10 +169,14 @@ public class DungeonChunkGenerator extends Thread {
                         block = Block.e(blocks[index] & 0xFF);
                         newChunkSection.setTypeId(x, y, z, block);
                         newChunkSection.setData(x, y, z, data[index]);
+                        newChunkSection.setEmittedLight(x, y, z, blockLight[index]);
+                        newChunkSection.setSkyLight(x, y, z, skyLight[index]);
                         if (isTileEntityBlock(block)) {
                             BlockVector pos = new BlockVector((chunkX * 16) + x, y + yOffset, (chunkZ * 16) + z);
                             tileEntityPositions.add(pos);
                         }
+                    } else {
+                        newChunkSection.setSkyLight(x, y, z, 15);
                     }
                 }
             }

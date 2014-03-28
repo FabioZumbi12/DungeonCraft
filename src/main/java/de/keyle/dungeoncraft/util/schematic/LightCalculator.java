@@ -58,7 +58,7 @@ public class LightCalculator {
         for (int x = 0; x < schematicWidth; x++) {
             for (int z = 0; z < schematicLength; z++) {
                 for (int y = schematicHeight - 1; y >= 0; y--) {
-                    if (blocks[getSchematicIndex(x, y, z)] == 0) {
+                    if (getBlockOpaque(blocks[getSchematicIndex(x, y, z)]) == 0) {
                         skylight[getSchematicIndex(x, y, z)] = 15;
                         continue;
                     }
@@ -186,11 +186,41 @@ public class LightCalculator {
         return z * schematicWidth + x;
     }
 
-    public byte getBlockEmittedLight(byte blockID) {
-        return (byte) Block.e(blockID & 0xf).m();
+    public byte getBlockEmittedLight(byte block) {
+        int blockID = block & 0xff;
+        switch (blockID) {
+            case 10:
+            case 11:
+            case 51:
+            case 89:
+            case 91:
+            case 119:
+            case 124:
+            case 138:
+                return 15;
+            case 50:
+                return 14;
+            case 62:
+                return 13;
+            case 90:
+                return 11;
+            case 84:
+            case 94:
+                return 9;
+            case 76:
+            case 130:
+                return 7;
+            case 39:
+            case 117:
+            case 120:
+            case 122:
+                return 1;
+            default:
+                return 0;
+        }
     }
 
     public byte getBlockOpaque(byte blockID) {
-        return (byte) (Block.e(blockID & 0xf).k() & 0xf);
+        return (byte) (Block.e(blockID & 0xff).k() & 0xf);
     }
 }

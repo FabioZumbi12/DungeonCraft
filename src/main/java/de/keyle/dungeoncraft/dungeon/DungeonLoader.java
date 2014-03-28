@@ -20,7 +20,6 @@
 
 package de.keyle.dungeoncraft.dungeon;
 
-import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftChunk;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftChunkProvider;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import de.keyle.dungeoncraft.dungeon.region.RegionLoader;
@@ -124,27 +123,6 @@ public class DungeonLoader extends Thread {
             }
         }
         dungeon.getDungeonLogger().info("Chunk Generation DONE");
-
-        dungeon.getDungeonLogger().info("Calculting Light...");
-        //Lighting calculation
-        for (int x = 0; x < xCount; x++) {
-            for (int z = 0; z < zCount; z++) {
-                Chunk c = DungeonCraftChunkProvider.chunkloader.getChunkAt(dungeon.position.getChunkX() + x, dungeon.position.getChunkZ() + z);
-                if (c instanceof DungeonCraftChunk) {
-                    ((DungeonCraftChunk) c).initEmittedLight();
-                    ((DungeonCraftChunk) c).generateSkylightMap();
-                }
-            }
-        }
-        for (int x = 0; x < xCount; x++) {
-            for (int z = 0; z < zCount; z++) {
-                Chunk c = DungeonCraftChunkProvider.chunkloader.getChunkAt(dungeon.position.getChunkX() + x, dungeon.position.getChunkZ() + z);
-                if (c instanceof DungeonCraftChunk) {
-                    ((DungeonCraftChunk) c).updateSkylight(false);
-                }
-            }
-        }
-        dungeon.getDungeonLogger().info("Light Calculation DONE");
 
         dungeon.getDungeonLogger().info("Load Paintings");
         loadEntities(schematic);

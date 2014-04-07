@@ -21,6 +21,7 @@
 package de.keyle.dungeoncraft.util;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
+import de.keyle.dungeoncraft.util.schematic.LightCalculator;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashSet;
@@ -33,6 +34,7 @@ public class Configuration {
 
     public static void setDefault() {
         config.addDefault("commands.allowed", new String[]{"kill", "w", "me", "tell", "msg", "help", "?"});
+        config.addDefault("light.calculation.threadcount", Runtime.getRuntime().availableProcessors());
 
 
         config.options().copyDefaults(true);
@@ -40,6 +42,8 @@ public class Configuration {
     }
 
     public static void loadConfiguration() {
+        LightCalculator.MAX_THREAD_COUNT = config.getInt("light.calculation.threadcount", Runtime.getRuntime().availableProcessors());
+
         ALLOWED_COMMANDS.clear();
         for (String cmd : config.getStringList("commands.allowed")) {
             ALLOWED_COMMANDS.add(cmd.toLowerCase());

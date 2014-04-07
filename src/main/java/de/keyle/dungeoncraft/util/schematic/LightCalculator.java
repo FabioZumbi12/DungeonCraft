@@ -20,19 +20,23 @@
 
 package de.keyle.dungeoncraft.util.schematic;
 
+import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import net.minecraft.server.v1_7_R2.Block;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LightCalculator {
     public static final int VERSION = 1;
+    public static int MAX_THREAD_COUNT = Runtime.getRuntime().availableProcessors();
 
     private final int schematicWidth;
     private final int schematicLength;
     private final int schematicHeight;
     byte[] blocks;
 
-    public byte[] skylight;
-    public byte[] blocklight;
-    private int[] heightMap;
+    public final byte[] skylight;
+    public final byte[] blocklight;
+    private final int[] heightMap;
 
     private enum Direction {
         UP, DOWN, NORTH, SOUTH, WEST, EAST, SELF
@@ -50,7 +54,46 @@ public class LightCalculator {
         heightMap = new int[schematicWidth * schematicLength];
 
         createHeightMap();
-        spreadSkyLight();
+
+        final int xThreads = (int) Math.ceil(schematicWidth / 100.);
+        final int zThreads = (int) Math.ceil(schematicLength / 100.);
+
+        final AtomicInteger actualX = new AtomicInteger(0);
+        final AtomicInteger actualZ = new AtomicInteger(0);
+
+        final AtomicInteger counter = new AtomicInteger(xThreads * zThreads);
+        final AtomicInteger threadCount = new AtomicInteger(0);
+
+        do {
+            if (threadCount.get() < MAX_THREAD_COUNT && actualZ.get() < zThreads) {
+                counter.decrementAndGet();
+                threadCount.incrementAndGet();
+                final int xFrom = actualX.get() * 100;
+                final int zFrom = actualZ.get() * 100;
+                final int xTo = Math.min(xFrom + 100, schematicWidth);
+                final int zTo = Math.min(zFrom + 100, schematicLength);
+                DungeonCraftLogger.write("Calculate light from (" + xFrom + "|" + zFrom + ") to (" + xTo + "|" + zTo + ")");
+                //ToDo "reuse" threads
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        spreadSkyLight(xFrom, zFrom, xTo, zTo);
+                        threadCount.decrementAndGet();
+                    }
+                };
+                thread.start();
+                if (actualX.incrementAndGet() == xThreads) {
+                    actualX.set(0);
+                    actualZ.incrementAndGet();
+                }
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } while (counter.get() > 0 || threadCount.get() > 0);
+
         spreadBlockLight();
     }
 
@@ -126,10 +169,10 @@ public class LightCalculator {
         }
     }
 
-    public void spreadSkyLight() {
+    public void spreadSkyLight(int startX, int startZ, int endX, int endZ) {
         int y, z;
-        for (int x = 0; x < schematicWidth; x++) {
-            for (z = 0; z < schematicLength; z++) {
+        for (int x = startX; x < endX; x++) {
+            for (z = startZ; z < endZ; z++) {
                 for (y = this.heightMap[getHeightKey(x, z)]; y < schematicHeight; y++) {
                     spreadSkyLight(Direction.SELF, x, y, z, (byte) 15);
                 }

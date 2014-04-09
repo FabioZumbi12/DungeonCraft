@@ -30,10 +30,7 @@ import de.keyle.dungeoncraft.util.config.ConfigurationYaml;
 import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.locale.ResourceBundle;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
-import de.keyle.dungeoncraft.util.schematic.ISchematicReveiver;
-import de.keyle.dungeoncraft.util.schematic.LightCalculator;
-import de.keyle.dungeoncraft.util.schematic.Schematic;
-import de.keyle.dungeoncraft.util.schematic.SchematicLoader;
+import de.keyle.dungeoncraft.util.schematic.*;
 import de.keyle.dungeoncraft.util.vector.OrientationVector;
 import de.keyle.knbt.TagByteArray;
 import de.keyle.knbt.TagCompound;
@@ -287,7 +284,7 @@ public class DungeonBase implements ISchematicReveiver {
             if (!s.isLightingInitialised()) {
                 DungeonCraftLogger.write("Calculating Light for Schematic (" + getSchematicFile().getName() + ")");
                 long startTime = System.currentTimeMillis();
-                LightCalculator lc = new LightCalculator(s);
+                LightCalculatorG lc = new LightCalculatorG(s);
 
                 FileInputStream is = new FileInputStream(getSchematicFile());
 

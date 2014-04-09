@@ -191,6 +191,11 @@
             <version>${knbt.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.nativelibs4java</groupId>
+            <artifactId>javacl</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <ciManagement>
@@ -272,6 +277,11 @@
                                     <include>de.keyle:command-framework:*</include>
                                     <include>de.keyle:fanciful-chat:*</include>
                                     <include>de.keyle:knbt:*</include>
+                                    <include>com.nativelibs4java:javacl:*</include>
+                                    <include>com.nativelibs4java:javacl-core:*</include>
+                                    <include>com.nativelibs4java:nativelibs4java-utils:*</include>
+                                    <include>com.nativelibs4java:opencl4java:*</include>
+                                    <include>com.nativelibs4java:bridj:*</include>
                                 </includes>
                             </artifactSet>
                             <relocations>

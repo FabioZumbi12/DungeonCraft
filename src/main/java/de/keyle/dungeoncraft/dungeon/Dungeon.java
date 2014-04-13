@@ -139,7 +139,6 @@ public class Dungeon implements Scheduler {
 
     protected synchronized void setReady() {
         isReady = true;
-        loader = null;
         dungeonLogger.info("Dungeon is now ready to use!");
     }
 
@@ -408,6 +407,7 @@ public class Dungeon implements Scheduler {
                 getDungeonLogger().info("Ohhhh such paintings");
 
                 unlockSchematic();
+                loader = null;
                 first = false;
 
                 if (dungeonBase.hasTimeLimit()) {

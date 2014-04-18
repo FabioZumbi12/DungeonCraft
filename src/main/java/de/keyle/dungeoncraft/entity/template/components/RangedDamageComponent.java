@@ -24,42 +24,45 @@ import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
 import de.keyle.dungeoncraft.entity.ai.attack.RangedAttack;
 import de.keyle.dungeoncraft.entity.ai.target.HurtByTarget;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
 import static de.keyle.dungeoncraft.entity.ai.attack.ranged.Projectile.ProjectileTypes;
 
 public class RangedDamageComponent extends EntityTemplateComponent {
     double damage = 0;
-    private final ProjectileTypes projectileTypes;
+    private final ProjectileTypes projectileType;
 
     public RangedDamageComponent(double damage, ProjectileTypes projectileType) {
         this.damage = damage;
-        this.projectileTypes = projectileType;
+        this.projectileType = projectileType;
     }
 
-    public RangedDamageComponent(@Parameter(type = Parameter.Type.Number, name = "damage") Double damage,
-                                 @Parameter(type = Parameter.Type.String, name = "projectile") String projectileType) {
+    public RangedDamageComponent(@Parameter(type = Parameter.Type.Number, name = "damage") Double damage, @Parameter(type = Parameter.Type.String, name = "projectile") String projectileType) {
         this.damage = damage;
         for (ProjectileTypes type : ProjectileTypes.values()) {
             if (type.name().equalsIgnoreCase(projectileType)) {
-                this.projectileTypes = type;
+                this.projectileType = type;
                 return;
             }
         }
-        this.projectileTypes = ProjectileTypes.Arrow;
+        this.projectileType = ProjectileTypes.Arrow;
     }
 
     public double getDamage() {
         return damage;
     }
 
-    public ProjectileTypes getProjectileTypes() {
-        return projectileTypes;
+    public ProjectileTypes getProjectileType() {
+        return projectileType;
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        entity.petPathfinderSelector.addGoal("RangedAttack", new RangedAttack(entity, -0.1F, 12.0F, projectileTypes));
-        entity.petTargetSelector.addGoal("HurtByTarget", new HurtByTarget(entity));
+    public void onAttached() {
+        getOwner().petPathfinderSelector.addGoal("RangedAttack", new RangedAttack(getOwner(), -0.1F, 12.0F, projectileType));
+        getOwner().petTargetSelector.addGoal("HurtByTarget", new HurtByTarget(getOwner()));
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new RangedDamageComponent(this.damage, this.projectileType);
     }
 }

@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.horse.EntityDungeonCraftHorse;
 
 public class VariantComponent extends EntityTemplateComponent {
@@ -33,9 +32,14 @@ public class VariantComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        if (entity instanceof EntityDungeonCraftHorse) {
-            ((EntityDungeonCraftHorse) entity).setVariant(variant);
+    public void onAttached() {
+        if (getOwner() instanceof EntityDungeonCraftHorse) {
+            ((EntityDungeonCraftHorse) getOwner()).setVariant(variant);
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new VariantComponent(this.variant);
     }
 }

@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.ocelot.EntityDungeonCraftOcelot;
 import de.keyle.dungeoncraft.entity.types.wolf.EntityDungeonCraftWolf;
 
@@ -39,11 +38,16 @@ public class SitComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        if (entity instanceof EntityDungeonCraftWolf) {
-            ((EntityDungeonCraftWolf) entity).applySitting(sitting);
-        } else if (entity instanceof EntityDungeonCraftOcelot) {
-            ((EntityDungeonCraftOcelot) entity).applySitting(sitting);
+    public void onAttached() {
+        if (getOwner() instanceof EntityDungeonCraftWolf) {
+            ((EntityDungeonCraftWolf) getOwner()).applySitting(sitting);
+        } else if (getOwner() instanceof EntityDungeonCraftOcelot) {
+            ((EntityDungeonCraftOcelot) getOwner()).applySitting(sitting);
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new SitComponent(this.sitting);
     }
 }

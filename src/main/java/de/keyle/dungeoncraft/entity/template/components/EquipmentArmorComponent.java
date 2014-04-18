@@ -23,7 +23,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.pigzombie.EntityDungeonCraftPigZombie;
 import de.keyle.dungeoncraft.entity.types.skeleton.EntityDungeonCraftSkeleton;
 import de.keyle.dungeoncraft.entity.types.zombie.EntityDungeonCraftZombie;
@@ -38,10 +37,7 @@ public class EquipmentArmorComponent extends EntityTemplateComponent {
     ParsedItem leggins;
     ParsedItem boots;
 
-    public EquipmentArmorComponent(@Parameter(type = Parameter.Type.JsonObject, name = "helmet") JSONObject helmet,
-                                   @Parameter(type = Parameter.Type.JsonObject, name = "chestplate") JSONObject chestplate,
-                                   @Parameter(type = Parameter.Type.JsonObject, name = "leggins") JSONObject leggins,
-                                   @Parameter(type = Parameter.Type.JsonObject, name = "boots") JSONObject boots) {
+    public EquipmentArmorComponent(@Parameter(type = Parameter.Type.JsonObject, name = "helmet") JSONObject helmet, @Parameter(type = Parameter.Type.JsonObject, name = "chestplate") JSONObject chestplate, @Parameter(type = Parameter.Type.JsonObject, name = "leggins") JSONObject leggins, @Parameter(type = Parameter.Type.JsonObject, name = "boots") JSONObject boots) {
         this.helmet = ParsedItem.parsedItem(helmet);
         if (this.helmet.isEmpty()) {
             this.helmet = null;
@@ -58,6 +54,13 @@ public class EquipmentArmorComponent extends EntityTemplateComponent {
         if (this.boots.isEmpty()) {
             this.boots = null;
         }
+    }
+
+    public EquipmentArmorComponent(ParsedItem helmet, ParsedItem chestplate, ParsedItem leggins, ParsedItem boots) {
+        this.helmet = null;
+        this.chestplate = null;
+        this.leggins = null;
+        this.boots = null;
     }
 
     public boolean hasHelmet() {
@@ -77,24 +80,24 @@ public class EquipmentArmorComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
+    public void onAttached() {
         if (hasHelmet()) {
-            if (entity instanceof EntityDungeonCraftZombie) {
-                final EntityDungeonCraftZombie zombie = (EntityDungeonCraftZombie) entity;
+            if (getOwner() instanceof EntityDungeonCraftZombie) {
+                final EntityDungeonCraftZombie zombie = (EntityDungeonCraftZombie) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         zombie.setEntityEquipment(EquipmentSlot.Helmet.getSlotId(), helmet.getMinecraftItem());
                     }
                 }, 5L);
-            } else if (entity instanceof EntityDungeonCraftPigZombie) {
-                final EntityDungeonCraftPigZombie pigZombie = (EntityDungeonCraftPigZombie) entity;
+            } else if (getOwner() instanceof EntityDungeonCraftPigZombie) {
+                final EntityDungeonCraftPigZombie pigZombie = (EntityDungeonCraftPigZombie) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         pigZombie.setEntityEquipment(EquipmentSlot.Helmet.getSlotId(), helmet.getMinecraftItem());
                     }
                 }, 5L);
-            } else if (entity instanceof EntityDungeonCraftSkeleton) {
-                final EntityDungeonCraftSkeleton skeleton = (EntityDungeonCraftSkeleton) entity;
+            } else if (getOwner() instanceof EntityDungeonCraftSkeleton) {
+                final EntityDungeonCraftSkeleton skeleton = (EntityDungeonCraftSkeleton) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         skeleton.setEntityEquipment(EquipmentSlot.Helmet.getSlotId(), helmet.getMinecraftItem());
@@ -103,22 +106,22 @@ public class EquipmentArmorComponent extends EntityTemplateComponent {
             }
         }
         if (hasChestplate()) {
-            if (entity instanceof EntityDungeonCraftZombie) {
-                final EntityDungeonCraftZombie zombie = (EntityDungeonCraftZombie) entity;
+            if (getOwner() instanceof EntityDungeonCraftZombie) {
+                final EntityDungeonCraftZombie zombie = (EntityDungeonCraftZombie) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         zombie.setEntityEquipment(EquipmentSlot.Chestplate.getSlotId(), chestplate.getMinecraftItem());
                     }
                 }, 5L);
-            } else if (entity instanceof EntityDungeonCraftPigZombie) {
-                final EntityDungeonCraftPigZombie pigZombie = (EntityDungeonCraftPigZombie) entity;
+            } else if (getOwner() instanceof EntityDungeonCraftPigZombie) {
+                final EntityDungeonCraftPigZombie pigZombie = (EntityDungeonCraftPigZombie) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         pigZombie.setEntityEquipment(EquipmentSlot.Chestplate.getSlotId(), chestplate.getMinecraftItem());
                     }
                 }, 5L);
-            } else if (entity instanceof EntityDungeonCraftSkeleton) {
-                final EntityDungeonCraftSkeleton skeleton = (EntityDungeonCraftSkeleton) entity;
+            } else if (getOwner() instanceof EntityDungeonCraftSkeleton) {
+                final EntityDungeonCraftSkeleton skeleton = (EntityDungeonCraftSkeleton) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         skeleton.setEntityEquipment(EquipmentSlot.Chestplate.getSlotId(), chestplate.getMinecraftItem());
@@ -127,22 +130,22 @@ public class EquipmentArmorComponent extends EntityTemplateComponent {
             }
         }
         if (hasLeggins()) {
-            if (entity instanceof EntityDungeonCraftZombie) {
-                final EntityDungeonCraftZombie zombie = (EntityDungeonCraftZombie) entity;
+            if (getOwner() instanceof EntityDungeonCraftZombie) {
+                final EntityDungeonCraftZombie zombie = (EntityDungeonCraftZombie) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         zombie.setEntityEquipment(EquipmentSlot.Leggins.getSlotId(), leggins.getMinecraftItem());
                     }
                 }, 5L);
-            } else if (entity instanceof EntityDungeonCraftPigZombie) {
-                final EntityDungeonCraftPigZombie pigZombie = (EntityDungeonCraftPigZombie) entity;
+            } else if (getOwner() instanceof EntityDungeonCraftPigZombie) {
+                final EntityDungeonCraftPigZombie pigZombie = (EntityDungeonCraftPigZombie) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         pigZombie.setEntityEquipment(EquipmentSlot.Leggins.getSlotId(), leggins.getMinecraftItem());
                     }
                 }, 5L);
-            } else if (entity instanceof EntityDungeonCraftSkeleton) {
-                final EntityDungeonCraftSkeleton skeleton = (EntityDungeonCraftSkeleton) entity;
+            } else if (getOwner() instanceof EntityDungeonCraftSkeleton) {
+                final EntityDungeonCraftSkeleton skeleton = (EntityDungeonCraftSkeleton) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         skeleton.setEntityEquipment(EquipmentSlot.Leggins.getSlotId(), leggins.getMinecraftItem());
@@ -151,22 +154,22 @@ public class EquipmentArmorComponent extends EntityTemplateComponent {
             }
         }
         if (hasBoots()) {
-            if (entity instanceof EntityDungeonCraftZombie) {
-                final EntityDungeonCraftZombie zombie = (EntityDungeonCraftZombie) entity;
+            if (getOwner() instanceof EntityDungeonCraftZombie) {
+                final EntityDungeonCraftZombie zombie = (EntityDungeonCraftZombie) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         zombie.setEntityEquipment(EquipmentSlot.Boots.getSlotId(), boots.getMinecraftItem());
                     }
                 }, 5L);
-            } else if (entity instanceof EntityDungeonCraftPigZombie) {
-                final EntityDungeonCraftPigZombie pigZombie = (EntityDungeonCraftPigZombie) entity;
+            } else if (getOwner() instanceof EntityDungeonCraftPigZombie) {
+                final EntityDungeonCraftPigZombie pigZombie = (EntityDungeonCraftPigZombie) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         pigZombie.setEntityEquipment(EquipmentSlot.Boots.getSlotId(), boots.getMinecraftItem());
                     }
                 }, 5L);
-            } else if (entity instanceof EntityDungeonCraftSkeleton) {
-                final EntityDungeonCraftSkeleton skeleton = (EntityDungeonCraftSkeleton) entity;
+            } else if (getOwner() instanceof EntityDungeonCraftSkeleton) {
+                final EntityDungeonCraftSkeleton skeleton = (EntityDungeonCraftSkeleton) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         skeleton.setEntityEquipment(EquipmentSlot.Boots.getSlotId(), boots.getMinecraftItem());
@@ -174,5 +177,10 @@ public class EquipmentArmorComponent extends EntityTemplateComponent {
                 }, 5L);
             }
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new EquipmentArmorComponent(this.helmet, this.chestplate, this.leggins, this.boots);
     }
 }

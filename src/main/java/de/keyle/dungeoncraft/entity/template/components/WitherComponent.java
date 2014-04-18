@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.skeleton.EntityDungeonCraftSkeleton;
 
 
@@ -38,9 +37,14 @@ public class WitherComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        if (entity instanceof EntityDungeonCraftSkeleton) {
-            ((EntityDungeonCraftSkeleton) entity).setWither(wither);
+    public void onAttached() {
+        if (getOwner() instanceof EntityDungeonCraftSkeleton) {
+            ((EntityDungeonCraftSkeleton) getOwner()).setWither(wither);
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new WitherComponent(this.wither);
     }
 }

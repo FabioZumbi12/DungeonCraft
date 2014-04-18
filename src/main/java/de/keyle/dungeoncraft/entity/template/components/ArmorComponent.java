@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
 public class ArmorComponent extends EntityTemplateComponent {
     int armor = 0;
@@ -32,7 +31,12 @@ public class ArmorComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        entity.setArmor(entity.getArmor() + armor);
+    public void onAttached() {
+        getOwner().setArmor(getOwner().getArmor() + armor);
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new ArmorComponent(this.armor);
     }
 }

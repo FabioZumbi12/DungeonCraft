@@ -24,7 +24,6 @@ import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
 import de.keyle.dungeoncraft.entity.ai.attack.MeleeAttack;
 import de.keyle.dungeoncraft.entity.ai.target.HurtByTarget;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
 public class MeleeDamageComponent extends EntityTemplateComponent {
     double damage = 0;
@@ -38,8 +37,13 @@ public class MeleeDamageComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        entity.petPathfinderSelector.addGoal("MeleeAttack", new MeleeAttack(entity, 0.1F, 3, 20));
-        entity.petTargetSelector.addGoal("HurtByTarget", new HurtByTarget(entity));
+    public void onAttached() {
+        getOwner().petPathfinderSelector.addGoal("MeleeAttack", new MeleeAttack(getOwner(), 0.1F, 3, 20));
+        getOwner().petTargetSelector.addGoal("HurtByTarget", new HurtByTarget(getOwner()));
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new MeleeDamageComponent(this.damage);
     }
 }

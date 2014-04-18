@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.chicken.EntityDungeonCraftChicken;
 import de.keyle.dungeoncraft.entity.types.cow.EntityDungeonCraftCow;
 import de.keyle.dungeoncraft.entity.types.horse.EntityDungeonCraftHorse;
@@ -47,29 +46,34 @@ public class BabyComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        if (entity instanceof EntityDungeonCraftChicken) {
-            ((EntityDungeonCraftChicken) entity).setBaby(baby);
-        } else if (entity instanceof EntityDungeonCraftCow) {
-            ((EntityDungeonCraftCow) entity).setBaby(baby);
-        } else if (entity instanceof EntityDungeonCraftHorse) {
-            ((EntityDungeonCraftHorse) entity).setBaby(baby);
-        } else if (entity instanceof EntityDungeonCraftMooshroom) {
-            ((EntityDungeonCraftMooshroom) entity).setBaby(baby);
-        } else if (entity instanceof EntityDungeonCraftOcelot) {
-            ((EntityDungeonCraftOcelot) entity).setBaby(baby);
-        } else if (entity instanceof EntityDungeonCraftPig) {
-            ((EntityDungeonCraftPig) entity).setBaby(baby);
-        } else if (entity instanceof EntityDungeonCraftPigZombie) {
-            ((EntityDungeonCraftPigZombie) entity).setBaby(baby);
-        } else if (entity instanceof EntityDungeonCraftSheep) {
-            ((EntityDungeonCraftSheep) entity).setBaby(baby);
-        } else if (entity instanceof EntityDungeonCraftVillager) {
-            ((EntityDungeonCraftVillager) entity).setBaby(baby);
-        } else if (entity instanceof EntityDungeonCraftWolf) {
-            ((EntityDungeonCraftWolf) entity).setBaby(baby);
-        } else if (entity instanceof EntityDungeonCraftZombie) {
-            ((EntityDungeonCraftZombie) entity).setBaby(baby);
+    public void onAttached() {
+        if (getOwner() instanceof EntityDungeonCraftChicken) {
+            ((EntityDungeonCraftChicken) getOwner()).setBaby(baby);
+        } else if (getOwner() instanceof EntityDungeonCraftCow) {
+            ((EntityDungeonCraftCow) getOwner()).setBaby(baby);
+        } else if (getOwner() instanceof EntityDungeonCraftHorse) {
+            ((EntityDungeonCraftHorse) getOwner()).setBaby(baby);
+        } else if (getOwner() instanceof EntityDungeonCraftMooshroom) {
+            ((EntityDungeonCraftMooshroom) getOwner()).setBaby(baby);
+        } else if (getOwner() instanceof EntityDungeonCraftOcelot) {
+            ((EntityDungeonCraftOcelot) getOwner()).setBaby(baby);
+        } else if (getOwner() instanceof EntityDungeonCraftPig) {
+            ((EntityDungeonCraftPig) getOwner()).setBaby(baby);
+        } else if (getOwner() instanceof EntityDungeonCraftPigZombie) {
+            ((EntityDungeonCraftPigZombie) getOwner()).setBaby(baby);
+        } else if (getOwner() instanceof EntityDungeonCraftSheep) {
+            ((EntityDungeonCraftSheep) getOwner()).setBaby(baby);
+        } else if (getOwner() instanceof EntityDungeonCraftVillager) {
+            ((EntityDungeonCraftVillager) getOwner()).setBaby(baby);
+        } else if (getOwner() instanceof EntityDungeonCraftWolf) {
+            ((EntityDungeonCraftWolf) getOwner()).setBaby(baby);
+        } else if (getOwner() instanceof EntityDungeonCraftZombie) {
+            ((EntityDungeonCraftZombie) getOwner()).setBaby(baby);
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new BabyComponent(this.baby);
     }
 }

@@ -42,8 +42,8 @@ public class EntityFactory {
             entity.setCustomNameVisible(true);
         }
 
-        for (EntityTemplateComponent comonent : template.getComponents()) {
-            comonent.applyComponent(entity);
+        for (EntityTemplateComponent component : template.getComponents()) {
+            component.attachTo(entity);
         }
 
         return entity;

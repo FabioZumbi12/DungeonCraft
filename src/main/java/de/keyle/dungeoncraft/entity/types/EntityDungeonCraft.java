@@ -20,6 +20,7 @@
 
 package de.keyle.dungeoncraft.entity.types;
 
+import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.entity.ai.AIGoalSelector;
 import de.keyle.dungeoncraft.entity.ai.movement.LookAtPlayer;
 import de.keyle.dungeoncraft.entity.ai.movement.RandomLookaround;
@@ -33,9 +34,7 @@ import org.bukkit.craftbukkit.v1_7_R3.event.CraftEventFactory;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public abstract class EntityDungeonCraft extends EntityCreature implements IMonster {
     public AIGoalSelector petPathfinderSelector, petTargetSelector;
@@ -45,6 +44,7 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
     protected int idleSoundTimer = 0;
     public AbstractNavigation petNavigation;
     private Map<Float, org.bukkit.inventory.ItemStack> lootTable = new HashMap<Float, org.bukkit.inventory.ItemStack>();
+    public List<EntityTemplateComponent> components = new ArrayList<EntityTemplateComponent>();
     private int maxDrops;
     private int lootIterations;
 
@@ -481,6 +481,10 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
             getControllerMove().c(); // move
             getControllerLook().a(); // look
             getControllerJump().b(); // jump
+
+            for (EntityTemplateComponent component : components) {
+                component.tick();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             DebugLogger.printThrowable(e);

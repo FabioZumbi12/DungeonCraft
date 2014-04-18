@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.magmacube.EntityDungeonCraftMagmaCube;
 import de.keyle.dungeoncraft.entity.types.slime.EntityDungeonCraftSlime;
 
@@ -38,11 +37,16 @@ public class SizeComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        if (entity instanceof EntityDungeonCraftSlime) {
-            ((EntityDungeonCraftSlime) entity).setSize(size);
-        } else if (entity instanceof EntityDungeonCraftMagmaCube) {
-            ((EntityDungeonCraftMagmaCube) entity).setSize(size);
+    public void onAttached() {
+        if (getOwner() instanceof EntityDungeonCraftSlime) {
+            ((EntityDungeonCraftSlime) getOwner()).setSize(size);
+        } else if (getOwner() instanceof EntityDungeonCraftMagmaCube) {
+            ((EntityDungeonCraftMagmaCube) getOwner()).setSize(size);
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new SizeComponent(this.size);
     }
 }

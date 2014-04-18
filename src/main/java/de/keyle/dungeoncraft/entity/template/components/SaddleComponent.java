@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.horse.EntityDungeonCraftHorse;
 import de.keyle.dungeoncraft.entity.types.pig.EntityDungeonCraftPig;
 
@@ -38,11 +37,16 @@ public class SaddleComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        if (entity instanceof EntityDungeonCraftHorse) {
-            ((EntityDungeonCraftHorse) entity).setSaddle(saddle);
-        } else if (entity instanceof EntityDungeonCraftPig) {
-            ((EntityDungeonCraftPig) entity).setSaddle(saddle);
+    public void onAttached() {
+        if (getOwner() instanceof EntityDungeonCraftHorse) {
+            ((EntityDungeonCraftHorse) getOwner()).setSaddle(saddle);
+        } else if (getOwner() instanceof EntityDungeonCraftPig) {
+            ((EntityDungeonCraftPig) getOwner()).setSaddle(saddle);
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new SaddleComponent(this.saddle);
     }
 }

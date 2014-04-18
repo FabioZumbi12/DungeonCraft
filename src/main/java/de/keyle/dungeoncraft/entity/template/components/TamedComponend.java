@@ -22,8 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
-import de.keyle.dungeoncraft.entity.types.horse.EntityDungeonCraftHorse;
 import de.keyle.dungeoncraft.entity.types.wolf.EntityDungeonCraftWolf;
 
 
@@ -39,11 +37,14 @@ public class TamedComponend extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        if (entity instanceof EntityDungeonCraftWolf) {
-            ((EntityDungeonCraftWolf) entity).setTamed(tamed);
-        } else if (entity instanceof EntityDungeonCraftHorse) {
-            ((EntityDungeonCraftHorse) entity).setTamed(tamed);
+    public void onAttached() {
+        if (getOwner() instanceof EntityDungeonCraftWolf) {
+            ((EntityDungeonCraftWolf) getOwner()).setTamed(tamed);
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new TamedComponend(this.tamed);
     }
 }

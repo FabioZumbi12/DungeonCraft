@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.horse.EntityDungeonCraftHorse;
 
 
@@ -38,9 +37,14 @@ public class ChestComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        if (entity instanceof EntityDungeonCraftHorse) {
-            ((EntityDungeonCraftHorse) entity).setChest(chest);
+    public void onAttached() {
+        if (getOwner() instanceof EntityDungeonCraftHorse) {
+            ((EntityDungeonCraftHorse) getOwner()).setChest(chest);
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new ChestComponent(this.chest);
     }
 }

@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.sheep.EntityDungeonCraftSheep;
 import de.keyle.dungeoncraft.entity.types.wolf.EntityDungeonCraftWolf;
 
@@ -38,11 +37,16 @@ public class ColorComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        if (entity instanceof EntityDungeonCraftWolf) {
-            ((EntityDungeonCraftWolf) entity).setCollarColor(color);
-        } else if (entity instanceof EntityDungeonCraftSheep) {
-            ((EntityDungeonCraftSheep) entity).setColor(color);
+    public void onAttached() {
+        if (getOwner() instanceof EntityDungeonCraftWolf) {
+            ((EntityDungeonCraftWolf) getOwner()).setCollarColor(color);
+        } else if (getOwner() instanceof EntityDungeonCraftSheep) {
+            ((EntityDungeonCraftSheep) getOwner()).setColor(color);
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new ColorComponent(this.color);
     }
 }

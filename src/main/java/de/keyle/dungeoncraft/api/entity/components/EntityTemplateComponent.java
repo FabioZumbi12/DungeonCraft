@@ -22,7 +22,38 @@ package de.keyle.dungeoncraft.api.entity.components;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
-public abstract class EntityTemplateComponent {
+public abstract class EntityTemplateComponent implements Cloneable {
+    EntityDungeonCraft owner;
 
-    public abstract void applyComponent(EntityDungeonCraft entity);
+    public boolean canTick() {
+        return true;
+    }
+
+    public final void tick() {
+        if (canTick()) {
+            onTick();
+        }
+    }
+
+    public void onTick() {
+    }
+
+    public boolean attachTo(EntityDungeonCraft owner) {
+        EntityTemplateComponent newComponent = clone();
+        newComponent.owner = owner;
+        owner.components.add(newComponent);
+        newComponent.onAttached();
+        return true;
+    }
+
+    public abstract void onAttached();
+
+    public EntityDungeonCraft getOwner() {
+        if (owner == null) {
+            throw new IllegalStateException("Trying to access the owner of this component before it was attached");
+        }
+        return owner;
+    }
+
+    public abstract EntityTemplateComponent clone();
 }

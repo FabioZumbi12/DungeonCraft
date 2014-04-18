@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.villager.EntityDungeonCraftVillager;
 
 public class ProfessionComponent extends EntityTemplateComponent {
@@ -33,9 +32,14 @@ public class ProfessionComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        if (entity instanceof EntityDungeonCraftVillager) {
-            ((EntityDungeonCraftVillager) entity).setProfession(profession);
+    public void onAttached() {
+        if (getOwner() instanceof EntityDungeonCraftVillager) {
+            ((EntityDungeonCraftVillager) getOwner()).setProfession(profession);
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new ProfessionComponent(this.profession);
     }
 }

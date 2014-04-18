@@ -23,7 +23,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.enderman.EntityDungeonCraftEnderman;
 import de.keyle.dungeoncraft.entity.types.pigzombie.EntityDungeonCraftPigZombie;
 import de.keyle.dungeoncraft.entity.types.skeleton.EntityDungeonCraftSkeleton;
@@ -56,31 +55,31 @@ public class EquipmentWeaponComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
+    public void onAttached() {
         if (hasWeapon()) {
-            if (entity instanceof EntityDungeonCraftZombie) {
-                final EntityDungeonCraftZombie zombie = (EntityDungeonCraftZombie) entity;
+            if (getOwner() instanceof EntityDungeonCraftZombie) {
+                final EntityDungeonCraftZombie zombie = (EntityDungeonCraftZombie) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         zombie.setEntityEquipment(EquipmentSlot.Weapon.getSlotId(), weapon.getMinecraftItem());
                     }
                 }, 5L);
-            } else if (entity instanceof EntityDungeonCraftPigZombie) {
-                final EntityDungeonCraftPigZombie pigZombie = (EntityDungeonCraftPigZombie) entity;
+            } else if (getOwner() instanceof EntityDungeonCraftPigZombie) {
+                final EntityDungeonCraftPigZombie pigZombie = (EntityDungeonCraftPigZombie) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         pigZombie.setEntityEquipment(EquipmentSlot.Weapon.getSlotId(), weapon.getMinecraftItem());
                     }
                 }, 5L);
-            } else if (entity instanceof EntityDungeonCraftSkeleton) {
-                final EntityDungeonCraftSkeleton skeleton = (EntityDungeonCraftSkeleton) entity;
+            } else if (getOwner() instanceof EntityDungeonCraftSkeleton) {
+                final EntityDungeonCraftSkeleton skeleton = (EntityDungeonCraftSkeleton) getOwner();
                 Bukkit.getScheduler().runTaskLater(DungeonCraftPlugin.getPlugin(), new Runnable() {
                     public void run() {
                         skeleton.setEntityEquipment(EquipmentSlot.Weapon.getSlotId(), weapon.getMinecraftItem());
                     }
                 }, 5L);
-            } else if (entity instanceof EntityDungeonCraftEnderman) {
-                EntityDungeonCraftEnderman enderman = (EntityDungeonCraftEnderman) entity;
+            } else if (getOwner() instanceof EntityDungeonCraftEnderman) {
+                EntityDungeonCraftEnderman enderman = (EntityDungeonCraftEnderman) getOwner();
                 enderman.setBlock(weapon.getBukkitItem().getTypeId(), weapon.getBukkitItem().getData().getData());
             }
         }

@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.enderman.EntityDungeonCraftEnderman;
 import de.keyle.dungeoncraft.entity.types.wolf.EntityDungeonCraftWolf;
 
@@ -39,11 +38,16 @@ public class AngryComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        if (entity instanceof EntityDungeonCraftWolf) {
-            ((EntityDungeonCraftWolf) entity).setAngry(angry);
-        } else if (entity instanceof EntityDungeonCraftEnderman) {
-            ((EntityDungeonCraftEnderman) entity).setScreaming(angry);
+    public void onAttached() {
+        if (getOwner() instanceof EntityDungeonCraftWolf) {
+            ((EntityDungeonCraftWolf) getOwner()).setAngry(angry);
+        } else if (getOwner() instanceof EntityDungeonCraftEnderman) {
+            ((EntityDungeonCraftEnderman) getOwner()).setScreaming(angry);
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new AngryComponent(this.angry);
     }
 }

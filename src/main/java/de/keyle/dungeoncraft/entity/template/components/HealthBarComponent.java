@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 
 public class HealthBarComponent extends EntityTemplateComponent {
     boolean visible = true;
@@ -36,6 +35,11 @@ public class HealthBarComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
+    public void onAttached() {
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new HealthBarComponent(this.visible);
     }
 }

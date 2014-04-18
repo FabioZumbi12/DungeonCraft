@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.ocelot.EntityDungeonCraftOcelot;
 
 public class CatComponent extends EntityTemplateComponent {
@@ -33,9 +32,14 @@ public class CatComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        if (entity instanceof EntityDungeonCraftOcelot) {
-            ((EntityDungeonCraftOcelot) entity).setCatType(catType);
+    public void onAttached() {
+        if (getOwner() instanceof EntityDungeonCraftOcelot) {
+            ((EntityDungeonCraftOcelot) getOwner()).setCatType(catType);
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new CatComponent(this.catType);
     }
 }

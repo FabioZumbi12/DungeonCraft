@@ -22,7 +22,6 @@ package de.keyle.dungeoncraft.entity.template.components;
 
 import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.api.entity.components.Parameter;
-import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.creeper.EntityDungeonCraftCreeper;
 
 
@@ -38,9 +37,14 @@ public class PoweredComponent extends EntityTemplateComponent {
     }
 
     @Override
-    public void applyComponent(EntityDungeonCraft entity) {
-        if (entity instanceof EntityDungeonCraftCreeper) {
-            ((EntityDungeonCraftCreeper) entity).setPowered(powered);
+    public void onAttached() {
+        if (getOwner() instanceof EntityDungeonCraftCreeper) {
+            ((EntityDungeonCraftCreeper) getOwner()).setPowered(powered);
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new PoweredComponent(this.powered);
     }
 }

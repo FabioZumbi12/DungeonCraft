@@ -98,7 +98,18 @@ public class DungeonCraftPlugin extends JavaPlugin {
 
         new File(getPlugin().getDataFolder(), "dungeons").mkdirs();
         new File(getPlugin().getDataFolder(), "logs").mkdirs();
-        new File(getPlugin().getDataFolder().getAbsolutePath() + File.separator + "logs", "dungeon").mkdirs();
+        File dungeonLogFolder = new File(getPlugin().getDataFolder().getAbsolutePath() + File.separator + "logs", "dungeon");
+        dungeonLogFolder.mkdirs();
+        if (dungeonLogFolder.exists() && dungeonLogFolder.isDirectory()) {
+            File[] files = dungeonLogFolder.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    if (f.getName().endsWith(".log.lck")) {
+                        f.delete();
+                    }
+                }
+            }
+        }
 
         File rhino = new File(getPlugin().getDataFolder(), "js.jar");
 

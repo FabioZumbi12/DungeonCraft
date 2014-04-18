@@ -26,11 +26,13 @@ import org.bukkit.ChatColor;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
 public class DungeonLogger {
+    private static SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd_HH.mm.S");
     private Logger logger;
     private boolean isEnabled = false;
     private Dungeon dungeon;
@@ -53,7 +55,7 @@ public class DungeonLogger {
             }
         }
         try {
-            fileHandler = new FileHandler(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "logs" + File.separator + "dungeon" + File.separator + dungeon.getDungeonBase().getName() + "_" + dungeon.getDungeonName() + "_" + System.currentTimeMillis() + ".log", true) {
+            fileHandler = new FileHandler(DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "logs" + File.separator + "dungeon" + File.separator + dungeon.getDungeonBase().getName() + "_" + dungeon.getDungeonName() + "_" + df.format(System.currentTimeMillis()) + ".log", true) {
                 @Override
                 public String toString() {
                     return "DungeonCraft-Dungeon-Logger-FileHandler";

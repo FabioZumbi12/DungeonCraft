@@ -22,6 +22,8 @@ package de.keyle.dungeoncraft.entity.types.pigzombie;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
+import de.keyle.dungeoncraft.util.DungeonCraftVersion;
+import de.keyle.dungeoncraft.util.Util;
 import net.minecraft.server.v1_7_R3.ItemStack;
 import net.minecraft.server.v1_7_R3.PacketPlayOutEntityEquipment;
 import net.minecraft.server.v1_7_R3.World;
@@ -29,6 +31,8 @@ import net.minecraft.server.v1_7_R3.WorldServer;
 
 @EntityInfo(width = 0.6F, height = 1.9F)
 public class EntityDungeonCraftPigZombie extends EntityDungeonCraft {
+    ItemStack[] shownEquipment = new ItemStack[5];
+
     public EntityDungeonCraftPigZombie(World world) {
         super(world);
     }
@@ -65,6 +69,16 @@ public class EntityDungeonCraftPigZombie extends EntityDungeonCraft {
     }
 
     public void setEntityEquipment(int slot, ItemStack itemStack) {
+        shownEquipment[slot] = itemStack;
         ((WorldServer) this.world).getTracker().a(this, new PacketPlayOutEntityEquipment(getId(), slot, itemStack));
+    }
+
+    public ItemStack getEquipment(int i) {
+        if (Util.findClassInStackTrace(Thread.currentThread().getStackTrace(), "net.minecraft.server." + DungeonCraftVersion.getBukkitPacket() + ".EntityTrackerEntry", 2)) {
+            if (shownEquipment[i] != null) {
+                return shownEquipment[i];
+            }
+        }
+        return super.getEquipment(i);
     }
 }

@@ -22,6 +22,7 @@ package de.keyle.dungeoncraft.util;
 
 import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.locale.Locales;
+import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.WordUtils;
@@ -111,5 +112,35 @@ public class Util {
                 + Util.formatText(Locales.getString("Terms.Common.Hours", dungeonCraftPlayer), hours)
                 + Util.formatText(Locales.getString("Terms.Common.Minutes", dungeonCraftPlayer), minutes)
                 + Util.formatText(Locales.getString("Terms.Common.Seconds", dungeonCraftPlayer), seconds));
+    }
+
+    public static boolean findClassInStackTrace(StackTraceElement[] stackTrace, String className) {
+        return findClassInStackTrace(stackTrace, className, 0, stackTrace.length - 1, false);
+    }
+
+    public static boolean findClassInStackTrace(StackTraceElement[] stackTrace, String className, int element) {
+        return findClassInStackTrace(stackTrace, className, element, element, false);
+    }
+
+    public static boolean findClassInStackTrace(StackTraceElement[] stackTrace, String className, int from, int to, boolean debug) {
+        Validate.isTrue(to >= from, "\"to\" has to be >= \"from\".");
+        Validate.isTrue(from >= 0, "\"from\" has to be >= 0.");
+        to = Math.min(stackTrace.length - 1, to);
+        if (debug) {
+            DebugLogger.info("=====================================================================================================================================");
+        }
+        for (int i = from; i <= to; i++) {
+            DebugLogger.info("  " + i + ": " + stackTrace[i].getClassName());
+            if (stackTrace[i].getClassName().equals(className)) {
+                if (debug) {
+                    DebugLogger.info("=====================================================================================================================================");
+                }
+                return true;
+            }
+        }
+        if (debug) {
+            DebugLogger.info("=====================================================================================================================================");
+        }
+        return false;
     }
 }

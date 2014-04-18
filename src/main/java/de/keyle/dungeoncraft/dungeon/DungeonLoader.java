@@ -29,9 +29,9 @@ import de.keyle.dungeoncraft.util.schematic.Schematic;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import de.keyle.knbt.TagCompound;
 import de.keyle.knbt.TagString;
-import net.minecraft.server.v1_7_R2.*;
+import net.minecraft.server.v1_7_R3.*;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_7_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_7_R3.CraftWorld;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -154,14 +154,14 @@ public class DungeonLoader extends Thread {
     }
 
     public void spawnEntities() {
-        net.minecraft.server.v1_7_R2.World world = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
+        net.minecraft.server.v1_7_R3.World world = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
         for (Entity entity : this.entities) {
             world.addEntity(entity);
         }
     }
 
     public void loadEntities(Schematic schematic) {
-        net.minecraft.server.v1_7_R2.World world = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
+        net.minecraft.server.v1_7_R3.World world = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
         Map<Vector, TagCompound> entities = schematic.getEntities();
         for (Vector pos : entities.keySet()) {
             Entity entity = null;

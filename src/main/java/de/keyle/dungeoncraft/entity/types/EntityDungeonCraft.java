@@ -26,8 +26,11 @@ import de.keyle.dungeoncraft.entity.ai.movement.RandomLookaround;
 import de.keyle.dungeoncraft.entity.ai.navigation.AbstractNavigation;
 import de.keyle.dungeoncraft.entity.ai.navigation.VanillaNavigation;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
-import net.minecraft.server.v1_7_R2.*;
+import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
+import net.minecraft.server.v1_7_R3.*;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_7_R3.event.CraftEventFactory;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -120,21 +123,6 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
         return false;
     }
 
-    public boolean damageEntity(DamageSource damagesource, int i) {
-        boolean damageEntity = false;
-        try {
-            Entity entity = damagesource.getEntity();
-
-            if (entity != null && !(entity instanceof EntityHuman) && !(entity instanceof EntityArrow)) {
-                i = (i + 1) / 2;
-            }
-            damageEntity = super.damageEntity(damagesource, i);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return damageEntity;
-    }
-
     public void setLootTable(Map<Float, org.bukkit.inventory.ItemStack> lootTable) {
         if (lootTable != null) {
             this.lootTable = lootTable;
@@ -173,6 +161,120 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
             e.printStackTrace();
         }
         return damageEntity;
+    }
+
+    public ItemStack getEquipment(int i) {
+        if (Thread.currentThread().getStackTrace()[2].getClassName().equals("net.minecraft.server.v1_7_R3.EntityTrackerEntry")) {
+            DungeonCraftLogger.write("get EQ: " + Thread.currentThread().getStackTrace()[2].getClassName());
+            DebugLogger.printStackTrace(Thread.currentThread().getStackTrace());
+        }
+        return super.getEquipment(i);
+    }
+
+    public boolean damageEntity(DamageSource damagesource, float damage) {
+
+        if (isInvulnerable()) {
+            return false;
+        }
+
+        this.aU = 0;
+        if (getHealth() <= 0.0F) {
+            return false;
+        }
+        if ((damagesource.o()) && (hasEffect(MobEffectList.FIRE_RESISTANCE))) {
+            return false;
+        }
+        if ((damagesource == DamageSource.ANVIL || damagesource == DamageSource.FALLING_BLOCK) && getEquipment(4) != null) {
+            getEquipment(4).damage((int) (damage * 4.0F + this.random.nextFloat() * damage * 2.0F), this);
+            damage *= 0.75F;
+        }
+
+        this.aF = 1.5F;
+        boolean flag = true;
+
+        EntityDamageEvent event = CraftEventFactory.handleEntityDamageEvent(this, damagesource, damage);
+        if (event != null) {
+            if (event.isCancelled()) {
+                return false;
+            }
+            damage = (float) event.getDamage();
+        }
+
+        if (this.noDamageTicks > this.maxNoDamageTicks / 2.0F) {
+            if (damage <= this.lastDamage) {
+                return false;
+            }
+
+            d(damagesource, damage - this.lastDamage);
+            this.lastDamage = damage;
+            flag = false;
+        } else {
+            this.lastDamage = damage;
+            this.aw = getHealth();
+            this.noDamageTicks = this.maxNoDamageTicks;
+            d(damagesource, damage);
+            this.hurtTicks = (this.ay = 10);
+        }
+
+        this.az = 0.0F;
+        Entity entity = damagesource.getEntity();
+
+        if (entity != null) {
+            if (entity instanceof EntityLiving) {
+                b((EntityLiving) entity);
+            }
+
+            if (entity instanceof EntityHuman) {
+                this.lastDamageByPlayerTime = 100;
+                this.killer = ((EntityHuman) entity);
+            } else if (entity instanceof EntityWolf) {
+                EntityWolf entitywolf = (EntityWolf) entity;
+
+                if (entitywolf.isTamed()) {
+                    this.lastDamageByPlayerTime = 100;
+                    this.killer = null;
+                }
+            }
+        }
+
+        if (flag) {
+            this.world.broadcastEntityEffect(this, (byte) 2);
+            if (damagesource != DamageSource.DROWN) {
+                P();
+            }
+
+            if (entity != null) {
+                double deltaX = entity.locX - this.locX;
+                double deltaZ = entity.locZ - this.locZ;
+
+                for (; deltaX * deltaX + deltaZ * deltaZ < 0.0001D; deltaZ = (Math.random() - Math.random()) * 0.01D) {
+                    deltaX = (Math.random() - Math.random()) * 0.01D;
+                }
+
+                this.az = ((float) (Math.atan2(deltaZ, deltaX) * 180.0D / 3.141592741012573D) - this.yaw);
+                a(entity, damage, deltaX, deltaZ);
+            } else {
+                this.az = ((int) (Math.random() * 2.0D) * 180);
+            }
+
+        }
+
+        if (getHealth() <= 0.0F) {
+            String deathSound = getDeathSound();
+            if ((flag) && (deathSound != null)) {
+                makeSound(deathSound, be(), getSoundSpeed());
+            }
+            die(damagesource);
+        } else {
+            String hurtSound = getHurtSound();
+            if (flag && hurtSound != null) {
+                makeSound(hurtSound, be(), getSoundSpeed());
+            }
+        }
+        return true;
+    }
+
+    public void dropEquipment(boolean b, int i) {
     }
 
     @Override

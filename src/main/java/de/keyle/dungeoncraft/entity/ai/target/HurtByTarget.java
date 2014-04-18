@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.entity.ai.target;
 
 import de.keyle.dungeoncraft.api.entity.ai.AIGoal;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
-import net.minecraft.server.v1_7_R2.EntityLiving;
+import net.minecraft.server.v1_7_R3.EntityLiving;
 
 public class HurtByTarget extends AIGoal {
     EntityDungeonCraft entityDungeonCraft;

@@ -23,7 +23,7 @@ package de.keyle.dungeoncraft.entity.types.squid;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
 import de.keyle.dungeoncraft.util.BukkitUtil;
-import net.minecraft.server.v1_7_R2.World;
+import net.minecraft.server.v1_7_R3.World;
 
 @EntityInfo(width = 0.95F, height = 0.95F)
 public class EntityDungeonCraftSquid extends EntityDungeonCraft {

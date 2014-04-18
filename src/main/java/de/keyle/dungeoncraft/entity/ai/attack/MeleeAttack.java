@@ -25,7 +25,7 @@ import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.pigzombie.EntityDungeonCraftPigZombie;
 import de.keyle.dungeoncraft.entity.types.skeleton.EntityDungeonCraftSkeleton;
 import de.keyle.dungeoncraft.entity.types.zombie.EntityDungeonCraftZombie;
-import net.minecraft.server.v1_7_R2.EntityLiving;
+import net.minecraft.server.v1_7_R3.EntityLiving;
 
 public class MeleeAttack extends AIGoal {
     EntityDungeonCraft entityDungeonCraft;

@@ -22,9 +22,9 @@ package de.keyle.dungeoncraft.dungeon.generator;
 
 import de.keyle.dungeoncraft.dungeon.Dungeon;
 import de.keyle.dungeoncraft.dungeon.DungeonManager;
-import net.minecraft.server.v1_7_R2.*;
+import net.minecraft.server.v1_7_R3.*;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_7_R2.util.LongHash;
+import org.bukkit.craftbukkit.v1_7_R3.util.LongHash;
 import org.bukkit.generator.ChunkGenerator;
 
 import java.lang.reflect.InvocationTargetException;

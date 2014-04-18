@@ -32,8 +32,8 @@ import de.keyle.dungeoncraft.entity.template.EntityTemplateRegistry;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_7_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_7_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
 
 public class SpawnTemplateEntityCommand {
     @Command(name = "dcste")
@@ -50,7 +50,7 @@ public class SpawnTemplateEntityCommand {
                     EntityTemplate et = r.getTemplate(args.getArgs().get(0));
                     if (et != null) {
                         EntityDungeonCraft entity = EntityFactory.createEntityByTemplate(et);
-                        net.minecraft.server.v1_7_R2.World mcWorld = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
+                        net.minecraft.server.v1_7_R3.World mcWorld = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
                         entity.setPosition(pLocation.getX(), pLocation.getY(), pLocation.getZ());
                         mcWorld.addEntity(entity);
                     }

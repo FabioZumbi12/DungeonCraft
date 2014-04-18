@@ -21,7 +21,7 @@
 package de.keyle.dungeoncraft.util.schematic;
 
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
-import net.minecraft.server.v1_7_R2.Block;
+import net.minecraft.server.v1_7_R3.Block;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

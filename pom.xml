@@ -32,8 +32,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <minecraft.version>1.7.5</minecraft.version>
+        <minecraft.version>1.7.9</minecraft.version>
         <bukkit.version>R0.1-SNAPSHOT</bukkit.version>
+        <bukkit.packet>v1_7_R3</bukkit.packet>
 
         <vault.version>1.2.30</vault.version>
         <worldedit.version>5.5.8</worldedit.version>

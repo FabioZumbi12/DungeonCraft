@@ -20,7 +20,7 @@
 
 package de.keyle.dungeoncraft.dungeon.generator;
 
-import net.minecraft.server.v1_7_R2.*;
+import net.minecraft.server.v1_7_R3.*;
 
 import java.util.List;
 import java.util.Random;

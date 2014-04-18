@@ -22,10 +22,10 @@ package de.keyle.dungeoncraft.entity.types.pigzombie;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
-import net.minecraft.server.v1_7_R2.ItemStack;
-import net.minecraft.server.v1_7_R2.PacketPlayOutEntityEquipment;
-import net.minecraft.server.v1_7_R2.World;
-import net.minecraft.server.v1_7_R2.WorldServer;
+import net.minecraft.server.v1_7_R3.ItemStack;
+import net.minecraft.server.v1_7_R3.PacketPlayOutEntityEquipment;
+import net.minecraft.server.v1_7_R3.World;
+import net.minecraft.server.v1_7_R3.WorldServer;
 
 @EntityInfo(width = 0.6F, height = 1.9F)
 public class EntityDungeonCraftPigZombie extends EntityDungeonCraft {

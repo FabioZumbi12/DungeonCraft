@@ -33,6 +33,7 @@ public class DungeonCraftVersion {
     private static String version = "0.0.0";
     private static String build = "0";
     private static String minecraftVersion = "0.0.0";
+    private static String bukkitPacket = "v0_0_R0";
 
     private static void getManifestVersion() {
         try {
@@ -47,6 +48,9 @@ public class DungeonCraftVersion {
             }
             if (attr.getValue("Project-Minecraft-Version") != null) {
                 minecraftVersion = attr.getValue("Project-Minecraft-Version");
+            }
+            if (attr.getValue("Project-Bukkit-Packet") != null) {
+                bukkitPacket = attr.getValue("Project-Bukkit-Packet");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,6 +89,14 @@ public class DungeonCraftVersion {
             updated = true;
         }
         return minecraftVersion;
+    }
+
+    public static String getBukkitPacket() {
+        if (!updated) {
+            getManifestVersion();
+            updated = true;
+        }
+        return bukkitPacket;
     }
 
     public static void reset() {

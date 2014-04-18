@@ -23,7 +23,7 @@ package de.keyle.dungeoncraft.entity.types.giant;
 import de.keyle.dungeoncraft.entity.ai.attack.MeleeAttack;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
-import net.minecraft.server.v1_7_R2.World;
+import net.minecraft.server.v1_7_R3.World;
 
 @EntityInfo(width = 5.5f, height = 5.5F)
 public class EntityDungeonCraftGiant extends EntityDungeonCraft {

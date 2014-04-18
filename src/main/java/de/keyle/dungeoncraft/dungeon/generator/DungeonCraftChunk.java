@@ -20,10 +20,10 @@
 
 package de.keyle.dungeoncraft.dungeon.generator;
 
-import net.minecraft.server.v1_7_R2.Chunk;
-import net.minecraft.server.v1_7_R2.ChunkSection;
-import net.minecraft.server.v1_7_R2.EnumSkyBlock;
-import net.minecraft.server.v1_7_R2.World;
+import net.minecraft.server.v1_7_R3.Chunk;
+import net.minecraft.server.v1_7_R3.ChunkSection;
+import net.minecraft.server.v1_7_R3.EnumSkyBlock;
+import net.minecraft.server.v1_7_R3.World;
 
 import java.util.Arrays;
 
@@ -99,8 +99,7 @@ public class DungeonCraftChunk extends Chunk {
                                 }
                             }
                             ++y;
-                        }
-                        while (y < topY && lightValue > 0);
+                        } while (y < topY && lightValue > 0);
                     }
                     ++z;
                     break;

@@ -22,7 +22,7 @@ package de.keyle.dungeoncraft.entity.types.silverfish;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import de.keyle.dungeoncraft.entity.types.EntityInfo;
-import net.minecraft.server.v1_7_R2.World;
+import net.minecraft.server.v1_7_R3.World;
 
 @EntityInfo(width = 0.3F, height = 0.7F)
 public class EntityDungeonCraftSilverfish extends EntityDungeonCraft {

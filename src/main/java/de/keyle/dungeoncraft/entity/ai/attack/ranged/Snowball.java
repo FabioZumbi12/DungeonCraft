@@ -21,9 +21,9 @@
 package de.keyle.dungeoncraft.entity.ai.attack.ranged;
 
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
-import net.minecraft.server.v1_7_R2.*;
-import org.bukkit.craftbukkit.v1_7_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_7_R2.entity.CraftSnowball;
+import net.minecraft.server.v1_7_R3.*;
+import org.bukkit.craftbukkit.v1_7_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_7_R3.entity.CraftSnowball;
 
 public class Snowball extends EntitySnowball implements Projectile {
     protected float damage = 0;

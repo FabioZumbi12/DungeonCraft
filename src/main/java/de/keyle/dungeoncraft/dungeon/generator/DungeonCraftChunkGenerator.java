@@ -20,8 +20,8 @@
 
 package de.keyle.dungeoncraft.dungeon.generator;
 
-import net.minecraft.server.v1_7_R2.ChunkProviderGenerate;
-import net.minecraft.server.v1_7_R2.World;
+import net.minecraft.server.v1_7_R3.ChunkProviderGenerate;
+import net.minecraft.server.v1_7_R3.World;
 
 public class DungeonCraftChunkGenerator extends ChunkProviderGenerate {
 

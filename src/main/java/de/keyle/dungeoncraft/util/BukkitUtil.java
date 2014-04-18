@@ -26,15 +26,15 @@ import de.keyle.dungeoncraft.party.DungeonCraftPlayer;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import de.keyle.dungeoncraft.util.vector.Vector;
 import de.keyle.knbt.*;
-import net.minecraft.server.v1_7_R2.*;
+import net.minecraft.server.v1_7_R3.*;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_7_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_7_R2.entity.CraftItem;
-import org.bukkit.craftbukkit.v1_7_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_7_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_7_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_7_R3.entity.CraftItem;
+import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -208,7 +208,7 @@ public class BukkitUtil {
     }
 
     public static org.bukkit.inventory.ItemStack getItemStackFromString(String itemName, int quantity) {
-        return new ItemStack(CraftItemStack.asBukkitCopy(new net.minecraft.server.v1_7_R2.ItemStack(BukkitUtil.getItem(itemName))).getType(), quantity);
+        return new ItemStack(CraftItemStack.asBukkitCopy(new net.minecraft.server.v1_7_R3.ItemStack(BukkitUtil.getItem(itemName))).getType(), quantity);
     }
 
     public static boolean isRealPlayer(Player player) {

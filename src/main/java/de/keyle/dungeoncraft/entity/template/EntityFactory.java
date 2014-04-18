@@ -24,11 +24,11 @@ import de.keyle.dungeoncraft.api.entity.components.EntityTemplateComponent;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import de.keyle.dungeoncraft.entity.types.EntityDungeonCraft;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_7_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_7_R3.CraftWorld;
 
 public class EntityFactory {
     public static EntityDungeonCraft createEntityByTemplate(EntityTemplate template) {
-        net.minecraft.server.v1_7_R2.World mcWorld = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
+        net.minecraft.server.v1_7_R3.World mcWorld = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
         EntityDungeonCraft entity = template.getType().getNewEntityInstance(mcWorld);
 
         entity.getBukkitEntity().setMaxHealth(template.getMaxHealth());

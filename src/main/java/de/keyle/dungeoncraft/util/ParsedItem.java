@@ -20,18 +20,18 @@
 
 package de.keyle.dungeoncraft.util;
 
-import net.minecraft.server.v1_7_R2.Item;
-import net.minecraft.server.v1_7_R2.MojangsonParser;
-import net.minecraft.server.v1_7_R2.NBTBase;
-import net.minecraft.server.v1_7_R2.NBTTagCompound;
-import org.bukkit.craftbukkit.v1_7_R2.inventory.CraftItemStack;
+import net.minecraft.server.v1_7_R3.Item;
+import net.minecraft.server.v1_7_R3.MojangsonParser;
+import net.minecraft.server.v1_7_R3.NBTBase;
+import net.minecraft.server.v1_7_R3.NBTTagCompound;
+import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONObject;
 
 public class ParsedItem {
-    net.minecraft.server.v1_7_R2.ItemStack item = null;
+    net.minecraft.server.v1_7_R3.ItemStack item = null;
 
-    public ParsedItem(net.minecraft.server.v1_7_R2.ItemStack item) {
+    public ParsedItem(net.minecraft.server.v1_7_R3.ItemStack item) {
         this.item = item;
     }
 
@@ -42,7 +42,7 @@ public class ParsedItem {
         this.item = CraftItemStack.asNMSCopy(item);
     }
 
-    public net.minecraft.server.v1_7_R2.ItemStack getMinecraftItem() {
+    public net.minecraft.server.v1_7_R3.ItemStack getMinecraftItem() {
         return item;
     }
 
@@ -84,7 +84,7 @@ public class ParsedItem {
         }
         if (itemId != 0) {
 
-            net.minecraft.server.v1_7_R2.ItemStack is = new net.minecraft.server.v1_7_R2.ItemStack(Item.d(itemId), 1, itemDamage);
+            net.minecraft.server.v1_7_R3.ItemStack is = new net.minecraft.server.v1_7_R3.ItemStack(Item.d(itemId), 1, itemDamage);
             if (nbtBase != null && nbtBase instanceof NBTTagCompound) {
                 is.setTag((NBTTagCompound) nbtBase);
             }
@@ -107,7 +107,7 @@ public class ParsedItem {
                 if (jsonData.containsKey("count") && Util.isInt(jsonData.get("count").toString())) {
                     amount = Integer.parseInt(jsonData.get("count").toString());
                 }
-                net.minecraft.server.v1_7_R2.ItemStack itemStack = new net.minecraft.server.v1_7_R2.ItemStack(item, amount, data);
+                net.minecraft.server.v1_7_R3.ItemStack itemStack = new net.minecraft.server.v1_7_R3.ItemStack(item, amount, data);
                 if (jsonData.containsKey("tag")) {
                     String tagString = jsonData.get("tag").toString();
                     NBTBase localNBTBase = MojangsonParser.parse(tagString);

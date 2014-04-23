@@ -35,38 +35,22 @@ import net.minecraft.server.v1_7_R3.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R3.CraftWorld;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DungeonLoader extends Thread {
-    private static final Queue<DungeonLoader> LOADER_QUEUE = new ArrayDeque<DungeonLoader>();
-    private volatile static DungeonLoader runningLoader = null;
-
+    private volatile boolean finished = false;
     private final Dungeon dungeon;
     private final List<Entity> entities = new ArrayList<Entity>();
 
-    public DungeonLoader(Dungeon dungeon) {
+    protected DungeonLoader(Dungeon dungeon) {
         this.dungeon = dungeon;
     }
 
-    public synchronized boolean isInQueue() {
-        return runningLoader != this;
-    }
-
-    public void startLoader() {
-        synchronized (LOADER_QUEUE) {
-            LOADER_QUEUE.add(this);
-
-            if (runningLoader == null && LOADER_QUEUE.size() == 1) {
-                runNextLoader();
-            }
-        }
-    }
-
-    @Override
-    public void start() {
-        runningLoader = this;
-        super.start();
+    public Dungeon getDungeon() {
+        return dungeon;
     }
 
     public void run() {
@@ -137,20 +121,7 @@ public class DungeonLoader extends Thread {
         dungeon.getDungeonLogger().info("Trigger Loading DONE");
 
         dungeon.setReady();
-
-        runNextLoader();
-    }
-
-    private static void runNextLoader() {
-        synchronized (LOADER_QUEUE) {
-            if (LOADER_QUEUE.size() > 0) {
-                DungeonLoader loader = LOADER_QUEUE.poll();
-                runningLoader = loader;
-                loader.start();
-                return;
-            }
-        }
-        runningLoader = null;
+        finished = true;
     }
 
     public void spawnEntities() {
@@ -162,10 +133,10 @@ public class DungeonLoader extends Thread {
 
     public void loadEntities(Schematic schematic) {
         net.minecraft.server.v1_7_R3.World world = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
-        Map<Vector, TagCompound> entities = schematic.getEntities();
-        for (Vector pos : entities.keySet()) {
-            NBTTagCompound entityCompound = (NBTTagCompound) BukkitUtil.compoundToVanillaCompound(entities.get(pos));
-            Entity newEntity = EntityTypes.a(entityCompound, world);
+        Map<Vector, TagCompound> schematicEntities = schematic.getEntities();
+        for (Vector pos : schematicEntities.keySet()) {
+            NBTTagCompound entityCompound = (NBTTagCompound) BukkitUtil.compoundToVanillaCompound(schematicEntities.get(pos));
+            Entity newEntity = EntityTypes.a(entityCompound, world); // create new Entity from NBT tag
             if (newEntity != null && !(newEntity instanceof EntityLiving)) {
                 newEntity.locX = pos.getX() + (dungeon.position.getChunkX() * 16);
                 newEntity.locY = pos.getY();
@@ -173,5 +144,9 @@ public class DungeonLoader extends Thread {
                 this.entities.add(newEntity);
             }
         }
+    }
+
+    public boolean isFinished() {
+        return finished;
     }
 }

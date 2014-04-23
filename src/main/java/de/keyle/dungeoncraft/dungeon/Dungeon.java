@@ -110,7 +110,7 @@ public class Dungeon implements Scheduler {
     }
 
     public boolean isLoading() {
-        return isLoading || loader != null;
+        return isLoading || (loader != null && !loader.isFinished());
     }
 
     public String getDungeonName() {
@@ -133,7 +133,7 @@ public class Dungeon implements Scheduler {
         isLoading = true;
         DungeonCraftPlayer partyLeader = playerParty.getPartyLeader();
         if (partyLeader.isOnline()) {
-            partyLeader.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Loading", partyLeader));
+            partyLeader.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Loader.Start", partyLeader));
         }
     }
 
@@ -437,12 +437,11 @@ public class Dungeon implements Scheduler {
             return;
         }
         if (!isLoading && loader == null) {
-            loader = new DungeonLoader(this);
-            loader.startLoader();
-            if (loader.isInQueue()) {
+            loader = DungeonCraftPlugin.getDungeonLoaderQueue().loadDungeon(this);
+            if (DungeonCraftPlugin.getDungeonLoaderQueue().isOnQueue(this)) {
                 DungeonCraftPlayer partyLeader = playerParty.getPartyLeader();
                 if (partyLeader.isOnline()) {
-                    partyLeader.getPlayer().sendMessage(Locales.getString("Message.Dungeon.InQueue", partyLeader));
+                    partyLeader.getPlayer().sendMessage(Locales.getString("Message.Dungeon.Loader.Queue.Add", partyLeader));
                 }
             }
         }

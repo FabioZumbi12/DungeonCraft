@@ -23,6 +23,7 @@ package de.keyle.dungeoncraft;
 import de.keyle.command.framework.CommandFramework;
 import de.keyle.dungeoncraft.commands.*;
 import de.keyle.dungeoncraft.dungeon.DungeonBaseLoader;
+import de.keyle.dungeoncraft.dungeon.DungeonLoaderQueue;
 import de.keyle.dungeoncraft.dungeon.entrance.DungeonEntranceRegistry;
 import de.keyle.dungeoncraft.dungeon.generator.DungeonCraftWorld;
 import de.keyle.dungeoncraft.entity.types.bat.EntityDungeonCraftBat;
@@ -62,6 +63,7 @@ import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.Configuration;
 import de.keyle.dungeoncraft.util.DungeonCraftVersion;
 import de.keyle.dungeoncraft.util.SQLite.SQLiteDataModel;
+import de.keyle.dungeoncraft.util.Schedule;
 import de.keyle.dungeoncraft.util.locale.Locales;
 import de.keyle.dungeoncraft.util.logger.DebugLogger;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
@@ -77,7 +79,9 @@ import java.util.Arrays;
 
 public class DungeonCraftPlugin extends JavaPlugin {
     private static DungeonCraftPlugin plugin;
-    CommandFramework framework;
+    private static DungeonLoaderQueue dungeonLoaderQueue;
+    private static Schedule scheduler;
+    private CommandFramework framework;
 
     public void onDisable() {
         DungeonCraftLogger.setConsole(null);
@@ -194,6 +198,10 @@ public class DungeonCraftPlugin extends JavaPlugin {
 
         DungeonCraftWorld.createWorld();
 
+        dungeonLoaderQueue = new DungeonLoaderQueue();
+        scheduler = new Schedule();
+        scheduler.scheduleRepeatingTask(dungeonLoaderQueue, 1);
+
         try {
             Metrics metrics = new Metrics(this);
             boolean metricsActive = false;
@@ -217,6 +225,14 @@ public class DungeonCraftPlugin extends JavaPlugin {
 
     public static DungeonCraftPlugin getPlugin() {
         return plugin;
+    }
+
+    public static DungeonLoaderQueue getDungeonLoaderQueue() {
+        return dungeonLoaderQueue;
+    }
+
+    public static Schedule getScheduler() {
+        return scheduler;
     }
 
     public File getFile() {

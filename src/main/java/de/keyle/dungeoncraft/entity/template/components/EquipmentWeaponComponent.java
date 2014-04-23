@@ -50,6 +50,10 @@ public class EquipmentWeaponComponent extends EntityTemplateComponent {
         }
     }
 
+    public EquipmentWeaponComponent(ParsedItem weapon) {
+        this.weapon = weapon;
+    }
+
     public boolean hasWeapon() {
         return weapon != null;
     }
@@ -83,5 +87,10 @@ public class EquipmentWeaponComponent extends EntityTemplateComponent {
                 enderman.setBlock(weapon.getBukkitItem().getTypeId(), weapon.getBukkitItem().getData().getData());
             }
         }
+    }
+
+    @Override
+    public EntityTemplateComponent clone() {
+        return new EquipmentWeaponComponent(this.weapon);
     }
 }

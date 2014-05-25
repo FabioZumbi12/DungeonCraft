@@ -33,7 +33,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <minecraft.version>1.7.9</minecraft.version>
-        <bukkit.version>R0.1-SNAPSHOT</bukkit.version>
+        <bukkit.version>R0.1</bukkit.version>
         <bukkit.packet>v1_7_R3</bukkit.packet>
 
         <vault.version>1.2.30</vault.version>
@@ -45,7 +45,7 @@
         <commandframework.version>0.0.1-SNAPSHOT</commandframework.version>
         <fanciful-chat.version>0.0.2</fanciful-chat.version>
         <metrics.version>R7</metrics.version>
-        <knbt.version>0.0.1-SNAPSHOT</knbt.version>
+        <knbt.version>0.0.1</knbt.version>
         <rhino.version>1.7R2</rhino.version>
 
         <download.translations>prepare-package</download.translations>

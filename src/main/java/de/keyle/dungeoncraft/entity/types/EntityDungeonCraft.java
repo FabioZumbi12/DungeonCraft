@@ -274,7 +274,8 @@ public abstract class EntityDungeonCraft extends EntityCreature implements IMons
         return true;
     }
 
-    public void dropEquipment(boolean b, int i) {
+    public net.minecraft.server.v1_7_R3.ItemStack[] dropEquipment(boolean b, int i) {
+        return new ItemStack[0];
     }
 
     @Override

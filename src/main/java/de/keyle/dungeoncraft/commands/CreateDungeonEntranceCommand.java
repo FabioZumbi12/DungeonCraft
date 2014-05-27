@@ -87,6 +87,7 @@ public class CreateDungeonEntranceCommand {
                             maxX = maxLoc.getBlockX();
                             maxY = maxLoc.getBlockY();
                             maxZ = maxLoc.getBlockZ();
+                            world = selection.getWorld().getName();
                         }
                     } catch (Error ignored) {
                     } catch (Exception ignored) {

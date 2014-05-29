@@ -22,10 +22,7 @@ package de.keyle.dungeoncraft.util.SQLite;
 
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,116 +75,211 @@ public class SQLiteDataModel {
     public static List<String> getAllDungeons() {
         List<String> returnList = new ArrayList<String>();
         connection = SQLiteConnection.getConnection();
+        PreparedStatement getAllDungeonsStatement = null;
+        ResultSet getAllDungeonsResult = null;
         try {
-            PreparedStatement getAllDungeonsStatement = connection.prepareStatement(GET_ALL_DUNGEONS);
-            ResultSet getAllDungeonsResult = getAllDungeonsStatement.executeQuery();
+            getAllDungeonsStatement = connection.prepareStatement(GET_ALL_DUNGEONS);
+            getAllDungeonsResult = getAllDungeonsStatement.executeQuery();
             while (getAllDungeonsResult.next()) {
                 returnList.add(getAllDungeonsResult.getString("dungeonname"));
             }
         } catch (Exception e) {
             DungeonCraftLogger.write("Error getting all dungeons");
             e.printStackTrace();
+        } finally {
+            try {
+                if (getAllDungeonsResult != null) {
+                    getAllDungeonsResult.close();
+                }
+                if (getAllDungeonsStatement != null) {
+                    getAllDungeonsStatement.close();
+                }
+            } catch (SQLException e) {
+                DungeonCraftLogger.write("Error closing statement in getAllDungeons");
+                e.printStackTrace();
+            }
         }
         return returnList;
     }
 
     private static boolean containsDungeon(String dungeonName) {
         connection = SQLiteConnection.getConnection();
+        PreparedStatement getDungeonStatement = null;
+        ResultSet getDungeonResult = null;
+        boolean contains = true;
         try {
-            PreparedStatement getDungeonStatement = connection.prepareStatement(GET_DUNGEON);
+            getDungeonStatement = connection.prepareStatement(GET_DUNGEON);
             getDungeonStatement.setString(1, dungeonName);
-            ResultSet getDungeonResult = getDungeonStatement.executeQuery();
-            return getDungeonResult.next();
+            getDungeonResult = getDungeonStatement.executeQuery();
+            contains = getDungeonResult.next();
         } catch (Exception e) {
             DungeonCraftLogger.write("Error getting dungeon " + dungeonName);
             e.printStackTrace();
+        } finally {
+            try {
+                if(getDungeonResult != null) {
+                    getDungeonResult.close();
+                }
+                if(getDungeonStatement != null) {
+                    getDungeonStatement.close();
+                }
+            } catch (SQLException e) {
+                DungeonCraftLogger.write("Error closing statements in containsDungeon");
+                e.printStackTrace();
+            }
         }
-        return true;
+        return contains;
     }
 
     public static void addDungeon(String dungeonName) {
         if (!containsDungeon(dungeonName)) {
             connection = SQLiteConnection.getConnection();
+            PreparedStatement insertDungeonStatement = null;
             try {
-                PreparedStatement insertDungeonStatement = connection.prepareStatement(INSERT_DUNGEON);
+                insertDungeonStatement = connection.prepareStatement(INSERT_DUNGEON);
                 insertDungeonStatement.setString(1, dungeonName);
                 insertDungeonStatement.execute();
             } catch (Exception e) {
                 DungeonCraftLogger.write("Error inserting dungeon " + dungeonName);
                 e.printStackTrace();
+            } finally {
+                try {
+                    if(insertDungeonStatement != null) {
+                        insertDungeonStatement.close();
+                    }
+                } catch (SQLException e) {
+                    DungeonCraftLogger.write("Error closing statement in addDungeon");
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     private static boolean containsPlayer(String playerName) {
         connection = SQLiteConnection.getConnection();
+        boolean contains = true;
+        PreparedStatement getPlayerStatement = null;
+        ResultSet getPlayerResult = null;
         try {
-            PreparedStatement getPlayerStatement = connection.prepareStatement(GET_PLAYER);
+            getPlayerStatement = connection.prepareStatement(GET_PLAYER);
             getPlayerStatement.setString(1, playerName);
-            ResultSet getPlayerResult = getPlayerStatement.executeQuery();
-            return getPlayerResult.next();
+            getPlayerResult = getPlayerStatement.executeQuery();
+            contains = getPlayerResult.next();
         } catch (Exception e) {
             DungeonCraftLogger.write("Error getting player " + playerName);
             e.printStackTrace();
+        } finally {
+            try {
+                if(getPlayerResult != null) {
+                    getPlayerResult.close();
+                }
+                if(getPlayerStatement != null) {
+                    getPlayerStatement.close();
+                }
+            } catch (SQLException e) {
+                DungeonCraftLogger.write("Error closing statements in containsPlayer");
+                e.printStackTrace();
+            }
         }
-        return true;
+        return contains;
     }
 
     public static void addPlayer(String playerName) {
         if (!containsPlayer(playerName)) {
             connection = SQLiteConnection.getConnection();
+            PreparedStatement insertPlayerStatement = null;
             try {
-                PreparedStatement insertPlayerStatement = connection.prepareStatement(INSERT_PLAYER);
+                insertPlayerStatement = connection.prepareStatement(INSERT_PLAYER);
                 insertPlayerStatement.setString(1, playerName);
                 insertPlayerStatement.execute();
             } catch (Exception e) {
                 DungeonCraftLogger.write("Error inserting player " + playerName);
                 e.printStackTrace();
+            } finally {
+                try {
+                    if(insertPlayerStatement != null) {
+                        insertPlayerStatement.close();
+                    }
+                } catch (SQLException e) {
+                    DungeonCraftLogger.write("Error closing statement in addPlayer");
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     private static int getPlayerID(String playerName) {
+        int id = -1;
         if (containsPlayer(playerName)) {
             connection = SQLiteConnection.getConnection();
+            PreparedStatement getPlayerStatement = null;
+            ResultSet getPlayerResult = null;
             try {
-                PreparedStatement getPlayerStatement = connection.prepareStatement(GET_PLAYER);
+                getPlayerStatement = connection.prepareStatement(GET_PLAYER);
                 getPlayerStatement.setString(1, playerName);
-                ResultSet getPlayerResult = getPlayerStatement.executeQuery();
+                getPlayerResult = getPlayerStatement.executeQuery();
                 getPlayerResult.next();
-                return getPlayerResult.getInt("ID");
+                id = getPlayerResult.getInt("ID");
             } catch (Exception e) {
                 DungeonCraftLogger.write("Error getting player ID" + playerName);
                 e.printStackTrace();
+            } finally {
+                try {
+                    if(getPlayerResult != null) {
+                        getPlayerResult.close();
+                    }
+                    if(getPlayerStatement != null) {
+                        getPlayerStatement.close();
+                    }
+                } catch (SQLException e) {
+                    DungeonCraftLogger.write("Error closing statement in getPlayerID");
+                    e.printStackTrace();
+                }
             }
         }
-        return -1;
+        return id;
     }
 
     private static int getDungeonID(String dungeonName) {
+        int id = -1;
         if (containsDungeon(dungeonName)) {
             connection = SQLiteConnection.getConnection();
+            PreparedStatement getDungeonStatement = null;
+            ResultSet getDungeonResult = null;
             try {
-                PreparedStatement getDungeonStatement = connection.prepareStatement(GET_DUNGEON);
+                getDungeonStatement = connection.prepareStatement(GET_DUNGEON);
                 getDungeonStatement.setString(1, dungeonName);
-                ResultSet getDungeonResult = getDungeonStatement.executeQuery();
+                getDungeonResult = getDungeonStatement.executeQuery();
                 getDungeonResult.next();
-                return getDungeonResult.getInt("ID");
+                id = getDungeonResult.getInt("ID");
             } catch (Exception e) {
                 DungeonCraftLogger.write("Error getting dungeon ID" + dungeonName);
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (getDungeonResult != null) {
+                        getDungeonResult.close();
+                    }
+                    if (getDungeonStatement != null) {
+                        getDungeonStatement.close();
+                    }
+                } catch (SQLException e) {
+                    DungeonCraftLogger.write("Error closing statements in getDungeonID");
+                    e.printStackTrace();
+                }
             }
         }
-        return -1;
+        return id;
     }
 
     public static void addCooldown(String playerName, String dungeonName, long cooldown) {
         int playerID = getPlayerID(playerName);
         int dungeonID = getDungeonID(dungeonName);
+        PreparedStatement insertCooldownStatement = null;
         if (playerID != -1 && dungeonID != -1) {
             connection = SQLiteConnection.getConnection();
             try {
-                PreparedStatement insertCooldownStatement = connection.prepareStatement(INSERT_COOLDOWN);
+                insertCooldownStatement = connection.prepareStatement(INSERT_COOLDOWN);
                 insertCooldownStatement.setInt(1, playerID);
                 insertCooldownStatement.setInt(2, dungeonID);
                 insertCooldownStatement.setLong(3, cooldown);
@@ -195,40 +287,78 @@ public class SQLiteDataModel {
             } catch (Exception e) {
                 DungeonCraftLogger.write("Error inserting cooldown");
                 e.printStackTrace();
+            } finally {
+                try {
+                    if(insertCooldownStatement != null) {
+                        insertCooldownStatement.close();
+                    }
+                } catch (SQLException e) {
+                    DungeonCraftLogger.write("Error closing statement in addCooldown");
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     private static String getDungeonByID(int id) {
         connection = SQLiteConnection.getConnection();
+        String dungeonName = null;
+        PreparedStatement getDungeonStatement = null;
+        ResultSet getDungeonResult = null;
         try {
-            PreparedStatement getDungeonStatement = connection.prepareStatement(GET_DUNGEON_BY_ID);
+            getDungeonStatement = connection.prepareStatement(GET_DUNGEON_BY_ID);
             getDungeonStatement.setInt(1, id);
-            ResultSet getDungeonResult = getDungeonStatement.executeQuery();
+            getDungeonResult = getDungeonStatement.executeQuery();
             getDungeonResult.next();
-            return getDungeonResult.getString("dungeonname");
+            dungeonName = getDungeonResult.getString("dungeonname");
         } catch (Exception e) {
             DungeonCraftLogger.write("Error getting dungeon with ID " + id);
             e.printStackTrace();
+        } finally {
+            try {
+                if(getDungeonResult != null) {
+                    getDungeonResult.close();
+                }
+                if(getDungeonStatement != null) {
+                    getDungeonStatement.close();
+                }
+            } catch (SQLException e) {
+                DungeonCraftLogger.write("Error closing statement in getDungeonByID");
+                e.printStackTrace();
+            }
         }
-        return null;
+        return dungeonName;
     }
 
     public static Map<String, Long> getCooldowns(String playerName) {
         int playerID = getPlayerID(playerName);
         Map<String, Long> returnMap = new HashMap<String, Long>();
+        PreparedStatement getCooldownsStatement = null;
+        ResultSet getCooldownsResult = null;
         if (playerID != -1) {
             connection = SQLiteConnection.getConnection();
             try {
-                PreparedStatement getCooldownsStatement = connection.prepareStatement(GET_COOLDOWNS);
+                getCooldownsStatement = connection.prepareStatement(GET_COOLDOWNS);
                 getCooldownsStatement.setInt(1, playerID);
-                ResultSet getCooldownsResult = getCooldownsStatement.executeQuery();
+                getCooldownsResult = getCooldownsStatement.executeQuery();
                 while (getCooldownsResult.next()) {
                     returnMap.put(getDungeonByID(getCooldownsResult.getInt("FK_DUNGEON")), getCooldownsResult.getLong("cooldown"));
                 }
             } catch (Exception e) {
                 DungeonCraftLogger.write("Error getting cooldown");
                 e.printStackTrace();
+            } finally {
+                try {
+                    if(getCooldownsResult != null) {
+                        getCooldownsResult.close();
+                    }
+                    if(getCooldownsStatement != null) {
+                        getCooldownsStatement.close();
+                    }
+                } catch (SQLException e) {
+                    DungeonCraftLogger.write("Error closing statements in getCooldowns");
+                    e.printStackTrace();
+                }
             }
         }
         return returnMap;
@@ -238,14 +368,24 @@ public class SQLiteDataModel {
         int playerID = getPlayerID(playerName);
         int dungeonID = getDungeonID(dungeonName);
         connection = SQLiteConnection.getConnection();
+        PreparedStatement deleteCooldownStatement = null;
         try {
-            PreparedStatement deleteCooldownStatement = connection.prepareStatement(DELETE_COOLDOWN);
+            deleteCooldownStatement = connection.prepareStatement(DELETE_COOLDOWN);
             deleteCooldownStatement.setInt(1, playerID);
             deleteCooldownStatement.setInt(2, dungeonID);
             deleteCooldownStatement.executeUpdate();
         } catch (Exception e) {
             DungeonCraftLogger.write("Error deleting cooldown for dungeon " + dungeonName + "from player " + playerName);
             e.printStackTrace();
+        } finally {
+            try {
+                if(deleteCooldownStatement != null) {
+                    deleteCooldownStatement.close();
+                }
+            } catch (SQLException e) {
+                DungeonCraftLogger.write("Error closing statements in deleteCooldown");
+                e.printStackTrace();
+            }
         }
     }
 }

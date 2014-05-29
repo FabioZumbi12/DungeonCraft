@@ -34,28 +34,33 @@ public class SQLiteConnection {
     private static Connection connection = null;
 
     public static Connection getConnection() {
-        if (connection != null) {
-            return connection;
-        } else {
-            SQLiteConfig config = new SQLiteConfig();
-            config.enforceForeignKeys(true);
-            String driver = "org.sqlite.JDBC";
-            String datafolder = DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath();
-            String url = "jdbc:sqlite:" + datafolder + File.separator + "dungeoncraft.db";
-            try {
-                Class.forName(driver);
-            } catch (ClassNotFoundException e) {
-                DungeonCraftLogger.write("No SQLite driver found!");
+        try {
+            if (connection != null && !connection.isClosed()) {
+                return connection;
+            } else {
+                SQLiteConfig config = new SQLiteConfig();
+                config.enforceForeignKeys(true);
+                String driver = "org.sqlite.JDBC";
+                String datafolder = DungeonCraftPlugin.getPlugin().getDataFolder().getAbsolutePath();
+                String url = "jdbc:sqlite:" + datafolder + File.separator + "dungeoncraft.db";
+                try {
+                    Class.forName(driver);
+                } catch (ClassNotFoundException e) {
+                    DungeonCraftLogger.write("No SQLite driver found!");
+                    return null;
+                }
+                try {
+                    connection = DriverManager.getConnection(url, config.toProperties());
+                    return connection;
+                } catch (SQLException e) {
+                    DungeonCraftLogger.write("Can't get a connection");
+                    connection = null;
+                }
                 return null;
             }
-            try {
-                connection = DriverManager.getConnection(url, config.toProperties());
-                return connection;
-            } catch (SQLException e) {
-                DungeonCraftLogger.write("Can't get a connection");
-                connection = null;
-            }
-            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 }

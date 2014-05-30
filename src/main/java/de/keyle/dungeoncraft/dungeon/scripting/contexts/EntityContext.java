@@ -39,11 +39,11 @@ public class EntityContext {
         this.dungeon = dungeon;
     }
 
-    public void createEntity(String templateId, OrientationVector vector) {
-        createEntity(templateId, vector.getX(), vector.getY(), vector.getZ());
+    public EntityDungeonCraft createEntity(String templateId, OrientationVector vector) {
+        return createEntity(templateId, vector.getX(), vector.getY(), vector.getZ());
     }
 
-    public void createEntity(String templateId, double posX, double posY, double posZ) {
+    public EntityDungeonCraft createEntity(String templateId, double posX, double posY, double posZ) {
         EntityTemplateRegistry r = dungeon.getDungeonBase().getEntityTemplateRegistry();
         EntityTemplate et = r.getTemplate(templateId);
         if (et != null) {
@@ -51,7 +51,9 @@ public class EntityContext {
             net.minecraft.server.v1_7_R3.World mcWorld = ((CraftWorld) Bukkit.getWorld(DungeonCraftWorld.WORLD_NAME)).getHandle();
             entity.setPosition(dungeon.getPosition().getBlockX() + posX, posY, dungeon.getPosition().getBlockZ() + posZ);
             mcWorld.addEntity(entity);
+            return entity;
         }
+        return null;
     }
 
     public void killEntity(LivingEntity entity) {

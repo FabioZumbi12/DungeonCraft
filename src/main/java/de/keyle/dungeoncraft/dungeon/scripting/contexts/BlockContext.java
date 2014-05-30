@@ -53,6 +53,10 @@ public class BlockContext {
         return getBlockAt(x, y, z).equals(b);
     }
 
+    public boolean testForBlock(int x, int y, int z, String materialName) {
+        return getBlockAt(x, y, z).getType().equals(Material.getMaterial(materialName));
+    }
+
     public void setBlock(int x, int y, int z, String materialName) {
         setBlock(x, y, z, materialName, (byte) 0);
     }

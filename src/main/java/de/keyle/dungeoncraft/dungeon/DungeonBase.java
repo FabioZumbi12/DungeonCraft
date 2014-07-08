@@ -65,6 +65,9 @@ public class DungeonBase implements ISchematicReveiver {
     Set<String> allowedCommands;
     Map<String, ResourceBundle> locale = new HashMap<String, ResourceBundle>();
 
+    int bukkitBuild = 0;
+    Set<String> requiredPlugins;
+
     boolean isLoading = false;
     ConfigurationSection customConfigOptions;
     EntityTemplateRegistry entityTemplateRegistry;
@@ -75,6 +78,7 @@ public class DungeonBase implements ISchematicReveiver {
         this.name = name;
         entityTemplateRegistry = new EntityTemplateRegistry();
         allowedCommands = new HashSet<String>();
+        requiredPlugins = new HashSet<String>();
         load();
     }
 
@@ -264,6 +268,13 @@ public class DungeonBase implements ISchematicReveiver {
             }
 
             customConfigOptions = config.getConfigurationSection("options");
+
+            requiredPlugins.clear();
+            for (String plg : config.getStringList("dependencies.plugins")) {
+                requiredPlugins.add(plg.toLowerCase());
+            }
+
+            bukkitBuild = config.getInt("dependencies.bukkit");
         }
 
         for (File f : getLocaleFiles()) {

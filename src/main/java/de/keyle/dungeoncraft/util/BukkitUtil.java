@@ -41,6 +41,8 @@ import org.bukkit.inventory.ItemStack;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.bukkit.World.Environment;
 
@@ -266,5 +268,16 @@ public class BukkitUtil {
                 return null;
         }
         return null;
+    }
+
+    public static int getBukkitBuild() {
+        String version = Bukkit.getVersion();
+        Pattern pattern = Pattern.compile("(b)([0-9]+)(jnks)");
+        Matcher matcher = pattern.matcher(version);
+
+        if(matcher.find()) {
+            return Integer.parseInt(matcher.group(2));
+        }
+        return 1;
     }
 }

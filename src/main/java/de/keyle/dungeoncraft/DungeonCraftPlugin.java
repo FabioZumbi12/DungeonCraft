@@ -70,6 +70,7 @@ import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
@@ -99,6 +100,11 @@ public class DungeonCraftPlugin extends JavaPlugin {
 
     public void onEnable() {
         plugin = this;
+
+        for (Plugin s : this.getServer().getPluginManager().getPlugins())
+        {
+            System.out.println(s.getName());
+        }
 
         new File(getPlugin().getDataFolder(), "dungeons").mkdirs();
         new File(getPlugin().getDataFolder(), "logs").mkdirs();

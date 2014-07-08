@@ -21,9 +21,13 @@
 package de.keyle.dungeoncraft.dungeon;
 
 import de.keyle.dungeoncraft.DungeonCraftPlugin;
+import de.keyle.dungeoncraft.util.BukkitUtil;
 import de.keyle.dungeoncraft.util.logger.DungeonCraftLogger;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DungeonBaseLoader {
     public DungeonBaseLoader() {
@@ -32,13 +36,25 @@ public class DungeonBaseLoader {
 
     private void loadBases() {
         File basesFolder = new File(DungeonCraftPlugin.getPlugin().getDataFolder(), "dungeons");
+        Set<String> installedPlugins = new HashSet<String>();
+        for (Plugin plugin : DungeonCraftPlugin.getPlugin().getServer().getPluginManager().getPlugins()) {
+            installedPlugins.add(plugin.getName().toLowerCase());
+        }
         if (basesFolder.exists()) {
             File[] files = basesFolder.listFiles();
             if (files != null) {
                 for (File f : files) {
                     if (f.isDirectory()) {
-                        DungeonCraftLogger.write("d: " + f.getName());
                         DungeonBase base = new DungeonBase(f.getName());
+                        if(BukkitUtil.getBukkitBuild() < base.bukkitBuild) {
+                            DungeonCraftLogger.write("Not loading " + base.getName() + " because it requires bukkit build " + base.bukkitBuild + " or greater!");
+                            continue;
+                        }
+                        if(!installedPlugins.containsAll(base.requiredPlugins)) {
+                            DungeonCraftLogger.write("Not loading " + base.getName() + " because it requires plugins you don't have!");
+                            continue;
+                        }
+                        DungeonCraftLogger.write("d: " + f.getName());
                         DungeonBaseRegistry.addDungeonBase(base);
                     }
                 }
